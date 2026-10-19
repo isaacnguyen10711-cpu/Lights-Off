@@ -78,7 +78,8 @@ namespace Lights_Off.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lights_Off.Migrations
 {
     [DbContext(typeof(LightsOffDbContext))]
-    [Migration("20261019084907_InitialCreate")]
+    [Migration("20261019101540_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -81,7 +81,8 @@ namespace Lights_Off.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()

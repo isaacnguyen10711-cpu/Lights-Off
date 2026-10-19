@@ -18,7 +18,7 @@ namespace Lights_Off.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OAuthProviderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SleepGoal = table.Column<int>(type: "int", nullable: true)
                 },
