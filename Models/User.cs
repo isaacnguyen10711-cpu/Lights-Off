@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Lights_Off.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lights_Off.Models
 {
@@ -15,6 +16,6 @@ namespace Lights_Off.Models
         [Required]
         [StringLength(100, MinimumLength = 1)]
         public string Name { get; set; } = string.Empty;
-        public string? SleepGoal { get; set; }
+        public SleepGoal? SleepGoal { get; set; }
     }
 }
