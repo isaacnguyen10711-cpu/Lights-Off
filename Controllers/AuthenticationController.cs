@@ -22,7 +22,7 @@ namespace Lights_Off.Controllers
         // Implement OAuth structural layout with 4 endpoints: login, callback, me, and logout
 
         [HttpGet("login")]
-        public IActionResult Login(string provider)
+        public IActionResult Login([FromQuery] string? provider)
         {
             if (provider != "Google" && provider != "Facebook")
             {
