@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Lights_Off.Data;
 
 
@@ -21,11 +20,18 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
     .AddCookie()
+    .AddFacebook(facebookOptions =>
+    {
+        facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"]!;
+        facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
+    })
     .AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-});
+}
+
+);
 
 var app = builder.Build();
 

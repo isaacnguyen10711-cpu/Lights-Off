@@ -22,31 +22,37 @@ namespace Lights_Off.Controllers
         // Implement OAuth structural layout with 4 endpoints: login, callback, me, and logout
 
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string provider)
         {
-            // Redirect to Google for authentication
+            if (provider != "Google" && provider != "Facebook")
+            {
+                return BadRequest("Invalid provider. Only 'Google' and 'Facebook' are supported.");
+            }
+
+            // Redirect to the chosen provider (Google or Facebook) to log in
             var redirectUrl = "/api/authentication/callback";
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-            return Challenge(properties, "Google");
+            return Challenge(properties, provider);
         }
 
         [Authorize]
         [HttpGet("callback")]
         public async Task<IActionResult> Callback()
         {
-            // After successful authentication, retrieve the user's Google ID from the claims
-            var googleId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // After login, get the user's provider ID claim (its Issuer says which provider they used)
+            var providerClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.OAuthProviderId == googleId);
-
+            // Check the provider and provider ID from the claims
+            var user = await FindUser(providerClaim!);
             if (user == null)
             {
                 // If the user does not exist, create a new user
                 user = new User
                 {
-                    OAuthProviderId = googleId!,
+                    OAuthProviderId = providerClaim!.Value,
+                    OAuthProvider = providerClaim.Issuer,
                     UserName = User.FindFirstValue(ClaimTypes.Name)!,
-                    Email = User.FindFirstValue(ClaimTypes.Email)!
+                    Email = User.FindFirstValue(ClaimTypes.Email)
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
@@ -57,24 +63,42 @@ namespace Lights_Off.Controllers
         // Separate endpoint to get the current authenticated user's information
         [Authorize]
         [HttpGet("me")]
-        public async Task<ActionResult<User>> GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var googleId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.OAuthProviderId == googleId);
+            var providerClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            // Check the provider and provider ID from the claims
+            var user = await FindUser(providerClaim!);
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(new
+            {
+                user.UserId,
+                user.Email,
+                user.UserName,
+                user.SleepGoal
+            });
         }
 
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            // Sign out the user and clear the default authentication scheme (Google) cookie
+            // Sign out by deleting the login cookie (the default Cookies scheme)
             await HttpContext.SignOutAsync();
             return NoContent();
+        }
+
+        private async Task<User?> FindUser(Claim providerClaim)
+        {
+            // Check the provider and provider ID from the claims
+            var provider = providerClaim!.Issuer;
+            var providerId = providerClaim.Value;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.OAuthProviderId == providerId && u.OAuthProvider == provider);
+            return user;
         }
     }
 }
