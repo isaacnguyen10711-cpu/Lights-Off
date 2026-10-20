@@ -77,9 +77,13 @@ namespace Lights_Off.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("OAuthProvider")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OAuthProviderId")
                         .IsRequired()
@@ -95,7 +99,7 @@ namespace Lights_Off.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("OAuthProviderId")
+                    b.HasIndex("OAuthProvider", "OAuthProviderId")
                         .IsUnique();
 
                     b.ToTable("Users");

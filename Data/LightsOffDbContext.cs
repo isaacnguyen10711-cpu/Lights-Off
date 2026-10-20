@@ -12,9 +12,9 @@ namespace Lights_Off.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure the User entity with database unique index
+            // One account per provider ID: Google and Facebook IDs could clash, so the provider is part of the index
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.OAuthProviderId)
+                .HasIndex(u => new { u.OAuthProvider, u.OAuthProviderId })
                 .IsUnique();
 
             // Configure the SleepLog entity with a unique index on UserId and Date because a user can only have one sleep log per day
