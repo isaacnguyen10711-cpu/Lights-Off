@@ -1,24 +1,18 @@
 ﻿using Lights_Off.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Lights_Off.Models
 {
-    public class User
+    // IdentityUser<int> already has Id, UserName, Email, PasswordHash and more.
+    // Google/Facebook logins are stored separately in the AspNetUserLogins table.
+    public class User : IdentityUser<int>
     {
-        [Required]
-        [Key]
-        public int UserId { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string OAuthProvider { get; set; } = string.Empty;
-        [Required]
-        public string OAuthProviderId { get; set; } = string.Empty;
-        [EmailAddress]
-        [StringLength(256)]
-        public string? Email { get; set; }
-        [Required]
-        [StringLength(100, MinimumLength = 1)]
-        public string UserName { get; set; } = string.Empty;
+        // Full name shown in the app, e.g. "Isaac Nguyen" from Google.
+        // UserName is the login name, so it can't hold spaces.
+        [StringLength(100)]
+        public string? DisplayName { get; set; }
+
         public SleepGoal? SleepGoal { get; set; }
     }
 }

@@ -1,21 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Lights_Off.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace Lights_Off.Data
 {
-    public class LightsOffDbContext : DbContext
+    public class LightsOffDbContext : IdentityDbContext<User, IdentityRole<int>, int >
     {
         public LightsOffDbContext(DbContextOptions<LightsOffDbContext> options) : base(options)
         {
         }
-        public DbSet<User> Users { get; set; } = null!;
         public DbSet<SleepLog> SleepLogs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // One account per provider ID: Google and Facebook IDs could clash, so the provider is part of the index
-            modelBuilder.Entity<User>()
-                .HasIndex(u => new { u.OAuthProvider, u.OAuthProviderId })
-                .IsUnique();
+            base.OnModelCreating(modelBuilder);
 
             // Configure the SleepLog entity with a unique index on UserId and Date because a user can only have one sleep log per day
             modelBuilder.Entity<SleepLog>()
