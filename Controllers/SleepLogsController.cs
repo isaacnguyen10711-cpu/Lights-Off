@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lights_Off.Models;
 using Lights_Off.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,10 +17,17 @@ public class SleepLogsController : ControllerBase
     }
 
     // GET: api/SleepLog
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SleepLog>>> GetSleepLog()
     {
-        return await _context.SleepLogs.ToListAsync();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = _context.SleepLogs
+            .AsNoTracking()
+            .Where(s => s.UserId == userId)
+            .OrderByDescending(s => s.Date);
+
+        return await query.ToListAsync();
     }
 
     // GET: api/SleepLog/5
