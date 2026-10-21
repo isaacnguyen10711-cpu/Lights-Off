@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Lights_Off.Models;
 using Lights_Off.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using Lights_Off.Models.DTOs;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -19,13 +19,26 @@ public class SleepLogsController : ControllerBase
     // GET: api/SleepLog
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SleepLog>>> GetSleepLog()
+    public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetSleepLog()
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var query = _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.UserId == userId)
-            .OrderByDescending(s => s.Date);
+            .OrderByDescending(s => s.Date)
+            .Select(s => new SleepLogResponse
+            {
+                SleepLogId = s.SleepLogId,
+                Date = s.Date,
+                Bedtime = s.Bedtime,
+                WakeUpTime = s.WakeUpTime,
+                Quality = s.Quality,
+                CaffeineAfter3pm = s.CaffeineAfter3pm,
+                Exercised = s.Exercised,
+                StressLevel = s.StressLevel,
+                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
+                AfternoonNapDuration = s.AfternoonNapDuration
+            });
 
         return await query.ToListAsync();
     }
