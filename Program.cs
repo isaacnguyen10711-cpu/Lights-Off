@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Lights_Off.Data;
+using Lights_Off.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,23 +16,25 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 // Add authentication services with cookie authentication and Google OAuth
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
-    .AddCookie()
+builder.Services.AddIdentityApiEndpoints<User>()
+    .AddEntityFrameworkStores<LightsOffDbContext>();
+
+// Google + Facebook, added on top of Identity
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+    })
     .AddFacebook(facebookOptions =>
     {
         facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"]!;
         facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
-    })
-    .AddGoogle(googleOptions =>
-{
-    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-}
+        facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
+    });
 
-);
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -50,5 +53,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGroup("/api/identity").MapIdentityApi<User>();
 
 app.Run();
