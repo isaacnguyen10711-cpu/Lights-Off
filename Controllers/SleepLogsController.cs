@@ -22,7 +22,7 @@ public class SleepLogsController : ControllerBase
     public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetSleepLog()
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var query = _context.SleepLogs
+        var allSleepLog = _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.Date)
@@ -40,21 +40,39 @@ public class SleepLogsController : ControllerBase
                 AfternoonNapDuration = s.AfternoonNapDuration
             });
 
-        return await query.ToListAsync();
+        return await allSleepLog.ToListAsync();
     }
 
     // GET: api/SleepLog/5
+    [Authorize]
     [HttpGet("{sleeplogid}")]
-    public async Task<ActionResult<SleepLog>> GetSleepLog(int sleeplogid)
+    public async Task<ActionResult<SleepLogResponse>> GetSleepLog(int sleeplogid)
     {
-        var sleeplog = await _context.SleepLogs.FindAsync(sleeplogid);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var sleepLog = await _context.SleepLogs
+            .AsNoTracking()
+            .Where(s => s.SleepLogId == sleeplogid && s.UserId == userId)
+            .Select(s => new SleepLogResponse
+            {
+                SleepLogId = s.SleepLogId,
+                Date = s.Date,
+                Bedtime = s.Bedtime,
+                WakeUpTime = s.WakeUpTime,
+                Quality = s.Quality,
+                CaffeineAfter3pm = s.CaffeineAfter3pm,
+                Exercised = s.Exercised,
+                StressLevel = s.StressLevel,
+                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
+                AfternoonNapDuration = s.AfternoonNapDuration
+            })
+            .FirstOrDefaultAsync();
 
-        if (sleeplog == null)
+        if (sleepLog == null)
         {
             return NotFound();
         }
 
-        return sleeplog;
+        return sleepLog;
     }
 
     // PUT: api/SleepLog/5
