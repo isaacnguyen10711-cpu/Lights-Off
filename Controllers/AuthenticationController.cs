@@ -31,7 +31,7 @@ namespace Lights_Off.Controllers
 
             // Redirect to the chosen provider (Google or Facebook) to log in
             var redirectUrl = "/api/authentication/callback";
-            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl, IsPersistent = true };
             return Challenge(properties, provider);
         }
 
