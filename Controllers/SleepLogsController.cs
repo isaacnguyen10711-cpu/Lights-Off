@@ -113,6 +113,20 @@ public class SleepLogsController : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+        if (sleeplog.WakeUpTime <= sleeplog.Bedtime)
+        {
+            return BadRequest("Wake up time must be after bedtime.");
+        }
+
+        // Check if the user has already logged sleep for the same date because the user should only be able to log sleep once a day
+        var alreadyLogged = await _context.SleepLogs
+            .AnyAsync(s => s.UserId == userId && s.Date == sleeplog.Date);
+
+        if (alreadyLogged)
+        {
+            return Conflict("You already logged sleep for this date.");
+        }
+
         var newSleepLog = new SleepLog
         {
             UserId = userId,
