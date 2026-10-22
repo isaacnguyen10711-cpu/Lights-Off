@@ -107,14 +107,42 @@ public class SleepLogsController : ControllerBase
     }
 
     // POST: api/SleepLog
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [Authorize]
     [HttpPost]
-    public async Task<ActionResult<SleepLog>> PostSleepLog(SleepLog sleeplog)
+    public async Task<ActionResult<SleepLogResponse>> PostSleepLog(SleepLogRequest sleeplog)
     {
-        _context.SleepLogs.Add(sleeplog);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var newSleepLog = new SleepLog
+        {
+            UserId = userId,
+            Date = sleeplog.Date,
+            Bedtime = sleeplog.Bedtime,
+            WakeUpTime = sleeplog.WakeUpTime,
+            Quality = sleeplog.Quality,
+            CaffeineAfter3pm = sleeplog.CaffeineAfter3pm,
+            Exercised = sleeplog.Exercised,
+            StressLevel = sleeplog.StressLevel,
+            ScreenTimeBeforeBed = sleeplog.ScreenTimeBeforeBed,
+            AfternoonNapDuration = sleeplog.AfternoonNapDuration
+        };
+
+        _context.SleepLogs.Add(newSleepLog);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetSleepLog", new { sleeplogid = sleeplog.SleepLogId }, sleeplog);
+        return CreatedAtAction(nameof(GetSleepLog), new { sleeplogid = newSleepLog.SleepLogId }, new SleepLogResponse
+        {
+            SleepLogId = newSleepLog.SleepLogId,
+            Date = newSleepLog.Date,
+            Bedtime = newSleepLog.Bedtime,
+            WakeUpTime = newSleepLog.WakeUpTime,
+            Quality = newSleepLog.Quality,
+            CaffeineAfter3pm = newSleepLog.CaffeineAfter3pm,
+            Exercised = newSleepLog.Exercised,
+            StressLevel = newSleepLog.StressLevel,
+            ScreenTimeBeforeBed = newSleepLog.ScreenTimeBeforeBed,
+            AfternoonNapDuration = newSleepLog.AfternoonNapDuration
+        });
     }
 
     // DELETE: api/SleepLog/5
