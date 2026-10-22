@@ -118,9 +118,12 @@ public class SleepLogsController : ControllerBase
             return BadRequest("Wake up time must be after bedtime.");
         }
 
-        // Check if the user has already logged sleep for the same date because the user should only be able to log sleep once a day
+        // the log belongs to the day they woke up
+        var date = DateOnly.FromDateTime(sleeplog.WakeUpTime);
+
+        // only one log per day
         var alreadyLogged = await _context.SleepLogs
-            .AnyAsync(s => s.UserId == userId && s.Date == sleeplog.Date);
+            .AnyAsync(s => s.UserId == userId && s.Date == date);
 
         if (alreadyLogged)
         {
@@ -130,7 +133,7 @@ public class SleepLogsController : ControllerBase
         var newSleepLog = new SleepLog
         {
             UserId = userId,
-            Date = sleeplog.Date,
+            Date = date,
             Bedtime = sleeplog.Bedtime,
             WakeUpTime = sleeplog.WakeUpTime,
             Quality = sleeplog.Quality,

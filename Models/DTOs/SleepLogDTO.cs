@@ -5,9 +5,7 @@ namespace Lights_Off.Models.DTOs
 {
     public class SleepLogRequest
     {
-        [Required] 
-        public DateOnly Date { get; set; }
-        [Required] 
+        [Required]
         public DateTime Bedtime { get; set; }
         [Required] 
         public DateTime WakeUpTime { get; set; }
@@ -20,10 +18,13 @@ namespace Lights_Off.Models.DTOs
         public AfternoonNapDuration? AfternoonNapDuration { get; set; }
     }
 
-    // What the API sends back = everything above + 2 extras
+    // What the API sends back = everything above + the id, date and hours slept
     public class SleepLogResponse : SleepLogRequest
     {
         public int SleepLogId { get; set; }
+
+        // worked out by the API from the wake up time
+        public DateOnly Date { get; set; }
         public double HoursSlept => Math.Round((WakeUpTime - Bedtime).TotalHours, 1);
     }
 }
