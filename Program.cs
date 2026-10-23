@@ -1,5 +1,7 @@
+using Anthropic;
 using Lights_Off.Data;
 using Lights_Off.Models;
+using Lights_Off.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +37,14 @@ builder.Services.AddAuthentication()
     });
 
 builder.Services.AddAuthorization();
+
+// one shared Claude client for the whole app
+builder.Services.AddSingleton(new AnthropicClient
+{
+    ApiKey = builder.Configuration["Anthropic:ApiKey"]
+});
+
+builder.Services.AddScoped<ISleepCoach, ClaudeSleepCoach>();
 
 var app = builder.Build();
 
