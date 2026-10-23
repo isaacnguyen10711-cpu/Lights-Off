@@ -41,7 +41,7 @@ builder.Services.AddAuthorization();
 // one shared Claude client for the whole app
 builder.Services.AddSingleton(new AnthropicClient
 {
-    ApiKey = builder.Configuration["Anthropic:ApiKey"]
+    ApiKey = builder.Configuration["Anthropic:Api:Key"]
 });
 
 builder.Services.AddScoped<ISleepCoach, ClaudeSleepCoach>();
