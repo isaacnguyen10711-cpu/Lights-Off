@@ -113,7 +113,7 @@ namespace Lights_Off.Services
             // not worth asking Claude about 1 or 2 nights
             if (nightsInWeekBefore.Count < 3)
             {
-                return "Log at least 3 nights this week to get a weekly review.";
+                return "Log at least 3 nights in the past week to get a weekly review.";
             }
 
             var averageHours = nightsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
