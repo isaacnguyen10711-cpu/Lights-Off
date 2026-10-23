@@ -90,7 +90,7 @@ namespace Lights_Off.Services
 
         public async Task<string> GetWeeklyReviewAsync(int userId)
         {
-            // the week ends on their latest log, not the server's date
+            // the week is the 7 days before their latest log (not the server's date)
             var latestLog = await _context.SleepLogs
                 .AsNoTracking()
                 .Where(s => s.UserId == userId)
@@ -102,10 +102,11 @@ namespace Lights_Off.Services
                 return "Log a few nights of sleep to get your weekly review.";
             }
 
-            var weekStart = latestLog.Date.AddDays(-6);
+            // last night has its own feedback, so leave it out of the week
+            var weekStart = latestLog.Date.AddDays(-7);
             var week = await _context.SleepLogs
                 .AsNoTracking()
-                .Where(s => s.UserId == userId && s.Date >= weekStart)
+                .Where(s => s.UserId == userId && s.Date >= weekStart && s.Date < latestLog.Date)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
@@ -118,7 +119,7 @@ namespace Lights_Off.Services
             var averageHours = week.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
             var averageQuality = week.Average(s => s.Quality);
 
-            var message = $"My sleep over the last 7 days ({week.Count} nights logged):\n";
+            var message = $"My sleep over the 7 days before last night ({week.Count} nights logged):\n";
             message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
 
             foreach (var night in week)
