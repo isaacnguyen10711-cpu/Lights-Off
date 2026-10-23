@@ -51,12 +51,7 @@ namespace Lights_Off.Services
 
         public async Task<string> GetLastNightFeedbackAsync(int userId)
         {
-            // their most recent night
-            var lastNight = await _context.SleepLogs
-                .AsNoTracking()
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.Date)
-                .FirstOrDefaultAsync();
+            var lastNight = await GetLatestLogAsync(userId);
 
             if (lastNight == null)
             {
@@ -64,19 +59,15 @@ namespace Lights_Off.Services
             }
 
             // the week before it, so Claude has something to compare with
-            var weekStart = lastNight.Date.AddDays(-7);
-            var nightsInWeekBefore = await _context.SleepLogs
-                .AsNoTracking()
-                .Where(s => s.UserId == userId && s.Date >= weekStart && s.Date < lastNight.Date)
-                .ToListAsync();
+            var logsInWeekBefore = await GetLogsInWeekBeforeAsync(userId, lastNight.Date);
 
             // if there are no earlier nights, we can't give an average
             var average = "No earlier nights logged yet.";
-            if (nightsInWeekBefore.Count > 0)
+            if (logsInWeekBefore.Count > 0)
             {
-                var averageHours = nightsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
-                var averageQuality = nightsInWeekBefore.Average(s => s.Quality);
-                average = $"{averageHours:0.0} hours and quality {averageQuality:0.0}/10 over {nightsInWeekBefore.Count} nights.";
+                var averageHours = logsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
+                var averageQuality = logsInWeekBefore.Average(s => s.Quality);
+                average = $"{averageHours:0.0} hours and quality {averageQuality:0.0}/10 over {logsInWeekBefore.Count} nights.";
             }
 
             // the message we send to Claude, with the last night log taken from DescribeNight() and the average of the week before above
@@ -91,11 +82,7 @@ namespace Lights_Off.Services
         public async Task<string> GetWeeklyReviewAsync(int userId)
         {
             // the week is the 7 days before their latest log (not the server's date)
-            var latestLog = await _context.SleepLogs
-                .AsNoTracking()
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.Date)
-                .FirstOrDefaultAsync();
+            var latestLog = await GetLatestLogAsync(userId);
 
             if (latestLog == null)
             {
@@ -103,28 +90,23 @@ namespace Lights_Off.Services
             }
 
             // last night has its own feedback, so leave it out of the week
-            var weekStart = latestLog.Date.AddDays(-7);
-            var nightsInWeekBefore = await _context.SleepLogs
-                .AsNoTracking()
-                .Where(s => s.UserId == userId && s.Date >= weekStart && s.Date < latestLog.Date)
-                .OrderBy(s => s.Date)
-                .ToListAsync();
+            var logsInWeekBefore = await GetLogsInWeekBeforeAsync(userId, latestLog.Date);
 
             // not worth asking Claude about 1 or 2 nights
-            if (nightsInWeekBefore.Count < 3)
+            if (logsInWeekBefore.Count < 3)
             {
                 return "Log at least 3 nights in the past week to get a weekly review.";
             }
 
-            var averageHours = nightsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
-            var averageQuality = nightsInWeekBefore.Average(s => s.Quality);
+            var averageHours = logsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
+            var averageQuality = logsInWeekBefore.Average(s => s.Quality);
 
-            var message = $"My sleep over the 7 days before last night ({nightsInWeekBefore.Count} nights logged):\n";
+            var message = $"My sleep over the 7 days before last night ({logsInWeekBefore.Count} nights logged):\n";
             message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
 
-            foreach (var night in nightsInWeekBefore)
+            foreach (var log in logsInWeekBefore)
             {
-                message += $"- {DescribeNight(night)}\n";
+                message += $"- {DescribeNight(log)}\n";
             }
 
             return await AskClaudeAsync(WeeklyPrompt, message);
@@ -161,7 +143,7 @@ namespace Lights_Off.Services
             return answer;
         }
 
-        // one night as a line of text for Claude
+        //  Helper method for GetLastNightFeedbackAsync and GetWeeklyReviewAsync 
         private static string DescribeNight(SleepLog sleepLog)
         {
             var hours = (sleepLog.WakeUpTime - sleepLog.Bedtime).TotalHours;
@@ -172,6 +154,28 @@ namespace Lights_Off.Services
                 + $"stress: {sleepLog.StressLevel?.ToString() ?? "not answered"}, "
                 + $"screen time before bed: {sleepLog.ScreenTimeBeforeBed?.ToString() ?? "not answered"}, "
                 + $"nap: {sleepLog.AfternoonNapDuration?.ToString() ?? "not answered"}";
+        }
+
+        // Helper method to get the latest log for a user
+        private async Task<SleepLog?> GetLatestLogAsync(int userId)
+        {
+            return await _context.SleepLogs
+                .AsNoTracking()
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.Date)
+                .FirstOrDefaultAsync();
+        }
+
+        // Helper method to get the logs in the week before a given date for a user
+        private async Task<List<SleepLog>> GetLogsInWeekBeforeAsync(int userId, DateOnly date)
+        {
+            var weekStart = date.AddDays(-7);
+
+            return await _context.SleepLogs
+                .AsNoTracking()
+                .Where(s => s.UserId == userId && s.Date >= weekStart && s.Date < date)
+                .OrderBy(s => s.Date)
+                .ToListAsync();
         }
     }
 }
