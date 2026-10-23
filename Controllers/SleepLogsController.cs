@@ -75,33 +75,49 @@ public class SleepLogsController : ControllerBase
         return sleepLog;
     }
 
-    // PUT: api/SleepLog/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    // PUT: api/SleepLogs/5
+    [Authorize]
     [HttpPut("{sleeplogid}")]
-    public async Task<IActionResult> PutSleepLog(int? sleeplogid, SleepLog sleeplog)
+    public async Task<IActionResult> PutSleepLog(int sleeplogid, SleepLogRequest sleeplog)
     {
-        if (sleeplogid != sleeplog.SleepLogId)
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        if (sleeplog.WakeUpTime <= sleeplog.Bedtime)
         {
-            return BadRequest();
+            return BadRequest("Wake up time must be after bedtime.");
         }
 
-        _context.Entry(sleeplog).State = EntityState.Modified;
+        // FindAsync keeps tracking it, so EF picks up the changes below
+        var existingLog = await _context.SleepLogs.FindAsync(sleeplogid);
 
-        try
+        // 404 if it doesn't exist or it's someone else's
+        if (existingLog == null || existingLog.UserId != userId)
         {
-            await _context.SaveChangesAsync();
+            return NotFound();
         }
-        catch (DbUpdateConcurrencyException)
+
+        var date = DateOnly.FromDateTime(sleeplog.WakeUpTime);
+
+        // only one log per day, but skip this log itself
+        var dateTaken = await _context.SleepLogs
+            .AnyAsync(s => s.UserId == userId && s.Date == date && s.SleepLogId != sleeplogid);
+
+        if (dateTaken)
         {
-            if (!SleepLogExists(sleeplogid))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return Conflict("You already logged sleep for this date.");
         }
+
+        existingLog.Date = date;
+        existingLog.Bedtime = sleeplog.Bedtime;
+        existingLog.WakeUpTime = sleeplog.WakeUpTime;
+        existingLog.Quality = sleeplog.Quality;
+        existingLog.CaffeineAfter3pm = sleeplog.CaffeineAfter3pm;
+        existingLog.Exercised = sleeplog.Exercised;
+        existingLog.StressLevel = sleeplog.StressLevel;
+        existingLog.ScreenTimeBeforeBed = sleeplog.ScreenTimeBeforeBed;
+        existingLog.AfternoonNapDuration = sleeplog.AfternoonNapDuration;
+
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
@@ -176,10 +192,5 @@ public class SleepLogsController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
-    }
-
-    private bool SleepLogExists(int? sleeplogid)
-    {
-        return _context.SleepLogs.Any(e => e.SleepLogId == sleeplogid);
     }
 }
