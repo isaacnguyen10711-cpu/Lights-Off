@@ -104,25 +104,25 @@ namespace Lights_Off.Services
 
             // last night has its own feedback, so leave it out of the week
             var weekStart = latestLog.Date.AddDays(-7);
-            var week = await _context.SleepLogs
+            var nightsInWeekBefore = await _context.SleepLogs
                 .AsNoTracking()
                 .Where(s => s.UserId == userId && s.Date >= weekStart && s.Date < latestLog.Date)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
             // not worth asking Claude about 1 or 2 nights
-            if (week.Count < 3)
+            if (nightsInWeekBefore.Count < 3)
             {
                 return "Log at least 3 nights this week to get a weekly review.";
             }
 
-            var averageHours = week.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
-            var averageQuality = week.Average(s => s.Quality);
+            var averageHours = nightsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
+            var averageQuality = nightsInWeekBefore.Average(s => s.Quality);
 
-            var message = $"My sleep over the 7 days before last night ({week.Count} nights logged):\n";
+            var message = $"My sleep over the 7 days before last night ({nightsInWeekBefore.Count} nights logged):\n";
             message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
 
-            foreach (var night in week)
+            foreach (var night in nightsInWeekBefore)
             {
                 message += $"- {DescribeNight(night)}\n";
             }
@@ -146,7 +146,7 @@ namespace Lights_Off.Services
             // Claude's safety filters can say no, so check before reading the answer
             if (response.StopReason == "refusal")
             {
-                return "Sorry, the sleep coach couldn't give feedback this time.";
+                return "Sorry, the Lights Off coach couldn't give feedback this time.";
             }
 
             var answer = "";
