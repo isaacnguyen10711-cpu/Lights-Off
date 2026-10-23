@@ -171,22 +171,6 @@ public class SleepLogsController : ControllerBase
         });
     }
 
-    // DELETE: api/SleepLog/5
-    [HttpDelete("{sleeplogid}")]
-    public async Task<IActionResult> DeleteSleepLog(int? sleeplogid)
-    {
-        var sleeplog = await _context.SleepLogs.FindAsync(sleeplogid);
-        if (sleeplog == null)
-        {
-            return NotFound();
-        }
-
-        _context.SleepLogs.Remove(sleeplog);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
     // [Authorize] makes sure this claim is always there
     private int GetUserId()
     {
