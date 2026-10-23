@@ -22,7 +22,7 @@ public class SleepLogsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetSleepLog()
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = GetUserId();
         var allSleepLog = _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.UserId == userId)
@@ -49,7 +49,7 @@ public class SleepLogsController : ControllerBase
     [HttpGet("{sleeplogid}")]
     public async Task<ActionResult<SleepLogResponse>> GetSleepLog(int sleeplogid)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = GetUserId();
         var sleepLog = await _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.SleepLogId == sleeplogid && s.UserId == userId)
@@ -82,7 +82,7 @@ public class SleepLogsController : ControllerBase
     [HttpPut("{sleeplogid}")]
     public async Task<IActionResult> PutSleepLog(int sleeplogid, SleepLogRequest sleeplog)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = GetUserId();
 
         // FindAsync keeps tracking it, so EF picks up the changes below
         var existingLog = await _context.SleepLogs.FindAsync(sleeplogid);
@@ -125,7 +125,7 @@ public class SleepLogsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<SleepLogResponse>> PostSleepLog(SleepLogRequest sleeplog)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = GetUserId();
 
         // the log belongs to the day they woke up
         var date = DateOnly.FromDateTime(sleeplog.WakeUpTime);
@@ -185,5 +185,11 @@ public class SleepLogsController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // [Authorize] makes sure this claim is always there
+    private int GetUserId()
+    {
+        return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
     }
 }
