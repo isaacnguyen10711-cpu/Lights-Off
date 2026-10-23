@@ -18,6 +18,7 @@ namespace Lights_Off.Controllers
         }
 
         // GET: api/SleepCoach/last-night
+        [Authorize]
         [HttpGet("last-night")]
         public async Task<IActionResult> GetLastNightFeedback()
         {
@@ -26,6 +27,7 @@ namespace Lights_Off.Controllers
         }
 
         // GET: api/SleepCoach/weekly
+        [Authorize]
         [HttpGet("weekly")]
         public async Task<IActionResult> GetWeeklyReview()
         {
@@ -33,7 +35,7 @@ namespace Lights_Off.Controllers
             return Ok(new { review });
         }
 
-        // [Authorize] makes sure this claim is always there
+        [Authorize]
         private int GetUserId()
         {
             return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
