@@ -5,6 +5,7 @@ using Lights_Off.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Lights_Off.Models.DTOs;
+using Lights_Off.Filters;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -77,15 +78,11 @@ public class SleepLogsController : ControllerBase
 
     // PUT: api/SleepLogs/5
     [Authorize]
+    [ValidateBedTimeAndWakeUpTime]
     [HttpPut("{sleeplogid}")]
     public async Task<IActionResult> PutSleepLog(int sleeplogid, SleepLogRequest sleeplog)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-        if (sleeplog.WakeUpTime <= sleeplog.Bedtime)
-        {
-            return BadRequest("Wake up time must be after bedtime.");
-        }
 
         // FindAsync keeps tracking it, so EF picks up the changes below
         var existingLog = await _context.SleepLogs.FindAsync(sleeplogid);
@@ -124,15 +121,11 @@ public class SleepLogsController : ControllerBase
 
     // POST: api/SleepLog
     [Authorize]
+    [ValidateBedTimeAndWakeUpTime]
     [HttpPost]
     public async Task<ActionResult<SleepLogResponse>> PostSleepLog(SleepLogRequest sleeplog)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-        if (sleeplog.WakeUpTime <= sleeplog.Bedtime)
-        {
-            return BadRequest("Wake up time must be after bedtime.");
-        }
 
         // the log belongs to the day they woke up
         var date = DateOnly.FromDateTime(sleeplog.WakeUpTime);
