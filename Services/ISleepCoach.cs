@@ -4,5 +4,8 @@
     {
         // short feedback on the most recent night
         Task<string> GetLastNightFeedbackAsync(int userId);
+
+        // a review of one whole month
+        Task<string> GetMonthlyFeedbackAsync(int userId, int year, int month);
     }
 }

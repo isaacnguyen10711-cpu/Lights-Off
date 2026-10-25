@@ -39,6 +39,25 @@ namespace Lights_Off.Services
             You give general sleep tips, not medical advice. Don't diagnose anything.
             """;
 
+        // instructions for the end of month review
+        private const string MonthlyPrompt = """
+            You are the sleep coach inside Lights Off, a sleep tracking app.
+            You'll get one month of the user's sleep: their averages and the details of each night they logged.
+
+            Write a short review of their month, like a supportive friend looking back with them:
+            - Start with one or two sentences on how the month went overall (hours, quality, consistency).
+            - Point out up to three patterns that seem linked to better or worse sleep, like certain days
+              of the week, caffeine, exercise, stress, screen time or naps.
+            - Mention their best stretch of sleep, so there's something to feel good about.
+            - Finish with two or three realistic tips for next month.
+            - Keep it friendly, under 200 words and in plain English. Short paragraphs are fine, no headings.
+            - If a pattern only shows up on a couple of nights, say it's early days rather than overclaiming.
+            - Only use the data you were given, don't make anything up.
+
+            You give general sleep tips, not medical advice. Don't diagnose anything.
+            If they're regularly sleeping under 5 hours or sleeping badly most nights, suggest they talk to a doctor.
+            """;
+
         public async Task<string> GetLastNightFeedbackAsync(int userId)
         {
             var lastNight = await GetLatestLogAsync(userId);
@@ -68,6 +87,40 @@ namespace Lights_Off.Services
 
             return await AskClaudeAsync(LastNightPrompt, message);
         }
+
+        // a review of one whole month (the controller checks the month is valid and finished)
+        public async Task<string> GetMonthlyFeedbackAsync(int userId, int year, int month)
+        {
+            // a date range instead of .Year/.Month so the (UserId, Date) index gets used
+            var monthStart = new DateOnly(year, month, 1);
+            var nextMonthStart = monthStart.AddMonths(1);
+
+            var logsInMonth = await _context.SleepLogs
+                .AsNoTracking()
+                .Where(s => s.UserId == userId && s.Date >= monthStart && s.Date < nextMonthStart)
+                .OrderBy(s => s.Date)
+                .ToListAsync();
+
+            // not worth asking Claude about only a few nights
+            if (logsInMonth.Count < 7)
+            {
+                return "Log at least 7 nights in a month to get your monthly review.";
+            }
+
+            var averageHours = logsInMonth.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
+            var averageQuality = logsInMonth.Average(s => s.Quality);
+
+            var message = $"My sleep in {monthStart:MMMM yyyy} ({logsInMonth.Count} nights logged):\n";
+            message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
+
+            foreach (var log in logsInMonth)
+            {
+                message += $"- {DescribeNight(log)}\n";
+            }
+
+            return await AskClaudeAsync(MonthlyPrompt, message);
+        }
+
 
         // sends the prompt to Claude and returns its answer
         private async Task<string> AskClaudeAsync(string prompt, string message)
