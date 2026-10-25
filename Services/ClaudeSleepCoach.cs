@@ -39,23 +39,6 @@ namespace Lights_Off.Services
             You give general sleep tips, not medical advice. Don't diagnose anything.
             """;
 
-        // instructions for the bigger weekly review
-        private const string WeeklyPrompt = """
-            You are the sleep coach inside Lights Off, a sleep tracking app.
-            You'll get the user's sleep from the last 7 days: their averages and the details of each night.
-
-            Write a short weekly review:
-            - Start with one or two sentences about the overall pattern (hours, quality, consistency).
-            - Point out up to three things that seem linked to better or worse sleep.
-            - Give two or three specific, realistic tips for next week.
-            - With only a few nights logged, say the patterns are rough rather than overclaiming.
-            - Keep it friendly, under 200 words and in plain English.
-            - Only use the data you were given, don't make anything up.
-
-            You give general sleep tips, not medical advice. Don't diagnose anything.
-            If they're regularly sleeping under 5 hours or sleeping badly most nights, suggest they talk to a doctor.
-            """;
-
         public async Task<string> GetLastNightFeedbackAsync(int userId)
         {
             var lastNight = await GetLatestLogAsync(userId);
@@ -84,39 +67,6 @@ namespace Lights_Off.Services
                 """;
 
             return await AskClaudeAsync(LastNightPrompt, message);
-        }
-
-        public async Task<string> GetWeeklyReviewAsync(int userId)
-        {
-            // the week is the 7 days before their latest log (not the server's date)
-            var latestLog = await GetLatestLogAsync(userId);
-
-            if (latestLog == null)
-            {
-                return "Log a few nights of sleep to get your weekly review.";
-            }
-
-            // last night has its own feedback, so leave it out of the week
-            var logsInWeekBefore = await GetLogsInWeekBeforeAsync(userId, latestLog.Date);
-
-            // not worth asking Claude about 1 or 2 nights
-            if (logsInWeekBefore.Count < 3)
-            {
-                return "Log at least 3 nights in the past week to get a weekly review.";
-            }
-
-            var averageHours = logsInWeekBefore.Average(s => (s.WakeUpTime - s.Bedtime).TotalHours);
-            var averageQuality = logsInWeekBefore.Average(s => s.Quality);
-
-            var message = $"My sleep over the 7 days before last night ({logsInWeekBefore.Count} nights logged):\n";
-            message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
-
-            foreach (var log in logsInWeekBefore)
-            {
-                message += $"- {DescribeNight(log)}\n";
-            }
-
-            return await AskClaudeAsync(WeeklyPrompt, message);
         }
 
         // sends the prompt to Claude and returns its answer
@@ -150,7 +100,7 @@ namespace Lights_Off.Services
             return answer;
         }
 
-        //  Helper method for GetLastNightFeedbackAsync and GetWeeklyReviewAsync 
+        // one night as a line of text for Claude
         private static string DescribeNight(SleepLog sleepLog)
         {
             var hours = (sleepLog.WakeUpTime - sleepLog.Bedtime).TotalHours;

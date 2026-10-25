@@ -26,15 +26,6 @@ namespace Lights_Off.Controllers
             return Ok(new { feedback });
         }
 
-        // GET: api/SleepCoach/weekly
-        [Authorize]
-        [HttpGet("weekly")]
-        public async Task<IActionResult> GetWeeklyReview()
-        {
-            var review = await _sleepCoach.GetWeeklyReviewAsync(GetUserId());
-            return Ok(new { review });
-        }
-
         [Authorize]
         private int GetUserId()
         {
