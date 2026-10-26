@@ -11,7 +11,7 @@ const API_URL = "https://localhost:7152";
 
 // shared styles for the email and password boxes
 const inputStyles =
-  "mt-2 h-12 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-muted focus:border-strong focus:outline-none";
+  "mt-2 h-12 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-muted transition duration-300 hover:-translate-y-1 focus:border-strong focus:outline-none";
 
 const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
@@ -71,7 +71,7 @@ export default function HomePage() {
 
             <button
               type="button"
-              className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition duration-300 hover:-translate-y-1 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
+              className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition-colors hover:cursor-pointer hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
             >
               Sign in
             </button>
