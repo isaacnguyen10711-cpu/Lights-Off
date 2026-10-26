@@ -99,13 +99,13 @@ export default function HomePage() {
         <div className="flex flex-col gap-3 text-sm text-muted lg:w-full lg:max-w-sm lg:items-end">
           <p>
             New here?{" "}
-            <Link href="/register" className="font-bold text-strong underline underline-offset-4">
+            <Link href="/register" className="font-bold text-strong hover:underline underline-offset-4">
               Create an account
             </Link>
           </p>
           <p>
             Forgot password?{" "}
-            <Link href="/reset-password" className="font-bold text-strong underline underline-offset-4">
+            <Link href="/reset-password" className="font-bold text-strong hover:underline underline-offset-4">
               Reset password
             </Link>
           </p>
