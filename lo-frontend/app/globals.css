@@ -6,7 +6,6 @@
   --color-navy: #0e1b3a; /* the glow behind the clock and the text on the sign in button */
   --color-field: #081329; /* inside of the input boxes and Google/Facebook buttons */
   --color-line: #4d6bb3; /* borders around inputs and buttons, and text highlight */
-  --color-line-soft: #26396a; /* faint lines, like the divider next to "or" */
   --color-strong: #f4f6fb; /* main text, headings and the sign in button */
   --color-muted: #a6b3d3; /* less important text, like labels, small descriptions and hints in empty inputs */
 
