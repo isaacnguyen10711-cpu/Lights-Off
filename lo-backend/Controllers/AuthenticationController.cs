@@ -15,11 +15,13 @@ namespace Lights_Off.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager)
+        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         // Implement OAuth structural layout with 4 endpoints: login, callback, me, and logout
@@ -46,7 +48,7 @@ namespace Lights_Off.Controllers
 
             if (userInfo == null)
             {
-                return Unauthorized("Unauthorized access.");
+                return Unauthorized("Unauthorized access. No user information found.");
             }
 
             // Check if the user already exists in the database
@@ -80,7 +82,7 @@ namespace Lights_Off.Controllers
             }
 
             // If the user already exists, sign them in and redirect to the "me" endpoint to get their information
-            return Redirect("/api/authentication/me"); 
+            return Redirect(_configuration["Frontend:Url"] + "/home"); 
         }
 
         // Separate endpoint to get the current authenticated user's information
