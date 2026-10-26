@@ -64,7 +64,7 @@ export default function HomePage() {
                 type="password"
                 name="password"
                 autoComplete="current-password"
-                placeholder="••••••••••"
+                placeholder="Enter your password"
                 className={inputStyles}
               />
             </label>
