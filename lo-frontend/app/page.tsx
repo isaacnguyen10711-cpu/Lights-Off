@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
+import { useRef, useEffect } from "react"; 
 
-export const metadata: Metadata = {
-  title: "Sign in | Lights Off",
-};
 
 // the backend, Google and Facebook login start from here
 const API_URL = "https://localhost:7152";
@@ -18,7 +19,38 @@ const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 const socialStyles =
   "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
 
-export default function HomePage() {
+export default function LoginPage() {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // handle sign in logic 
+    try {
+      const response = await fetch(`${API_URL}/api/identity/login?useCookies=true`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: emailRef.current?.value, password: passwordRef.current?.value }),
+        credentials: "include"
+      });
+
+      if (!response.ok) {
+        alert("Sign in failed. Please check your credentials.");
+      }
+      else {
+        // Redirect to the home page
+        router.push("/home");
+      }
+      
+    }
+    catch (error) {
+      console.error("Error during sign in:", error);
+    }
+  };
+
   return (
     <main className="min-h-screen lg:flex lg:h-screen lg:overflow-hidden">
       {/* left side: logo, the clock and what the app does */}
@@ -46,7 +78,7 @@ export default function HomePage() {
           <p className="mt-2 text-muted">Sign in to log last night&rsquo;s sleep.</p>
 
           {/* not hooked up to the backend yet, so the button doesn't submit anything */}
-          <form className="mt-8 flex flex-col gap-4">
+          <form className="mt-8 flex flex-col gap-4" onSubmit={handleSignIn}>
             <label className="block">
               <span className={labelStyles}>Email</span>
               <input
@@ -55,6 +87,7 @@ export default function HomePage() {
                 autoComplete="email"
                 placeholder="Enter your email"
                 className={inputStyles}
+                ref={emailRef}
               />
             </label>
 
@@ -66,11 +99,12 @@ export default function HomePage() {
                 autoComplete="current-password"
                 placeholder="Enter your password"
                 className={inputStyles}
+                ref={passwordRef}
               />
             </label>
 
             <button
-              type="button"
+              type="submit"
               className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition-colors hover:cursor-pointer hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
             >
               Sign in
