@@ -21,6 +21,14 @@ builder.Services.AddOpenApi();
 builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<LightsOffDbContext>();
 
+// the frontend (http) and API (https) count as different sites, so the login cookie
+// needs SameSite=None to be sent with fetch. None only works with Secure (https only)
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 // Google + Facebook, added on top of Identity
 builder.Services.AddAuthentication()
     .AddGoogle(googleOptions =>
