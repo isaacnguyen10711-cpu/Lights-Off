@@ -18,7 +18,7 @@ const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 const socialStyles =
   "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition-colors hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
 
-export default function LoginPage() {
+export default function HomePage() {
   return (
     <main className="min-h-screen lg:flex lg:h-screen lg:overflow-hidden">
       {/* left side: logo, the clock and what the app does */}
