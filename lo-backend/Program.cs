@@ -46,6 +46,16 @@ builder.Services.AddSingleton(new AnthropicClient
 
 builder.Services.AddScoped<ISleepCoach, ClaudeSleepCoach>();
 
+// let the Next.js frontend call this API from the browser (with the login cookie)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +67,9 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+// has to come before auth so the browser's preflight check isn't blocked
+app.UseCors("Frontend");
 
 app.UseAuthentication();
 
