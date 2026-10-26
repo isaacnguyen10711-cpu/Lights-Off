@@ -25,28 +25,17 @@ export default function LoginPage() {
       <section className="flex flex-col justify-between gap-6 px-4 py-8 sm:px-12 lg:flex-1 lg:px-20 lg:py-10">
         <p className="text-2xl font-bold tracking-tight">Lights Off</p>
 
-        {/* on big screens the clock takes whatever height is left, so the page never scrolls */}
-        <div className="relative flex justify-center lg:min-h-0 lg:flex-1">
+        <div className="relative mx-auto">
           {/* soft navy glow, the clock comes after it in the code so it sits on top */}
           <div className="absolute inset-12 rounded-full bg-navy blur-3xl" />
-          <Image
-            src="/sleep-dial.svg"
-            alt=""
-            width={548}
-            height={548}
-            priority
-            className="relative h-auto w-full max-w-2xl object-contain lg:h-full lg:w-auto"
-          />
+          <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-80 sm:size-128" />
         </div>
 
         <div>
           <h1 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
             Improve your sleeps instantly
           </h1>
-          <p className="mt-3 max-w-lg text-base leading-relaxed text-muted">
-            For shift workers, students and anyone whose nights move around. Log last night in seconds and see what
-            changes your sleep.
-          </p>
+          <p className="mt-3 text-base text-muted">Sleep tracker for your busy schedule.</p>
         </div>
       </section>
 
