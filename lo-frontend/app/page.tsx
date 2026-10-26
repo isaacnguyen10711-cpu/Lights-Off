@@ -11,32 +11,39 @@ const API_URL = "https://localhost:7152";
 
 // shared styles for the email and password boxes
 const inputStyles =
-  "mt-2 h-13 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-placeholder focus:border-strong focus:outline-none";
+  "mt-2 h-12 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-placeholder focus:border-strong focus:outline-none";
 
-const labelStyles = "text-xs font-semibold uppercase tracking-[0.06em] text-muted";
+const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 const socialStyles =
-  "flex h-13 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition-colors hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
+  "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition-colors hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
 
 export default function LoginPage() {
   return (
-    <main className="grid min-h-screen lg:grid-cols-[1fr_minmax(420px,520px)]">
+    <main className="min-h-screen lg:flex lg:h-screen lg:overflow-hidden">
       {/* left side: logo, the clock and what the app does */}
-      <section className="flex flex-col justify-between gap-8 px-4 py-8 sm:px-12 lg:min-h-screen lg:px-20 lg:py-12">
-        <p className="text-[22px] font-bold tracking-tight">Lights Off</p>
+      <section className="flex flex-col justify-between gap-6 px-4 py-8 sm:px-12 lg:flex-1 lg:px-20 lg:py-10">
+        <p className="text-2xl font-bold tracking-tight">Lights Off</p>
 
-        {/* the clock shrinks on short screens so the whole page fits without scrolling */}
-        <div className="relative isolate mx-auto w-full max-w-[min(600px,58vh)]">
-          {/* soft navy glow behind the clock */}
-          <div className="absolute inset-[12%] -z-10 rounded-full bg-navy blur-[90px]" />
-          <Image src="/sleep-dial.svg" alt="" width={600} height={600} priority className="h-auto w-full" />
+        {/* on big screens the clock takes whatever height is left, so the page never scrolls */}
+        <div className="relative flex justify-center lg:min-h-0 lg:flex-1">
+          {/* soft navy glow, the clock comes after it in the code so it sits on top */}
+          <div className="absolute inset-12 rounded-full bg-navy blur-3xl" />
+          <Image
+            src="/sleep-dial.svg"
+            alt=""
+            width={548}
+            height={548}
+            priority
+            className="relative h-auto w-full max-w-2xl object-contain lg:h-full lg:w-auto"
+          />
         </div>
 
         <div>
-          <h1 className="text-4xl leading-tight font-semibold tracking-[-0.03em] sm:text-[56px]">
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
             Improve your sleeps instantly
           </h1>
-          <p className="mt-5 max-w-[520px] text-base leading-relaxed text-muted">
+          <p className="mt-3 max-w-lg text-base leading-relaxed text-muted">
             For shift workers, students and anyone whose nights move around. Log last night in seconds and see what
             changes your sleep.
           </p>
@@ -44,9 +51,9 @@ export default function LoginPage() {
       </section>
 
       {/* right side: the sign in form */}
-      <section className="flex flex-col gap-12 px-4 pb-10 sm:px-12 lg:py-12 lg:pr-16 lg:pl-0">
-        <div className="my-auto w-full max-w-[420px] self-center lg:self-start">
-          <h2 className="text-[32px] leading-10 font-semibold tracking-[-0.02em]">Welcome back</h2>
+      <section className="flex flex-col gap-12 px-4 pb-10 sm:px-12 lg:w-lg lg:shrink-0 lg:py-12 lg:pr-16 lg:pl-0">
+        <div className="my-auto w-full max-w-md self-center lg:self-start">
+          <h2 className="text-3xl font-semibold tracking-tight">Welcome back</h2>
           <p className="mt-2 text-muted">Sign in to log last night&rsquo;s sleep.</p>
 
           {/* not hooked up to the backend yet, so the button doesn't submit anything */}
@@ -75,7 +82,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              className="mt-2 h-13 rounded-xl bg-strong font-bold text-navy transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
+              className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
             >
               Sign in
             </button>
