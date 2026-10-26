@@ -52,7 +52,7 @@ export default function LoginPage() {
 
       {/* right side: the sign in form */}
       <section className="flex flex-col gap-12 px-4 pb-10 sm:px-12 lg:w-lg lg:shrink-0 lg:py-12 lg:pr-16 lg:pl-0">
-        <div className="my-auto w-full max-w-md self-center lg:self-start">
+        <div className="my-auto w-full max-w-sm self-center lg:self-start">
           <h2 className="text-3xl font-semibold tracking-tight">Welcome back</h2>
           <p className="mt-2 text-muted">Sign in to log last night&rsquo;s sleep.</p>
 
@@ -107,7 +107,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 text-sm text-muted lg:items-end">
+        <div className="flex flex-col gap-3 text-sm text-muted lg:w-full lg:max-w-sm lg:items-end">
           <p>
             New here?{" "}
             <Link href="/register" className="font-bold text-strong underline underline-offset-4">
