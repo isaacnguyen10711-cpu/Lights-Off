@@ -16,7 +16,7 @@ const inputStyles =
 const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 const socialStyles =
-  "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition-colors hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
+  "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
 
 export default function HomePage() {
   return (
@@ -71,7 +71,7 @@ export default function HomePage() {
 
             <button
               type="button"
-              className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
+              className="mt-2 h-12 rounded-xl bg-strong font-bold text-navy transition duration-300 hover:-translate-y-1 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong"
             >
               Sign in
             </button>
