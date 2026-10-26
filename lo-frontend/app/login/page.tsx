@@ -57,7 +57,7 @@ export default function LoginPage() {
                 type="email"
                 name="email"
                 autoComplete="email"
-                placeholder="you@example.com"
+                placeholder="Enter your email"
                 className={inputStyles}
               />
             </label>
