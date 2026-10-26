@@ -11,7 +11,7 @@ const API_URL = "https://localhost:7152";
 
 // shared styles for the email and password boxes
 const inputStyles =
-  "mt-2 h-12 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-placeholder focus:border-strong focus:outline-none";
+  "mt-2 h-12 w-full rounded-xl border border-line bg-field px-4 text-base text-strong placeholder:text-muted focus:border-strong focus:outline-none";
 
 const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 

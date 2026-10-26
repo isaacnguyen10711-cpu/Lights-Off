@@ -2,14 +2,13 @@
 
 /* Lights Off colours, same as the Figma file */
 @theme {
-  --color-night: #050608;
-  --color-navy: #0e1b3a;
-  --color-field: #081329;
-  --color-line: #4d6bb3;
-  --color-line-soft: #26396a;
-  --color-strong: #f4f6fb;
-  --color-muted: #a6b3d3;
-  --color-placeholder: #7f8db0;
+  --color-night: #050608; /* page background, almost black */
+  --color-navy: #0e1b3a; /* the glow behind the clock and the text on the sign in button */
+  --color-field: #081329; /* inside of the input boxes and Google/Facebook buttons */
+  --color-line: #4d6bb3; /* borders around inputs and buttons, and text highlight */
+  --color-line-soft: #26396a; /* faint lines, like the divider next to "or" */
+  --color-strong: #f4f6fb; /* main text, headings and the sign in button */
+  --color-muted: #a6b3d3; /* less important text, like labels, small descriptions and hints in empty inputs */
 
   --font-sans: var(--font-manrope);
 }
@@ -17,7 +16,6 @@
 body {
   background: var(--color-night);
   color: var(--color-strong);
-  caret-color: var(--color-strong);
 }
 
 /* highlighted text uses our blue instead of the browser default */
