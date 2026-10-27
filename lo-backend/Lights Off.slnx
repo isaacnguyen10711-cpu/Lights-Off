@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../lo-backend.Tests/lo-backend.Tests.csproj" Id="18e18b58-94ca-4029-8948-3244414f097f" />
   <Project Path="Lights Off.csproj" />
 </Solution>
