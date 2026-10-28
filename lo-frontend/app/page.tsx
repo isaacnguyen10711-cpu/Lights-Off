@@ -19,6 +19,14 @@ const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 const socialStyles =
   "flex h-12 flex-1 items-center justify-center gap-3 rounded-xl border border-line bg-field font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
 
+// the backend sends Google/Facebook login errors back as ?error=<code>.
+// we only show our own messages, never text from the url
+const errorMessages: Record<string, string> = {
+  "login-cancelled": "Sign in was cancelled.",
+  "login-failed": "Something went wrong signing in. Please try again.",
+  "email-taken": "This email already has an account. Sign in the way you did before.",
+};
+
 export default function LoginPage() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -26,6 +34,14 @@ export default function LoginPage() {
 
 
   useEffect(() => {
+    // show a message if Google/Facebook login sent us back with an error
+    const error = new URLSearchParams(window.location.search).get("error");
+    if (error && errorMessages[error]) {
+      alert(errorMessages[error]);
+      // take ?error off the url so refreshing doesn't show it again
+      window.history.replaceState(null, "", "/");
+    }
+
     // Check if the user is already authenticated
     const checkAuthentication = async () => {
       try {
