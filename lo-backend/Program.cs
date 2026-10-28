@@ -36,12 +36,26 @@ builder.Services.AddAuthentication()
         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
         googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+        googleOptions.Events.OnRemoteFailure = context =>
+        {
+            // handle the error, e.g., log it or redirect to an error page
+            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error?login-cancelled");
+            context.HandleResponse(); // Suppress the default behavior
+            return Task.CompletedTask;
+        };
     })
     .AddFacebook(facebookOptions =>
     {
         facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"]!;
         facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
         facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
+        facebookOptions.Events.OnRemoteFailure = context =>
+        {
+            // handle the error, e.g., log it or redirect to an error page
+            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error?login-cancelled");
+            context.HandleResponse(); // Suppress the default behavior
+            return Task.CompletedTask;
+        };
     });
 
 builder.Services.AddAuthorization();
