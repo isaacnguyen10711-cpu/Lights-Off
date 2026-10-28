@@ -38,9 +38,9 @@ builder.Services.AddAuthentication()
         googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
         googleOptions.Events.OnRemoteFailure = context =>
         {
-            // handle the error, e.g., log it or redirect to an error page
-            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error?login-cancelled");
-            context.HandleResponse(); // Suppress the default behavior
+            // they cancelled or it failed on the provider's side, so send them back to the login page
+            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
+            context.HandleResponse(); // stops ASP.NET showing its own error page
             return Task.CompletedTask;
         };
     })
@@ -51,9 +51,9 @@ builder.Services.AddAuthentication()
         facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
         facebookOptions.Events.OnRemoteFailure = context =>
         {
-            // handle the error, e.g., log it or redirect to an error page
-            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error?login-cancelled");
-            context.HandleResponse(); // Suppress the default behavior
+            // they cancelled or it failed on the provider's side, so send them back to the login page
+            context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
+            context.HandleResponse(); // stops ASP.NET showing its own error page
             return Task.CompletedTask;
         };
     });
