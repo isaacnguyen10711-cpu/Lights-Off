@@ -48,7 +48,7 @@ namespace Lights_Off.Controllers
 
             if (userInfo == null)
             {
-                return Unauthorized("Unauthorized access. No user information found.");
+                return Redirect(_configuration["Frontend:Url"] + "/?error=login-failed");
             }
 
             // Check if the user already exists in the database
@@ -67,22 +67,33 @@ namespace Lights_Off.Controllers
                     DisplayName = displayName ?? "Unknown",
                 };
 
-                // Create the new user in the database
                 var response = await _userManager.CreateAsync(newUser);
                 if (!response.Succeeded)
                 {
-                    return BadRequest(response.Errors);
+                    // their email already has an account (made with another sign in method)
+                    // email can be null, e.g. Facebook accounts made with a phone number
+                    if (email != null && await _userManager.FindByEmailAsync(email) != null)
+                    {
+                        return Redirect(_configuration["Frontend:Url"] + "/?error=email-taken");
+                    }
+
+                    // anything else is unexpected, so just say it didn't work
+                    return Redirect(_configuration["Frontend:Url"] + "/?error=login-failed");
                 }
 
                 // Associate the external login with the newly created user
-                await _userManager.AddLoginAsync(newUser, userInfo);
+                var linkResult = await _userManager.AddLoginAsync(newUser, userInfo);
+                if (!linkResult.Succeeded)
+                {
+                    return Redirect(_configuration["Frontend:Url"] + "/?error=login-failed");
+                }
 
                 // Sign in the newly created user
                 await _signInManager.SignInAsync(newUser, isPersistent: true, userInfo.LoginProvider);
             }
 
-            // If the user already exists, sign them in and redirect to the "me" endpoint to get their information
-            return Redirect(_configuration["Frontend:Url"] + "/home"); 
+            // logged in, send them back to the website
+            return Redirect(_configuration["Frontend:Url"] + "/home");
         }
 
         // Separate endpoint to get the current authenticated user's information
