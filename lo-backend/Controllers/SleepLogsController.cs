@@ -76,6 +76,39 @@ public class SleepLogsController : ControllerBase
         return sleepLog;
     }
 
+    // GET : api/SleepLog/latest-log
+    [Authorize]
+    [HttpGet("latest-log")]
+    public async Task<ActionResult<SleepLogResponse>> GetLatestSleepLog()
+    {
+        var userId = GetUserId();
+        var sleepLog = await _context.SleepLogs
+            .AsNoTracking()
+            .Where(s => s.UserId == userId)
+            .OrderByDescending(s => s.Date)
+            .Select(s => new SleepLogResponse
+            {
+                SleepLogId = s.SleepLogId,
+                Date = s.Date,
+                Bedtime = s.Bedtime,
+                WakeUpTime = s.WakeUpTime,
+                Quality = s.Quality,
+                CaffeineAfter3pm = s.CaffeineAfter3pm,
+                Exercised = s.Exercised,
+                StressLevel = s.StressLevel,
+                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
+                AfternoonNapDuration = s.AfternoonNapDuration
+            })
+            .FirstOrDefaultAsync();
+
+        if (sleepLog == null)
+        {
+            return NotFound();
+        }
+
+        return sleepLog;
+    }
+
     // PUT: api/SleepLogs/5
     [Authorize]
     [ValidateBedTimeAndWakeUpTime]
