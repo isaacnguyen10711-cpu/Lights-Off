@@ -37,8 +37,8 @@ export default function LoginPage() {
     const error = new URLSearchParams(window.location.search).get("error");
     if (error && errorMessages[error]) {
       alert(errorMessages[error]);
-      // take ?error off the url so refreshing doesn't show it again
-      window.history.replaceState(null, "", "/");
+      // refresh the page so the error message doesn't show again if the user reloads
+      router.replace("/");
     }
 
     // Check if the user is already authenticated
