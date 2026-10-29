@@ -27,19 +27,7 @@ public class SleepLogsController : ControllerBase
             .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.Date)
-            .Select(s => new SleepLogResponse
-            {
-                SleepLogId = s.SleepLogId,
-                Date = s.Date,
-                Bedtime = s.Bedtime,
-                WakeUpTime = s.WakeUpTime,
-                Quality = s.Quality,
-                CaffeineAfter3pm = s.CaffeineAfter3pm,
-                Exercised = s.Exercised,
-                StressLevel = s.StressLevel,
-                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
-                AfternoonNapDuration = s.AfternoonNapDuration
-            });
+            .Select(s => SleepLogResponse.Create(s));
 
         return await allSleepLog.ToListAsync();
     }
@@ -53,19 +41,7 @@ public class SleepLogsController : ControllerBase
         var sleepLog = await _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.SleepLogId == sleeplogid && s.UserId == userId)
-            .Select(s => new SleepLogResponse
-            {
-                SleepLogId = s.SleepLogId,
-                Date = s.Date,
-                Bedtime = s.Bedtime,
-                WakeUpTime = s.WakeUpTime,
-                Quality = s.Quality,
-                CaffeineAfter3pm = s.CaffeineAfter3pm,
-                Exercised = s.Exercised,
-                StressLevel = s.StressLevel,
-                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
-                AfternoonNapDuration = s.AfternoonNapDuration
-            })
+            .Select(s => SleepLogResponse.Create(s))
             .FirstOrDefaultAsync();
 
         if (sleepLog == null)
@@ -86,19 +62,7 @@ public class SleepLogsController : ControllerBase
             .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.Date)
-            .Select(s => new SleepLogResponse
-            {
-                SleepLogId = s.SleepLogId,
-                Date = s.Date,
-                Bedtime = s.Bedtime,
-                WakeUpTime = s.WakeUpTime,
-                Quality = s.Quality,
-                CaffeineAfter3pm = s.CaffeineAfter3pm,
-                Exercised = s.Exercised,
-                StressLevel = s.StressLevel,
-                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
-                AfternoonNapDuration = s.AfternoonNapDuration
-            })
+            .Select(s => SleepLogResponse.Create(s))
             .FirstOrDefaultAsync();
 
         if (sleepLog == null)
@@ -189,19 +153,7 @@ public class SleepLogsController : ControllerBase
         _context.SleepLogs.Add(newSleepLog);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetSleepLog), new { sleeplogid = newSleepLog.SleepLogId }, new SleepLogResponse
-        {
-            SleepLogId = newSleepLog.SleepLogId,
-            Date = newSleepLog.Date,
-            Bedtime = newSleepLog.Bedtime,
-            WakeUpTime = newSleepLog.WakeUpTime,
-            Quality = newSleepLog.Quality,
-            CaffeineAfter3pm = newSleepLog.CaffeineAfter3pm,
-            Exercised = newSleepLog.Exercised,
-            StressLevel = newSleepLog.StressLevel,
-            ScreenTimeBeforeBed = newSleepLog.ScreenTimeBeforeBed,
-            AfternoonNapDuration = newSleepLog.AfternoonNapDuration
-        });
+        return CreatedAtAction(nameof(GetSleepLog), new { sleeplogid = newSleepLog.SleepLogId }, SleepLogResponse.Create(newSleepLog));
     }
 
     // [Authorize] makes sure this claim is always there

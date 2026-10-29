@@ -26,5 +26,23 @@ namespace Lights_Off.Models.DTOs
         // worked out by the API from the wake up time
         public DateOnly Date { get; set; }
         public double HoursSlept => Math.Round((WakeUpTime - Bedtime).TotalHours, 1);
+
+        // turns a database row into what the API sends back, so the field list only lives here
+        public static SleepLogResponse Create(SleepLog s)
+        {
+            return new SleepLogResponse
+            {
+                SleepLogId = s.SleepLogId,
+                Date = s.Date,
+                Bedtime = s.Bedtime,
+                WakeUpTime = s.WakeUpTime,
+                Quality = s.Quality,
+                CaffeineAfter3pm = s.CaffeineAfter3pm,
+                Exercised = s.Exercised,
+                StressLevel = s.StressLevel,
+                ScreenTimeBeforeBed = s.ScreenTimeBeforeBed,
+                AfternoonNapDuration = s.AfternoonNapDuration
+            };
+        }
     }
 }
