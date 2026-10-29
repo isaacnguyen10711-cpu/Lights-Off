@@ -90,19 +90,19 @@ export default function LoginPage() {
     };
 
     return (
-      <main className="min-h-screen lg:flex lg:h-screen lg:overflow-hidden">
+      <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
         {/* left side: logo, the clock and what the app does */}
-        <section className="flex flex-col justify-between gap-6 px-4 py-8 sm:px-12 lg:flex-1 lg:px-20 lg:py-10">
+        <section className="flex flex-col justify-between gap-6 px-4 py-8 md:px-12 md:flex-1 xl:px-20 xl:py-10">
           <p className="text-2xl font-bold tracking-tight">Lights Off</p>
 
           <div className="relative mx-auto">
             {/* soft navy glow, the clock comes after it in the code so it sits on top */}
             <div className="absolute inset-12 rounded-full bg-navy blur-3xl" />
-            <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-80 sm:size-128" />
+            <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-80 md:size-72 xl:size-128" />
           </div>
 
           <div>
-            <h1 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
+            <h1 className="text-3xl leading-tight font-semibold tracking-tight md:text-4xl">
               Improve your sleeps instantly
             </h1>
             <p className="mt-3 text-base text-muted">Sleep tracker for your busy schedule.</p>
@@ -110,8 +110,8 @@ export default function LoginPage() {
         </section>
 
         {/* right side: the sign in form */}
-        <section className="flex flex-col gap-12 px-4 pb-10 sm:px-12 lg:w-lg lg:shrink-0 lg:py-12 lg:pr-16 lg:pl-0">
-          <div className="my-auto w-full max-w-sm self-center lg:self-start">
+        <section className="flex flex-col gap-12 px-4 pb-10 md:px-12 md:w-96 md:shrink-0 md:py-12 md:pr-12 md:pl-0 xl:w-lg xl:pr-16">
+          <div className="my-auto w-full max-w-sm self-center md:self-start">
             <h2 className="text-3xl font-semibold tracking-tight">Welcome back</h2>
             <p className="mt-2 text-muted">Sign in to log last night&rsquo;s sleep.</p>
 
@@ -168,7 +168,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 text-sm text-muted lg:w-full lg:max-w-sm lg:items-end">
+          <div className="flex flex-col gap-3 text-sm text-muted md:w-full md:max-w-sm md:items-end">
             <p>
               New here?{" "}
               <Link href="/register" className="font-bold text-strong hover:underline underline-offset-4">
