@@ -67,6 +67,11 @@ namespace Lights_Off.Services
                 return "Log your first night of sleep to get feedback.";
             }
 
+            if (lastNight.LastNightFeedback != null)
+            {
+                return lastNight.LastNightFeedback;
+            }
+
             // the week before it, so Claude has something to compare with
             var logsInWeekBefore = await GetLogsInWeekBeforeAsync(userId, lastNight.Date);
 
@@ -85,7 +90,15 @@ namespace Lights_Off.Services
                 My average the week before: {average}
                 """;
 
-            return await AskClaudeAsync(LastNightPrompt, message);
+            var feedback = await AskClaudeAsync(LastNightPrompt, message);
+            if (feedback != RefusalMessage && !string.IsNullOrWhiteSpace(feedback))
+            {
+                lastNight.LastNightFeedback = feedback;
+                // need to use Update() because lastNight was retrieved with AsNoTracking()
+                _context.SleepLogs.Update(lastNight);
+                await _context.SaveChangesAsync();
+            }
+            return feedback;
         }
 
         // a review of one whole month (the controller checks the month is valid and finished)
