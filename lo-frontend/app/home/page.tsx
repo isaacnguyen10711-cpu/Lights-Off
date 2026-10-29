@@ -55,19 +55,42 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
+    const fetchLatestLogData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          // User is not authenticated, redirect to the login page
+          router.replace("/");
+        }
+
+        if (response.ok) {
+          setLatestLog(await response.json());
+        }
+      }
+      catch (error) {
+        console.error("Error fetching latest sleep log:", error);
+      }
+    };
+    fetchLatestLogData();
+  }, [router]);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/authentication/logout`, {
+      await fetch(`${API_URL}/api/authentication/logout`, {
         method: "POST",
         credentials: "include",
       });
 
       alert("You have been logged out.");
-      router.replace("/");
     }
     catch (error) {
       console.error("Error logging out:", error);
+    }
+    router.replace("/");
   }
 
   return (
