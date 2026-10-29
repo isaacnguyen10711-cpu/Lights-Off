@@ -111,6 +111,9 @@ public class SleepLogsController : ControllerBase
         existingLog.ScreenTimeBeforeBed = sleeplog.ScreenTimeBeforeBed;
         existingLog.AfternoonNapDuration = sleeplog.AfternoonNapDuration;
 
+        // clear feedback so it can be regenerated with the new data
+        existingLog.LastNightFeedback = null;
+
         await _context.SaveChangesAsync();
 
         return NoContent();
