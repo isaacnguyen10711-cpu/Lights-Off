@@ -77,6 +77,9 @@ namespace Lights_Off.Migrations
                     b.Property<bool?>("Exercised")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastNightFeedback")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quality")
                         .HasColumnType("int");
 

@@ -17,14 +17,15 @@ namespace Lights_Off.Models
         [Required]
         [Range(1, 10)]
         public int Quality { get; set; }
-
         public bool? CaffeineAfter3pm { get; set; }
-
         public bool? Exercised { get; set; }
         [Range(1, 10)]
         public int? StressLevel { get; set; }
         public ScreenTimeBeforeBed? ScreenTimeBeforeBed { get; set; }
         public AfternoonNapDuration? AfternoonNapDuration { get; set; }
+
+        public string? LastNightFeedback { get; set; }
+
         [Required]
         public int UserId { get; set; }
         public User User { get; set; } = null!;
