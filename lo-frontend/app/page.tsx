@@ -6,10 +6,8 @@ import Link from "next/link";
 import React from "react";
 import { useRef, useEffect } from "react";
 
-
-// the backend, Google and Facebook login start from here
-const API_URL = "https://localhost:7152";
-
+// the backend address, set in .env.local
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // shared styles for the email and password boxes
 const inputStyles =
