@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ScoreBoxProps, HabitProps, SleepLogProps } from "../../type";
 
-// just the look for now, the real data gets hooked up later
-
-// every size below is set for 3 screens: phone (default), tablet (md) and big screens (xl)
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const primaryButtonStyles =
   "h-12 md:h-11 xl:h-12 rounded-xl bg-strong px-6 md:px-4 xl:px-6 text-base md:text-sm xl:text-base font-bold text-navy transition-colors hover:cursor-pointer hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
@@ -13,16 +16,6 @@ const secondaryButtonStyles =
 const boxStyles = "rounded-2xl border border-line bg-field p-4 md:p-4 xl:p-5";
 
 const labelStyles = "text-xs md:text-xs xl:text-sm font-semibold uppercase tracking-wider text-muted";
-
-type ScoreBoxProps = {
-  label: string;
-  score: number;
-};
-
-type HabitProps = {
-  label: string;
-  value: string;
-};
 
 // a score out of 10, shown as the number plus 10 little bars
 const ScoreBox = ({ label, score }: ScoreBoxProps) => {
@@ -57,6 +50,26 @@ const Habit = ({ label, value }: HabitProps) => {
 }
 
 export default function HomePage() {
+  const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/authentication/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      alert("You have been logged out.");
+      router.replace("/");
+    }
+    catch (error) {
+      console.error("Error logging out:", error);
+  }
+
   return (
     <main className="flex min-h-screen flex-col md:h-screen">
       {/* top bar */}
@@ -67,6 +80,7 @@ export default function HomePage() {
             Dashboard
           </Link>
           <button
+            onClick={handleLogout}
             type="button"
             className="font-semibold text-muted transition-colors hover:cursor-pointer hover:text-strong"
           >
