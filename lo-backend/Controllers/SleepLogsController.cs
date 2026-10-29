@@ -17,19 +17,35 @@ public class SleepLogsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/SleepLog
+    // GET: api/SleepLogs?year=2026&month=10
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetSleepLog()
+    public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetAllSleepLogInAMonth([FromQuery] int year, [FromQuery] int month)
     {
         var userId = GetUserId();
-        var allSleepLog = _context.SleepLogs
+
+        // DateOnly crashes on silly years like 0, so stop them here with a 400 instead
+        if (year < 2000 || year > 2100)
+        {
+            return BadRequest("Year must be between 2000 and 2100.");
+        }
+
+        if (month < 1 || month > 12)
+        {
+            return BadRequest("Month must be between 1 and 12.");
+        }
+
+        var monthStart = new DateOnly(year, month, 1);
+        var nextMonthStart = monthStart.AddMonths(1);
+
+        var sleepLogInTheMonth = _context.SleepLogs
             .AsNoTracking()
-            .Where(s => s.UserId == userId)
-            .OrderByDescending(s => s.Date)
+            .Where(s => s.UserId == userId && s.Date >= monthStart && s.Date < nextMonthStart)
+            .OrderBy(s => s.Date)
+            // use the DTO helper method to convert to the response model
             .Select(s => SleepLogResponse.Create(s));
 
-        return await allSleepLog.ToListAsync();
+        return await sleepLogInTheMonth.ToListAsync();
     }
 
     // GET: api/SleepLog/5
@@ -41,6 +57,7 @@ public class SleepLogsController : ControllerBase
         var sleepLog = await _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.SleepLogId == sleeplogid && s.UserId == userId)
+            // use the DTO helper method to convert to the response model
             .Select(s => SleepLogResponse.Create(s))
             .FirstOrDefaultAsync();
 
@@ -62,6 +79,7 @@ public class SleepLogsController : ControllerBase
             .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.Date)
+            // use the DTO helper method to convert to the response model
             .Select(s => SleepLogResponse.Create(s))
             .FirstOrDefaultAsync();
 
