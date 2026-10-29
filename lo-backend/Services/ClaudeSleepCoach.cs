@@ -91,6 +91,16 @@ namespace Lights_Off.Services
         // a review of one whole month (the controller checks the month is valid and finished)
         public async Task<string> GetMonthlyFeedbackAsync(int userId, int year, int month)
         {
+            // already reviewed this month? reuse it so we don't pay Claude again
+            var savedReview = await _context.MonthlyReviews
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.UserId == userId && r.Year == year && r.Month == month);
+
+            if (savedReview != null)
+            {
+                return savedReview.Review;
+            }
+
             // a date range instead of .Year/.Month so the (UserId, Date) index gets used
             var monthStart = new DateOnly(year, month, 1);
             var nextMonthStart = monthStart.AddMonths(1);
@@ -118,8 +128,27 @@ namespace Lights_Off.Services
                 message += $"- {DescribeNight(log)}\n";
             }
 
-            return await AskClaudeAsync(MonthlyPrompt, message);
+            var review = await AskClaudeAsync(MonthlyPrompt, message);
+
+            // only save a real review, so a refusal or empty answer can be tried again later
+            if (review != RefusalMessage && !string.IsNullOrWhiteSpace(review))
+            {
+                _context.MonthlyReviews.Add(new MonthlyReview
+                {
+                    UserId = userId,
+                    Year = year,
+                    Month = month,
+                    Review = review,
+                    CreatedAt = DateTime.UtcNow
+                });
+                await _context.SaveChangesAsync();
+            }
+
+            return review;
         }
+
+        // what we show when Claude says no
+        private const string RefusalMessage = "Sorry, the Lights Off coach couldn't give feedback this time.";
 
 
         // sends the prompt to Claude and returns its answer
@@ -138,7 +167,7 @@ namespace Lights_Off.Services
             // Claude's safety filters can say no, so check before reading the answer
             if (response.StopReason == "refusal")
             {
-                return "Sorry, the Lights Off coach couldn't give feedback this time.";
+                return RefusalMessage;
             }
 
             var answer = "";
