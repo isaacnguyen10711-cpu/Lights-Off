@@ -10,7 +10,7 @@ import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } fr
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const 
+
 
 export default function HomePage() {
   const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
@@ -63,6 +63,20 @@ export default function HomePage() {
     router.replace("/");
   }
 
+  // convert the bedtime and wakeUpTime to readable strings
+  const bedTimeString = latestLog?.bedtime ? new Date(latestLog.bedtime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '';
+  const wakeUpTimeString = latestLog?.wakeUpTime ? new Date(latestLog.wakeUpTime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '';
+  const hoursSleptString = latestLog?.hoursSlept ? `${Math.floor(latestLog.hoursSlept)}h ${Math.round((latestLog.hoursSlept % 1) * 60)}m` : '';
+  const dateString = latestLog?.date ? new Date(latestLog.date).toLocaleDateString("en-AU", { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) : '';
+
+  // convert the screenTimeBeforeBed and afternoonNapDuration to readable strings because they are stored as enums
+  const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
+
+  const screenTimeBeforeBedString =
+    latestLog?.screenTimeBeforeBed != null ? durationLabels[latestLog.screenTimeBeforeBed] : "-";
+  const afternoonNapDurationString =
+    latestLog?.afternoonNapDuration != null ? durationLabels[latestLog.afternoonNapDuration] : "-";
+
   return (
     <main className="flex min-h-screen flex-col md:h-screen">
       {/* top bar */}
@@ -90,7 +104,7 @@ export default function HomePage() {
             Morning, Isaac.
           </h1>
           <p className="mt-2 md:mt-3 xl:mt-3 max-w-sm text-base md:text-sm xl:text-base text-muted">
-            Here&rsquo;s how last night went. You woke up Wednesday, 29 October.
+            Here&rsquo;s how last night went.
           </p>
 
           {/* stacked on phones, side by side from tablets up */}
@@ -112,26 +126,26 @@ export default function HomePage() {
               {/* label on the left, when they woke up on the right */}
               <div className="flex items-baseline justify-between gap-3 md:gap-3 xl:gap-4">
                 <p className={labelStyles}>Total slept</p>
-                <p className="text-xs md:text-xs xl:text-sm text-muted tabular-nums">Thursday 30 Oct, 2026</p>
+                <p className="text-xs md:text-xs xl:text-sm text-muted tabular-nums">{dateString}</p>
               </div>
               <p className="mt-2 md:mt-2 xl:mt-3 text-5xl md:text-5xl xl:text-6xl font-semibold tracking-tight tabular-nums">
-                7h 30m
+                {hoursSleptString}
               </p>
               <p className="mt-3 md:mt-3 xl:mt-4 text-base md:text-sm xl:text-base text-muted tabular-nums">
-                <span className="text-strong">11:10 pm</span> bed &rarr; <span className="text-strong">6:40 am</span> up
+                <span className="text-strong">{bedTimeString}</span> bed &rarr; <span className="text-strong">{wakeUpTimeString}</span> up
               </p>
             </div>
 
-            <ScoreBox label="Quality" score={8} />
-            <ScoreBox label="Stress" score={4} />
+            <ScoreBox label="Quality" score={latestLog?.quality ?? 0} />
+            <ScoreBox label="Stress" score={latestLog?.stressLevel ?? 0} />
 
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>Habits</p>
               <dl className="mt-3 md:mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 md:gap-x-4 xl:gap-x-6 gap-y-3 md:gap-y-3 xl:gap-y-4">
-                <Habit label="Caffeine after 3pm" value="No" />
-                <Habit label="Exercise" value="Yes" />
-                <Habit label="Screen time before bed" value="30 to 60 min" />
-                <Habit label="Nap" value="None" />
+                <Habit label="Caffeine after 3pm" value={latestLog?.caffeineAfter3pm ? 'Yes' : '-'} />
+                <Habit label="Exercise" value={latestLog?.exercised ? 'Yes' : '-'} />
+                <Habit label="Screen time before bed" value={screenTimeBeforeBedString} />
+                <Habit label="Nap" value={afternoonNapDurationString} />
               </dl>
             </div>
 
