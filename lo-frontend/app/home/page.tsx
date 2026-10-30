@@ -142,8 +142,8 @@ export default function HomePage() {
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>Habits</p>
               <dl className="mt-3 md:mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 md:gap-x-4 xl:gap-x-6 gap-y-3 md:gap-y-3 xl:gap-y-4">
-                <Habit label="Caffeine after 3pm" value={latestLog?.caffeineAfter3pm ? 'Yes' : '-'} />
-                <Habit label="Exercise" value={latestLog?.exercised ? 'Yes' : '-'} />
+                <Habit label="Caffeine after 3pm" value={latestLog?.caffeineAfter3pm == null ? '-' : latestLog.caffeineAfter3pm ? 'Yes' : 'No'} />
+                <Habit label="Exercise" value={latestLog?.exercised == null ? '-' : latestLog.exercised ? 'Yes' : 'No'} />
                 <Habit label="Screen time before bed" value={screenTimeBeforeBedString} />
                 <Habit label="Nap" value={afternoonNapDurationString} />
               </dl>
