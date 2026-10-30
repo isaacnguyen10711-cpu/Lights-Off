@@ -6,15 +6,11 @@ import { useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
 import ScoreBox from "../../components/ScoreBox";
 import Habit from "../../components/Habit";
-import { boxStyles, labelStyles } from "../../components/styles";
+import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const primaryButtonStyles =
-  "h-12 md:h-11 xl:h-12 rounded-xl bg-strong px-6 md:px-4 xl:px-6 text-base md:text-sm xl:text-base font-bold text-navy transition-colors hover:cursor-pointer hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
-
-const secondaryButtonStyles =
-  "flex h-12 md:h-11 xl:h-12 items-center justify-center rounded-xl border border-line bg-field px-6 md:px-4 xl:px-6 text-base md:text-sm xl:text-base font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
+const 
 
 export default function HomePage() {
   const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
@@ -113,7 +109,11 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
             {/* the big one: how long they slept */}
             <div className={`${boxStyles} col-span-2`}>
-              <p className={labelStyles}>Total slept</p>
+              {/* label on the left, when they woke up on the right */}
+              <div className="flex items-baseline justify-between gap-3 md:gap-3 xl:gap-4">
+                <p className={labelStyles}>Total slept</p>
+                <p className="text-xs md:text-xs xl:text-sm text-muted tabular-nums">Thursday 30 Oct, 2026</p>
+              </div>
               <p className="mt-2 md:mt-2 xl:mt-3 text-5xl md:text-5xl xl:text-6xl font-semibold tracking-tight tabular-nums">
                 7h 30m
               </p>
