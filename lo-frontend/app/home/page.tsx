@@ -86,14 +86,15 @@ export default function HomePage() {
   // convert the bedtime and wakeUpTime to readable strings
 
 
-  const bedTimeString = latestLog?.bedtime ? new Date(latestLog.bedtime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '';
-  const wakeUpTimeString = latestLog?.wakeUpTime ? new Date(latestLog.wakeUpTime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '';
-  const hoursSleptString = latestLog?.hoursSlept ? `${Math.floor(latestLog.hoursSlept)}h ${Math.round((latestLog.hoursSlept % 1) * 60)}m` : '';
-  const dateString = latestLog?.date ? new Date(`${latestLog.date}T00:00:00`).toLocaleDateString("en-AU", { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) : '';
+  const bedTimeString = latestLog?.bedtime ? new Date(latestLog.bedtime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '-';
+  const wakeUpTimeString = latestLog?.wakeUpTime ? new Date(latestLog.wakeUpTime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '-';
+  const hoursSleptString = latestLog?.hoursSlept ? `${Math.floor(latestLog.hoursSlept)}h ${Math.round((latestLog.hoursSlept % 1) * 60)}m` : '-';
+  const dateString = latestLog?.date ? new Date(`${latestLog.date}T00:00:00`).toLocaleDateString("en-AU", { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) : '-';
 
   // convert the screenTimeBeforeBed and afternoonNapDuration to readable strings because they are stored as enums
   const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
+  // enums return the index of the enum, so we can use that to get the label from the array above
   const screenTimeBeforeBedString =
     latestLog?.screenTimeBeforeBed != null ? durationLabels[latestLog.screenTimeBeforeBed] : "-";
   const afternoonNapDurationString =
