@@ -4,6 +4,8 @@ using Lights_Off.Models;
 using Lights_Off.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
+using System.Security.Claims;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +62,23 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddRateLimiter(options =>
+{
+    // Too Many Requests so that devs can know when they are hitting the limit, rather than a 500 error
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("AIFeedbackRequest", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            context.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? context.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+            }
+        )
+    );
+});
+
+
 // one shared Claude client for the whole app
 builder.Services.AddSingleton(new AnthropicClient
 {
@@ -96,6 +115,8 @@ app.UseCors("Frontend");
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 app.MapGroup("/api/identity").MapIdentityApi<User>();

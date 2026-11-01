@@ -1,12 +1,14 @@
 using Lights_Off.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace Lights_Off.Controllers
 {
     [Authorize]
     [ApiController]
+    [EnableRateLimiting("AIFeedbackRequest")]
     [Route("api/[controller]")]
     public class SleepCoachController : ControllerBase
     {
