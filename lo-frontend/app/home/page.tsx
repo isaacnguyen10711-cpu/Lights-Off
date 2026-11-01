@@ -14,6 +14,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function HomePage() {
   const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -39,6 +40,25 @@ export default function HomePage() {
       }
     };
     fetchLatestLogData();
+
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/authentication/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const user = await response.json();
+          // google gives the full name so we only want their first name
+          setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
+        }
+      }
+      catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
 
   }, [router]);
 
@@ -103,7 +123,8 @@ export default function HomePage() {
         {/* left side: greeting and what to do next */}
         <section>
           <h1 className="text-3xl md:text-4xl xl:text-5xl leading-tight font-semibold tracking-tight">
-            Morning, Isaac.
+            {/* email sign ups don't have a name, so just say "Morning." */}
+            {firstName ? `Morning, ${firstName}.` : "Morning."}
           </h1>
           <p className="mt-2 md:mt-3 xl:mt-3 max-w-sm text-base md:text-sm xl:text-base text-muted">
             Here&rsquo;s how last night went.
