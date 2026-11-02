@@ -2,7 +2,7 @@ import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
-// the boxes, like boxStyles but without the hover lift (it's annoying on a form)
+// the boxes, like boxStyles but without the hover lift
 const sectionStyles = "rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6";
 
 const inputStyles =
@@ -64,6 +64,65 @@ export default function LogPage() {
             </div>
           </div>
         </section>
+
+        {/* your day: hidden until they click it. <details> opens and closes by itself*/}
+        <details className={`${sectionStyles} mt-3 md:mt-3 xl:mt-4`}>
+          <summary className="hover:cursor-pointer">
+            <span className="text-base md:text-base xl:text-lg font-semibold">Add more about your day</span>
+            <span className="text-sm md:text-xs xl:text-sm text-muted"> (optional)</span>
+          </summary>
+
+          <div className="mt-6 md:mt-6 xl:mt-6 flex flex-col gap-5 md:gap-5 xl:gap-6">
+            {/* the two yes/no ones side by side */}
+            <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
+              <div>
+                <p className={labelStyles}>Caffeine after 3pm</p>
+                <div className="mt-2 grid grid-cols-2 gap-1 md:gap-1 xl:gap-2">
+                  <Choice name="caffeineAfter3pm" value="true" label="Yes" />
+                  <Choice name="caffeineAfter3pm" value="false" label="No" />
+                </div>
+              </div>
+              <div>
+                <p className={labelStyles}>Exercised</p>
+                <div className="mt-2 grid grid-cols-2 gap-1 md:gap-1 xl:gap-2">
+                  <Choice name="exercised" value="true" label="Yes" />
+                  <Choice name="exercised" value="false" label="No" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p className={labelStyles}>Stress level</p>
+              <div className="mt-2 grid grid-cols-10 gap-1 md:gap-1 xl:gap-2">
+                {oneToTen.map((n) => (
+                  <Choice key={n} name="stressLevel" value={n} label={n} />
+                ))}
+              </div>
+              <p className={hintStyles}>
+                <span>Calm</span>
+                <span>Very stressed</span>
+              </p>
+            </div>
+
+            <div>
+              <p className={labelStyles}>Screen time before bed</p>
+              <div className="mt-2 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-1 xl:gap-2">
+                {durations.map((label, i) => (
+                  <Choice key={label} name="screenTimeBeforeBed" value={String(i)} label={label} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className={labelStyles}>Afternoon nap</p>
+              <div className="mt-2 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-1 xl:gap-2">
+                {durations.map((label, i) => (
+                  <Choice key={label} name="afternoonNapDuration" value={String(i)} label={label} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </details>
 
         {/* stacked on phones, side by side on md screens or above */}
         <div className="mt-6 md:mt-6 xl:mt-8 flex flex-col-reverse md:flex-row md:justify-end gap-3 md:gap-3 xl:gap-4">
