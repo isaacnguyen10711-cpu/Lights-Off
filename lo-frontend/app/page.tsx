@@ -37,19 +37,19 @@ export default function LoginPage() {
     const error = new URLSearchParams(window.location.search).get("error");
     if (error && errorMessages[error]) {
       alert(errorMessages[error]);
-      // refresh the page so the error message doesn't show again if the user reloads
+      // clear ?error from the url so the message doesn't pop up again on reload
       router.replace("/");
     }
 
-    // Check if the user is already authenticated
+    // check if they're already logged in
     const checkAuthentication = async () => {
       try {
         const response = await fetch(`${API_URL}/api/authentication/me`, {
           method: "GET",
-          credentials: "include", // Include cookies for authentication
+          credentials: "include", // send the login cookie too
         });
         if (response.ok) {
-          // User is authenticated, redirect to the home page
+          // already logged in, so go straight to home
           router.replace("/home");
         }
       }
@@ -63,7 +63,6 @@ export default function LoginPage() {
 
     const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      // handle sign in logic 
       try {
         const response = await fetch(`${API_URL}/api/identity/login?useCookies=true`, {
           method: "POST",
@@ -78,7 +77,7 @@ export default function LoginPage() {
           alert("Sign in failed. Please check your credentials.");
         }
         else {
-          // Redirect to the home page
+          // logged in, go to home
           router.push("/home");
         }
 
@@ -119,7 +118,7 @@ export default function LoginPage() {
               Sign in to log last night&rsquo;s sleep.
             </p>
 
-            {/* not hooked up to the backend yet, so the button doesn't submit anything */}
+            {/* sends the email and password to the backend when they press sign in */}
             <form className="mt-8 md:mt-6 xl:mt-8 flex flex-col gap-4 md:gap-3 xl:gap-4" onSubmit={handleSignIn}>
               <label className="block">
                 <span className={labelStyles}>Email</span>

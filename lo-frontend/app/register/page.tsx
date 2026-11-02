@@ -43,10 +43,8 @@ export default function RegisterPage() {
       });
 
       if (!response.ok) {
-        // identity sends back what went wrong, e.g. password too short or email taken
-        const data = await response.json();
-        const messages = Object.values(data.errors ?? {}).flat();
-        alert(messages.length > 0 ? messages.join("\n") : "Sign up failed. Please try again.");
+        // usually the email's already used or the password is too weak
+        alert("Sign up failed. The email might already be used, or the password is too weak.");
         return;
       }
 

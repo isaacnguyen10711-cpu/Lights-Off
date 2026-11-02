@@ -27,7 +27,7 @@ export default function HomePage() {
         });
 
         if (response.status === 401) {
-          // User is not authenticated, redirect to the login page
+          // not logged in, send them back to the login page
           router.replace("/");
         }
 
@@ -83,7 +83,7 @@ export default function HomePage() {
     router.replace("/");
   }
 
-  // convert the bedtime and wakeUpTime to readable strings
+  // turn bedtime and wakeUpTime into times people can read
 
 
   const bedTimeString = latestLog?.bedtime ? new Date(latestLog.bedtime).toLocaleTimeString("en-AU", { hour: '2-digit', minute: '2-digit' }) : '-';
@@ -91,10 +91,10 @@ export default function HomePage() {
   const hoursSleptString = latestLog?.hoursSlept ? `${Math.floor(latestLog.hoursSlept)}h ${Math.round((latestLog.hoursSlept % 1) * 60)}m` : '-';
   const dateString = latestLog?.date ? new Date(`${latestLog.date}T00:00:00`).toLocaleDateString("en-AU", { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) : '-';
 
-  // convert the screenTimeBeforeBed and afternoonNapDuration to readable strings because they are stored as enums
+  // screen time and nap come back as enums (just numbers), so turn them into words
   const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
-  // enums return the index of the enum, so we can use that to get the label from the array above
+  // the enum number is its spot in the array above, so durationLabels[number] gives the label
   const screenTimeBeforeBedString =
     latestLog?.screenTimeBeforeBed != null ? durationLabels[latestLog.screenTimeBeforeBed] : "-";
   const afternoonNapDurationString =
@@ -147,7 +147,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
             {/* the big one: how long they slept */}
             <div className={`${boxStyles} col-span-2`}>
-              {/* label on the left, when they woke up on the right */}
+              {/* label on the left, the date on the right */}
               <div className="flex items-baseline justify-between gap-3 md:gap-3 xl:gap-4">
                 <p className={labelStyles}>Total slept</p>
                 <p className="text-xs md:text-xs xl:text-sm text-muted tabular-nums">{dateString}</p>
