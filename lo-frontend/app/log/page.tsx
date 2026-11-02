@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
@@ -47,22 +47,29 @@ export default function LogPage() {
     const screenTimeBeforeBed = formData.get("screenTimeBeforeBed");
     const afternoonNapDuration = formData.get("afternoonNapDuration");
 
+    let bedDay = date;
+    if (bedtime! > wakeUpTime!) {
+      const newDate = new Date(`${date}T00:00`);
+      newDate.setDate(newDate.getDate() - 1);
+      bedDay = newDate.toLocaleDateString("en-CA");
+    }
+
+    if (!quality) {
+      alert("Pick how well you slept.");
+      return;
+    }
+
     const body = {
       // Send bedtime and wakeUpTime as ISO 8601 strings ("2026-11-02T09:00"), combining the date and time for the backend to parse correctly
-      bedtime: `${date}T${bedtime}`,       
+      bedtime: `${bedDay}T${bedtime}`,       
       wakeUpTime: `${date}T${wakeUpTime}`,
       quality: Number(quality),
-      caffeineAfter3pm: caffeineAfter3pm ? null : caffeineAfter3pm === "true",
-      exercised: exercised ? null : exercised === "true",
+      caffeineAfter3pm: caffeineAfter3pm ? caffeineAfter3pm === "true" : null,
+      exercised: exercised ? exercised === "true" : null,
       stressLevel: stressLevel ? Number(stressLevel) : null,
       screenTimeBeforeBed: screenTimeBeforeBed ? Number(screenTimeBeforeBed) : null,
       afternoonNapDuration: afternoonNapDuration ? Number(afternoonNapDuration) : null,
     };
-
-    if (!body.bedtime || !body.wakeUpTime || body.quality === null) {
-      alert("Please fill in all required fields.");
-      return;
-    }
 
     try {
       const response = await fetch(`${API_URL}/api/sleeplogs`, {
