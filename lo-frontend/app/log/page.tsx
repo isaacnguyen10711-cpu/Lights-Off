@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react"; 
 import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
@@ -17,6 +20,15 @@ const oneToTen = Array.from({ length: 10 }, (_, i) => String(i + 1));
 const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 
 export default function LogPage() {
+  const dateRef = useRef<HTMLInputElement>(null); 
+
+  useEffect(() => {
+    // set the date input to today's date on page load, use en-CA format so it works in all browsers (YYYY-MM-DD)
+    if (dateRef.current) {
+      dateRef.current.value = new Date().toLocaleDateString("en-CA");
+    }
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 xl:py-5">
@@ -36,7 +48,7 @@ export default function LogPage() {
           <div className="flex flex-col gap-5 md:gap-5 xl:gap-6">
             <label className="block">
               <span className={labelStyles}>Date</span>
-              <input type="date" name="date" required className={inputStyles} />
+              <input type="date" name="date" ref={dateRef} required className={inputStyles} />
             </label>
 
             <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
