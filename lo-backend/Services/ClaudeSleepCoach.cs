@@ -58,9 +58,9 @@ namespace Lights_Off.Services
             If they're regularly sleeping under 5 hours or sleeping badly most nights, suggest they talk to a doctor.
             """;
 
-        public async Task<string> GetLastNightFeedbackAsync(int userId)
+        public async Task<string> GetLatestNightFeedbackAsync(int userId)
         {
-            var lastNight = await GetLatestLogAsync(userId);
+            var lastNight = await GetLatestLogAsync(userId); 
 
             if (lastNight == null)
             {

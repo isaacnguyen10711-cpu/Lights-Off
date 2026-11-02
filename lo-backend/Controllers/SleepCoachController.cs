@@ -19,12 +19,12 @@ namespace Lights_Off.Controllers
             _sleepCoach = sleepCoach;
         }
 
-        // GET: api/SleepCoach/last-night
+        // GET: api/SleepCoach/latest-night
         [Authorize]
-        [HttpGet("last-night")]
-        public async Task<IActionResult> GetLastNightReview()
+        [HttpGet("latest-night")]
+        public async Task<IActionResult> GetLatestNightReview()
         {
-            var review = await _sleepCoach.GetLastNightFeedbackAsync(GetUserId());
+            var review = await _sleepCoach.GetLatestNightFeedbackAsync(GetUserId());  
             return Ok(new { review });
         }
 
