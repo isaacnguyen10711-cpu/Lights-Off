@@ -2,18 +2,18 @@ import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
-// the boxes, like boxStyles but without the hover lift
+// same as boxStyles, just without the hover lift
 const sectionStyles = "rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6";
 
 const inputStyles =
   "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-night px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong tabular-nums scheme-dark focus:border-strong focus:outline-none";
 
-// the little hint under a 1 to 10 row, e.g. "Awful ... Great"
+// small text under the 1 to 10 rows, like "Awful ... Great"
 const hintStyles = "mt-2 flex justify-between text-xs md:text-xs xl:text-xs text-muted";
 
 const oneToTen = Array.from({ length: 10 }, (_, i) => String(i + 1));
 
-// same order as the enums in the backend (0 to 3)
+// these match the backend enums, 0 to 3
 const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 
 export default function LogPage() {
@@ -31,7 +31,7 @@ export default function LogPage() {
           How did last night go?
         </h1>
 
-        {/* the night: the only part you have to fill in */}
+        {/* the night, the only bit they have to fill in */}
         <section className={`${sectionStyles} mt-6 md:mt-6 xl:mt-8`}>
           <div className="flex flex-col gap-5 md:gap-5 xl:gap-6">
             <label className="block">
@@ -65,7 +65,7 @@ export default function LogPage() {
           </div>
         </section>
 
-        {/* your day: hidden until they click it. <details> opens and closes by itself*/}
+        {/* your day stays closed until they click it, <details> opens and closes by itself */}
         <details className={`${sectionStyles} mt-3 md:mt-3 xl:mt-4`}>
           <summary className="hover:cursor-pointer">
             <span className="text-base md:text-base xl:text-lg font-semibold">Add more about your day</span>
@@ -73,7 +73,7 @@ export default function LogPage() {
           </summary>
 
           <div className="mt-6 md:mt-6 xl:mt-6 flex flex-col gap-5 md:gap-5 xl:gap-6">
-            {/* the two yes/no ones side by side */}
+            {/* yes/no ones next to each other */}
             <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
               <div>
                 <p className={labelStyles}>Caffeine after 3pm</p>
@@ -124,7 +124,7 @@ export default function LogPage() {
           </div>
         </details>
 
-        {/* stacked on phones, side by side on md screens or above */}
+        {/* stacked on phones, next to each other from md up */}
         <div className="mt-6 md:mt-6 xl:mt-8 flex flex-col-reverse md:flex-row md:justify-end gap-3 md:gap-3 xl:gap-4">
           <Link href="/home" className={secondaryButtonStyles}>
             Cancel
