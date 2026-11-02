@@ -11,6 +11,12 @@ export type HabitProps = {
 };
 
 
+export type ChoiceProps = {
+  name: string;
+  value: string;
+  label: string;
+};
+
 export type SleepLogProps = {
   sleepLogId: number;
   date: string;
