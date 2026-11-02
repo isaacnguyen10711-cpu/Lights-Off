@@ -15,6 +15,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function HomePage() {
   const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -41,26 +42,45 @@ export default function HomePage() {
     };
     fetchLatestLogData();
 
-    const fetchUser = async () => {
+    const generateLatestNightFeedback = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/authentication/me`, {
+        const response = await fetch(`${API_URL}/api/sleepcoach/latest-night`, {
           method: "GET",
           credentials: "include",
         });
 
-        if (response.ok) {
-          const user = await response.json();
-          // google gives the full name so we only want their first name
-          setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
+        if (!response.ok) {
+          console.log("Error generating latest night feedback:", response.statusText);
         }
+        const data = await response.json();
+        setFeedback(data.review);
       }
       catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("Error generating latest night feedback:", error);
       }
     };
-    fetchUser();
+    generateLatestNightFeedback();
 
-  }, [router]);
+      const fetchUser = async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/authentication/me`, {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const user = await response.json();
+            // google gives the full name so we only want their first name
+            setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
+          }
+        }
+        catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+      fetchUser();
+
+    }, [router]);
 
   useEffect(() => {
     if (latestLog) {
@@ -176,7 +196,7 @@ export default function HomePage() {
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>From your coach</p>
               <p className="mt-2 md:mt-2 xl:mt-3 text-base md:text-sm xl:text-lg leading-relaxed">
-                Great job! You slept 7.5 hours, about half an hour more than usual.
+                {feedback ?? "No feedback available."}
               </p>
             </div>
           </div>
