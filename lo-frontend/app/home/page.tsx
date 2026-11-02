@@ -16,7 +16,6 @@ export default function HomePage() {
   const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -140,15 +139,16 @@ export default function HomePage() {
       </header>
 
       {/* 1 column on phones, 2 columns from tablets up */}
-      <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 md:grid-cols-2 content-center md:items-center gap-10 md:gap-8 xl:gap-20 px-4 md:px-8 xl:px-20 pb-8 md:pb-6 xl:pb-8">
+      <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 md:grid-cols-2 content-center md:items-center gap-10 md:gap-8 xl:gap-12 px-4 md:px-8 xl:px-20 pb-8 md:pb-6 xl:pb-4">
         {/* left side: greeting and what to do next */}
         <section>
           <h1 className="text-3xl md:text-4xl xl:text-5xl leading-tight font-semibold tracking-tight">
             {/* email sign ups don't have a name, so just say "Morning." */}
             {firstName ? `Morning, ${firstName}.` : "Morning."}
           </h1>
-          <p className="mt-2 md:mt-3 xl:mt-3 max-w-sm text-base md:text-sm xl:text-base text-muted">
-            Here&rsquo;s how last night went.
+          {/* the coach's message, or a plain line if there isn't one yet */}
+          <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
+            {feedback ?? "Here's how last night went."}
           </p>
 
           {/* stacked on phones, side by side from tablets up */}
@@ -163,7 +163,7 @@ export default function HomePage() {
         </section>
 
         {/* right side: last night split into boxes */}
-        <section className="mx-auto w-full max-w-lg">
+        <section className="mx-auto w-full max-w-lg md:max-w-lg xl:max-w-xl">
           <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
             {/* the big one: how long they slept */}
             <div className={`${boxStyles} col-span-2`}>
@@ -175,7 +175,7 @@ export default function HomePage() {
               <p className="mt-2 md:mt-2 xl:mt-3 text-5xl md:text-5xl xl:text-6xl font-semibold tracking-tight tabular-nums">
                 {hoursSleptString}
               </p>
-              <p className="mt-3 md:mt-3 xl:mt-4 text-base md:text-sm xl:text-base text-muted tabular-nums">
+              <p className="mt-3 md:mt-3 xl:mt-4 text-base md:text-sm xl:text-lg text-muted tabular-nums">
                 <span className="text-strong">{bedTimeString}</span> bed &rarr; <span className="text-strong">{wakeUpTimeString}</span> up
               </p>
             </div>
@@ -185,21 +185,13 @@ export default function HomePage() {
 
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>Habits</p>
-              <dl className="mt-3 md:mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 md:gap-x-4 xl:gap-x-6 gap-y-3 md:gap-y-3 xl:gap-y-4">
+              <dl className="mt-3 md:mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 md:gap-x-4 xl:gap-x-6 gap-y-3 md:gap-y-3 xl:gap-y-5">
                 <Habit label="Caffeine after 3pm" value={latestLog?.caffeineAfter3pm == null ? '-' : latestLog.caffeineAfter3pm ? 'Yes' : 'No'} />
                 <Habit label="Exercise" value={latestLog?.exercised == null ? '-' : latestLog.exercised ? 'Yes' : 'No'} />
                 <Habit label="Screen time before bed" value={screenTimeBeforeBedString} />
                 <Habit label="Nap" value={afternoonNapDurationString} />
               </dl>
-            </div>
-
-            <div className={`${boxStyles} col-span-2`}>
-              <p className={labelStyles}>From your coach</p>
-              <p className="mt-2 md:mt-2 xl:mt-3 text-base md:text-sm xl:text-lg leading-relaxed">
-                {feedback ?? "No feedback available."}
-              </p>
-            </div>
-          </div>
+            </div>          </div>
         </section>
       </div>
     </main>
