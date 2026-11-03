@@ -48,9 +48,17 @@ export default function HomePage() {
           credentials: "include",
         });
 
+        // hit the 5 a minute limit, the body's empty so don't read it
+        if (response.status === 429) {
+          setFeedback("Your coach needs a breather, try again in a minute.");
+          return;
+        }
+
         if (!response.ok) {
           console.log("Error generating latest night feedback:", response.statusText);
+          return;
         }
+
         const data = await response.json();
         setFeedback(data.review);
       }
