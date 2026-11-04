@@ -160,7 +160,7 @@ export default function HomePage() {
           {/* stacked on phones, side by side from tablets up */}
           <div className="mt-8 md:mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 md:gap-3 xl:gap-4">
             {loggedToday ? (
-              <Link href={`/log/edit?id=${latestLog?.sleepLogId}`} className={primaryButtonStyles}>
+              <Link href={`/update-log?id=${latestLog?.sleepLogId}`} className={primaryButtonStyles}>
                 Update last night
               </Link>
             ) : (
