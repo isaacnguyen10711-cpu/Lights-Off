@@ -137,7 +137,7 @@ export default function HomePage() {
           <button
             onClick={handleLogout}
             type="button"
-            className="font-semibold text-muted transition-colors hover:cursor-pointer hover:text-strong"
+            className="font-semibold text-muted transition-colors hover:text-strong"
           >
             Log out
           </button>

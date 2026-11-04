@@ -17,6 +17,11 @@ body {
   color: var(--color-strong);
 }
 
+/* tailwind v4 took the pointer off buttons, so put it back for all of them */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* highlighted text uses our blue instead of the browser default */
 ::selection {
   background: var(--color-line);
