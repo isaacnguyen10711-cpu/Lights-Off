@@ -79,6 +79,12 @@ export default function LogPage() {
         body: JSON.stringify(body),
       });
 
+      // backend only allows one log per day
+      if (response.status === 409) {
+        alert("You already logged this night.");
+        return;
+      }
+
       if (!response.ok) {
         alert("Failed to submit form. Please try again.");
         console.log("Error response:", await response.text());
