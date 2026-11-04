@@ -117,7 +117,7 @@ export default function HomePage() {
   const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
   // the log's date is the day they woke up, so if it's today they've already logged last night
-  const loggedToday = latestLog?.date === new Date().toLocaleDateString("en-CA");
+  const loggedToday = latestLog !== null && latestLog.date === new Date().toLocaleDateString("en-CA");
 
   // the enum number is its spot in the array above, so durationLabels[number] gives the label
   const screenTimeBeforeBedString =

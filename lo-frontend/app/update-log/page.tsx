@@ -4,7 +4,7 @@ import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -23,7 +23,7 @@ const oneToTen = Array.from({ length: 10 }, (_, i) => String(i + 1));
 // these match the backend enums, 0 to 3
 const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 
-export default function UpdateLogPage() {
+function UpdateLogForm() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
 
@@ -36,7 +36,7 @@ export default function UpdateLogPage() {
     }
     const fetchLogData = async () => {
       try {
-        const response = await fetch(`${API_URL}/sleeplogs/${id}`, {
+        const response = await fetch(`${API_URL}/api/sleeplogs/${id}`, {
           method: "GET",
           credentials: "include",
         });
@@ -176,4 +176,13 @@ return (
     </form>
   </main>
 );
+}
+
+// useSearchParams needs a Suspense around it, so Next knows what to show before it reads the url
+export default function UpdateLogPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <UpdateLogForm />
+    </Suspense>
+  );
 }
