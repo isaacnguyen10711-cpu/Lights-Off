@@ -116,6 +116,9 @@ export default function HomePage() {
   // screen time and nap come back as enums (just numbers), so turn them into words
   const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
+  // the log's date is the day they woke up, so if it's today they've already logged last night
+  const loggedToday = latestLog?.date === new Date().toLocaleDateString("en-CA");
+
   // the enum number is its spot in the array above, so durationLabels[number] gives the label
   const screenTimeBeforeBedString =
     latestLog?.screenTimeBeforeBed != null ? durationLabels[latestLog.screenTimeBeforeBed] : "-";
@@ -156,9 +159,15 @@ export default function HomePage() {
 
           {/* stacked on phones, side by side from tablets up */}
           <div className="mt-8 md:mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 md:gap-3 xl:gap-4">
-            <Link href="/log" className={primaryButtonStyles}>
-              Log a night
-            </Link>
+            {loggedToday ? (
+              <Link href={`/log/edit?id=${latestLog?.sleepLogId}`} className={primaryButtonStyles}>
+                Update last night
+              </Link>
+            ) : (
+              <Link href="/log" className={primaryButtonStyles}>
+                Log a night
+              </Link>
+            )}
             <Link href="/dashboard" className={secondaryButtonStyles}>
               Open dashboard
             </Link>
