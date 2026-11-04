@@ -15,6 +15,7 @@ export type ChoiceProps = {
   name: string;
   value: string;
   label: string;
+  defaultChecked?: boolean;
 };
 
 export type SleepLogProps = {
