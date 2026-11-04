@@ -33,7 +33,7 @@ export default function LogPage() {
     }
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogSleep = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // get the date value and put it in the form data, so it can be sent to the backend
     const formData = new FormData(event.currentTarget);
@@ -108,7 +108,7 @@ return (
       </Link>
     </header>
 
-    <form onSubmit={handleSubmit} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 xl:px-0 pt-4 md:pt-4 xl:pt-2 pb-10 md:pb-8 xl:pb-8">
+    <form onSubmit={handleLogSleep} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 xl:px-0 pt-4 md:pt-4 xl:pt-2 pb-10 md:pb-8 xl:pb-8">
       <h1 className="text-3xl md:text-4xl xl:text-4xl leading-tight font-semibold tracking-tight">
         How did last night go?
       </h1>

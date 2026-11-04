@@ -55,8 +55,75 @@ function UpdateLogForm() {
     };
 
     fetchLogData();
-  }, [id]);
+  }, [id, router]);
 
+  // same as the log page, just PUT to this log's id instead of POST
+  const handleUpdateSleepLog = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // read every input in the form by its name
+    const formData = new FormData(event.currentTarget);
+    const date = formData.get("date");
+    const bedtime = formData.get("bedtime");
+    const wakeUpTime = formData.get("wakeUpTime");
+    const quality = formData.get("quality");
+    const caffeineAfter3pm = formData.get("caffeineAfter3pm");
+    const exercised = formData.get("exercised");
+    const stressLevel = formData.get("stressLevel");
+    const screenTimeBeforeBed = formData.get("screenTimeBeforeBed");
+    const afternoonNapDuration = formData.get("afternoonNapDuration");
+
+    // if bedtime is later than wake up time, they went to bed the night before
+    let bedDay = date;
+    if (bedtime! > wakeUpTime!) {
+      const newDate = new Date(`${date}T00:00`);
+      newDate.setDate(newDate.getDate() - 1);
+      bedDay = newDate.toLocaleDateString("en-CA");
+    }
+
+    if (!quality) {
+      alert("Pick how well you slept.");
+      return;
+    }
+
+    const body = {
+      // glue date and time together, like "2026-11-02T09:00"
+      bedtime: `${bedDay}T${bedtime}`,
+      wakeUpTime: `${date}T${wakeUpTime}`,
+      quality: Number(quality),
+      caffeineAfter3pm: caffeineAfter3pm ? caffeineAfter3pm === "true" : null,
+      exercised: exercised ? exercised === "true" : null,
+      stressLevel: stressLevel ? Number(stressLevel) : null,
+      screenTimeBeforeBed: screenTimeBeforeBed ? Number(screenTimeBeforeBed) : null,
+      afternoonNapDuration: afternoonNapDuration ? Number(afternoonNapDuration) : null,
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/api/sleeplogs/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body),
+      });
+
+      // they changed the date to one that's already logged
+      if (response.status === 409) {
+        alert("You already logged this night.");
+        return;
+      }
+
+      if (!response.ok) {
+        alert("Failed to update. Please try again.");
+        console.log("Error response:", await response.text());
+        return;
+      }
+
+      alert("Log updated!");
+      router.push("/home");
+    }
+    catch (error) {
+      console.error("Error updating log:", error);
+    }
+  };
 
   if (!logData) {
     return <p>Loading...</p>;
@@ -71,8 +138,7 @@ function UpdateLogForm() {
         </Link>
       </header>
 
-      {/* not hooked up yet, so nothing happens on submit */}
-      <form className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 xl:px-0 pt-4 md:pt-4 xl:pt-2 pb-10 md:pb-8 xl:pb-8">
+      <form onSubmit={handleUpdateSleepLog} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 xl:px-0 pt-4 md:pt-4 xl:pt-2 pb-10 md:pb-8 xl:pb-8">
         <h1 className="text-3xl md:text-4xl xl:text-4xl leading-tight font-semibold tracking-tight">
           Update last night
         </h1>
