@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
 
@@ -26,12 +26,14 @@ const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 function UpdateLogForm() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
+  const router = useRouter();
 
   const [logData, setLogData] = useState<SleepLogProps | null>(null);
 
   useEffect(() => {
     if (!id) {
       alert("No log ID provided.");
+      router.push("/home");
       return;
     }
     const fetchLogData = async () => {
