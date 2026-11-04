@@ -19,28 +19,6 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchLatestLogData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (response.status === 401) {
-          // not logged in, send them back to the login page
-          router.replace("/");
-        }
-
-        if (response.ok) {
-          setLatestLog(await response.json());
-        }
-      }
-      catch (error) {
-        console.error("Error fetching latest sleep log:", error);
-      }
-    };
-    fetchLatestLogData();
-
     const generateLatestNightFeedback = async () => {
       try {
         const response = await fetch(`${API_URL}/api/sleepcoach/latest-night`, {
@@ -61,7 +39,44 @@ export default function HomePage() {
         console.error("Error generating latest night feedback:", error);
       }
     };
-    generateLatestNightFeedback();
+
+    const fetchLatestLogData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          // not logged in, send them back to the login page
+          router.replace("/");
+          return;
+        }
+
+        // no logs yet, so there's nothing for the coach to look at
+        if (response.status === 404) {
+          setFeedback("Log your first night of sleep to get feedback.");
+          return;
+        }
+
+        if (response.ok) {
+          const log = await response.json();
+          setLatestLog(log);
+
+          // use the saved feedback if there is one, only ask the coach if it's empty
+          if (log.lastNightFeedback) {
+            setFeedback(log.lastNightFeedback);
+          }
+          else {
+            generateLatestNightFeedback();
+          }
+        }
+      }
+      catch (error) {
+        console.error("Error fetching latest sleep log:", error);
+      }
+    };
+    fetchLatestLogData();
 
       const fetchUser = async () => {
         try {

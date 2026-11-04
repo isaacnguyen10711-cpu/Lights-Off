@@ -30,5 +30,6 @@ export type SleepLogProps = {
   stressLevel: number | null;
   screenTimeBeforeBed: number | null;
   afternoonNapDuration: number | null;
+  lastNightFeedback: string | null;
 };
 
