@@ -78,26 +78,26 @@ export default function HomePage() {
     };
     fetchLatestLogData();
 
-      const fetchUser = async () => {
-        try {
-          const response = await fetch(`${API_URL}/api/authentication/me`, {
-            method: "GET",
-            credentials: "include",
-          });
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/authentication/me`, {
+          method: "GET",
+          credentials: "include",
+        });
 
-          if (response.ok) {
-            const user = await response.json();
-            // google gives the full name so we only want their first name
-            setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
-          }
+        if (response.ok) {
+          const user = await response.json();
+          // google gives the full name so we only want their first name
+          setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
         }
-        catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      };
-      fetchUser();
+      }
+      catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
 
-    }, [router]);
+  }, [router]);
 
   useEffect(() => {
     if (latestLog) {
@@ -167,10 +167,17 @@ export default function HomePage() {
             {/* email sign ups don't have a name, so just say "Morning." */}
             {firstName ? `Morning, ${firstName}.` : "Morning."}
           </h1>
-          {/* the coach's message, or a plain line if there isn't one yet */}
-          <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
-            {feedback ?? "Here's how last night went."}
-          </p>
+
+          {/* if there's a log for last night, show the coach's feedback, otherwise tell them to log a night */}
+          {latestLog ? (
+            <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
+              {feedback ?? "Here's how last night went."}
+            </p>
+          ) : (
+            <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
+              Log your first night of sleep to get feedback.
+            </p>
+          )}
 
           {/* stacked on phones, side by side from tablets up */}
           <div className="mt-8 md:mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 md:gap-3 xl:gap-4">
