@@ -203,7 +203,8 @@ export default function HomePage() {
                 <Habit label="Screen time before bed" value={screenTimeBeforeBedString} />
                 <Habit label="Nap" value={afternoonNapDurationString} />
               </dl>
-            </div>          </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>

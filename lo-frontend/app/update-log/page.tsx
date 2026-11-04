@@ -1,6 +1,13 @@
+"use client"; 
+
 import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { SleepLogProps } from "../../type";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // same as boxStyles, just without the hover lift
 const sectionStyles = "rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6";
@@ -17,6 +24,38 @@ const oneToTen = Array.from({ length: 10 }, (_, i) => String(i + 1));
 const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 
 export default function UpdateLogPage() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+
+  const [logData, setLogData] = useState<SleepLogProps | null>(null);
+
+  useEffect(() => {
+    if (!id) {
+      alert("No log ID provided.");
+      return;
+    }
+    const fetchLogData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/sleeplogs/${id}`, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch log data");
+        }
+        const data = await response.json();
+        setLogData(data);
+      }
+      catch (error) {
+        console.error(error);
+        alert("Failed to fetch log data.");
+      }
+    };
+
+    fetchLogData();
+  }, [id]);
+
+
 return (
   <main className="flex min-h-screen flex-col">
     <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 xl:py-5">
