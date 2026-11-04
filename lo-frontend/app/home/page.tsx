@@ -207,8 +207,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            <ScoreBox label="Quality" score={latestLog?.quality ?? 0} />
-            <ScoreBox label="Stress" score={latestLog?.stressLevel ?? 0} />
+            <ScoreBox label="Quality" score={latestLog?.quality ?? null} />
+            <ScoreBox label="Stress" score={latestLog?.stressLevel ?? null} />
 
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>Habits</p>

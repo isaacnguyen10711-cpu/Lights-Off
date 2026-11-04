@@ -1,7 +1,7 @@
 
 export type ScoreBoxProps = {
   label: string;
-  score: number;
+  score: number | null;
 };
 
 export type HabitProps = {

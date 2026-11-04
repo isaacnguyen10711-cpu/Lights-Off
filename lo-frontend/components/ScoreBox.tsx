@@ -7,7 +7,7 @@ const ScoreBox = ({ label, score }: ScoreBoxProps) => {
     <div className={boxStyles}>
       <p className={labelStyles}>{label}</p>
       <p className="mt-2 md:mt-2 xl:mt-3 text-2xl md:text-2xl xl:text-3xl font-semibold tabular-nums">
-        {score}
+        {score ?? "-"}
         <span className="text-sm md:text-sm xl:text-base text-muted"> / 10</span>
       </p>
       <div className="mt-3 md:mt-3 xl:mt-4 flex gap-1">
@@ -15,7 +15,7 @@ const ScoreBox = ({ label, score }: ScoreBoxProps) => {
         {Array.from({ length: 10 }, (_, i) => (
           <span
             key={i}
-            className={`h-2 md:h-2 xl:h-2 flex-1 rounded-full ${i < score ? "bg-strong" : "bg-line/30"}`}
+            className={`h-2 md:h-2 xl:h-2 flex-1 rounded-full ${i < (score ?? 0) ? "bg-strong" : "bg-line/30"}`}
           />
         ))}
       </div>
