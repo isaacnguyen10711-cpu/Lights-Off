@@ -64,7 +64,7 @@ namespace Lights_Off.Controllers
                 {
                     UserName = email ?? $"{userInfo.LoginProvider}_{userInfo.ProviderKey}",
                     Email = email,
-                    DisplayName = displayName ?? "Unknown",
+                    DisplayName = displayName,
                 };
 
                 var response = await _userManager.CreateAsync(newUser);
