@@ -6,28 +6,40 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built. The frontend has a working login page, and the home page is in progress.
+The backend API is built. On the frontend, the login, register, home, log a night and update pages all work with the API. The dashboard is next.
 
 ## Features
 
-- Register and log in with email and password
-- Sign in with Google or Facebook, linked to the same account
-- If a Google or Facebook login fails or gets cancelled, you're sent back to the login page with a message
-- Stay logged in with a secure HttpOnly cookie
-- Log a night of sleep with bedtime, wake up time and sleep quality
-- Add optional daily factors: caffeine after 3pm, exercise, stress, screen time before bed and naps
+- Sign up and log in with email and password, Google or Facebook
+- Log a night of sleep, with optional factors like caffeine, exercise and stress
 - See your latest night on the home page
-- Get all your sleep logs for a month (for the dashboard calendar)
-- Update saved sleep logs
-- Get short AI feedback on last night's sleep, compared with the week before
-- Get an AI review of a whole month
-- AI answers are saved, so the same feedback isn't paid for twice (last night's feedback is cleared when you edit that log)
-- AI endpoints are rate limited to 5 requests per minute per user
-- Only see and change your own sleep logs
+- Update last night's log
+- Get AI feedback on last night's sleep and a review of each month
+- AI feedback is saved and rate limited to keep costs down
 
 ## Screenshots
 
-Screenshots will be added once the main pages are done.
+### Login
+
+![Login page](lo-frontend/public/images/login.png)
+
+### Register
+
+![Register page](lo-frontend/public/images/register.png)
+
+### Home
+
+![Home page](lo-frontend/public/images/home.webp)
+
+### Log a night
+
+![Log a night page](lo-frontend/public/images/log.png)
+
+![Log a night page with the optional details open](lo-frontend/public/images/log-optional.webp)
+
+### Update last night
+
+![Update last night page](lo-frontend/public/images/update-log.webp)
 
 ## Technology Stack
 
@@ -80,10 +92,10 @@ Screenshots will be added once the main pages are done.
 ## Future Implementations
 
 ### Frontend
-- Finish the home page (scores and coach feedback from real data)
-- Build the log a night form
 - Build the dashboard with a sleep calendar and monthly stats
 - Show the full details of a night when a day is selected
+- Show the monthly AI review on the dashboard
+- Add a password reset page once the backend can send emails
 
 ### Backend
 - Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
@@ -106,7 +118,9 @@ Lights-Off/
 │   └── Program.cs         # App setup
 ├── lo-backend.Tests/      # Backend tests
 ├── lo-frontend/           # Next.js frontend
-│   ├── app/               # Pages (login, home)
-│   └── components/        # Shared UI pieces and styles
+│   ├── app/               # Pages (login, register, home, log, update-log)
+│   ├── components/        # Shared UI pieces and styles
+│   ├── public/images/     # Screenshots for this README
+│   └── type.ts            # TypeScript types for props and API data
 └── README.md
 ```
