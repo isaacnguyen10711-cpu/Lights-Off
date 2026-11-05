@@ -41,8 +41,8 @@ export default function DashboardPage() {
       </header>
 
       {/* calendar on the left, review and the picked night on the right. stacked until xl */}
-      <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 md:grid-cols-1 xl:grid-cols-5 content-center gap-6 md:gap-8 xl:gap-10 px-4 md:px-8 xl:px-20 pb-10 md:pb-8 xl:pb-6">
-        <section className="xl:col-span-3">
+      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 md:grid-cols-1 xl:grid-cols-3 content-center gap-6 md:gap-8 xl:gap-10 px-4 md:px-8 xl:px-20 pt-6 xl:pt-0 pb-10 md:pb-8 xl:pb-6">
+        <section className="xl:col-span-2">
           {/* month name with arrows either side */}
           <div className="flex items-center justify-between">
             <button type="button" aria-label="Previous month" className={arrowStyles}>&larr;</button>
@@ -73,7 +73,7 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="xl:col-span-2 flex flex-col gap-4 md:gap-4 xl:gap-4">
+        <section className="xl:col-span-1 flex flex-col gap-4 md:gap-4 xl:gap-4">
           <div className="rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-5">
             <p className={labelStyles}>October review</p>
             <p className="mt-2 md:mt-2 xl:mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">
