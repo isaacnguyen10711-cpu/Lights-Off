@@ -143,9 +143,9 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col md:h-screen">
       {/* top bar */}
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 xl:py-5">
-        <p className="text-xl md:text-2xl xl:text-2xl font-bold tracking-tight">Lights Off</p>
-        <nav className="flex items-center gap-4 md:gap-6 xl:gap-8 text-sm md:text-sm xl:text-base">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 ">
+        <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
+        <nav className="flex items-center gap-4 md:gap-6 xl:gap-8 text-sm xl:text-base">
           <Link href="/dashboard" className="font-semibold text-muted transition-colors hover:text-strong">
             Dashboard
           </Link>
@@ -170,17 +170,17 @@ export default function HomePage() {
 
           {/* if there's a log for last night, show the coach's feedback, otherwise tell them to log a night */}
           {latestLog ? (
-            <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
+            <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
               {feedback ?? "Here's how last night went."}
             </p>
           ) : (
-            <p className="mt-3 md:mt-4 xl:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
+            <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
               Log your first night of sleep to get feedback.
             </p>
           )}
 
           {/* stacked on phones, side by side from tablets up */}
-          <div className="mt-8 md:mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 md:gap-3 xl:gap-4">
+          <div className="mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 xl:gap-4">
             {loggedToday ? (
               <Link href={`/update-log?id=${latestLog?.sleepLogId}`} className={primaryButtonStyles}>
                 Update last night
@@ -197,19 +197,19 @@ export default function HomePage() {
         </section>
 
         {/* right side: last night split into boxes */}
-        <section className="mx-auto w-full max-w-lg md:max-w-lg xl:max-w-xl">
-          <div className="grid grid-cols-2 gap-3 md:gap-3 xl:gap-4">
+        <section className="mx-auto w-full max-w-lg xl:max-w-xl">
+          <div className="grid grid-cols-2 gap-3 xl:gap-4">
             {/* the big one: how long they slept */}
             <div className={`${boxStyles} col-span-2`}>
               {/* label on the left, the date on the right */}
-              <div className="flex items-baseline justify-between gap-3 md:gap-3 xl:gap-4">
+              <div className="flex items-baseline justify-between gap-3 xl:gap-4">
                 <p className={labelStyles}>Total slept</p>
-                <p className="text-xs md:text-xs xl:text-sm text-muted tabular-nums">{dateString}</p>
+                <p className="text-xs xl:text-sm text-muted tabular-nums">{dateString}</p>
               </div>
-              <p className="mt-2 md:mt-2 xl:mt-3 text-5xl md:text-5xl xl:text-6xl font-semibold tracking-tight tabular-nums">
+              <p className="mt-2 xl:mt-3 text-5xl xl:text-6xl font-semibold tracking-tight tabular-nums">
                 {hoursSleptString}
               </p>
-              <p className="mt-3 md:mt-3 xl:mt-4 text-base md:text-sm xl:text-lg text-muted tabular-nums">
+              <p className="mt-3 xl:mt-4 text-base md:text-sm xl:text-lg text-muted tabular-nums">
                 <span className="text-strong">{bedTimeString}</span> bed &rarr; <span className="text-strong">{wakeUpTimeString}</span> up
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function HomePage() {
 
             <div className={`${boxStyles} col-span-2`}>
               <p className={labelStyles}>Habits</p>
-              <dl className="mt-3 md:mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 md:gap-x-4 xl:gap-x-6 gap-y-3 md:gap-y-3 xl:gap-y-5">
+              <dl className="mt-3 xl:mt-4 grid grid-cols-2 gap-x-4 xl:gap-x-6 gap-y-3 xl:gap-y-5">
                 <Habit label="Caffeine after 3pm" value={latestLog?.caffeineAfter3pm == null ? '-' : latestLog.caffeineAfter3pm ? 'Yes' : 'No'} />
                 <Habit label="Exercise" value={latestLog?.exercised == null ? '-' : latestLog.exercised ? 'Yes' : 'No'} />
                 <Habit label="Screen time before bed" value={screenTimeBeforeBedString} />

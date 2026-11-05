@@ -13,7 +13,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const inputStyles =
   "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-field px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong placeholder:text-muted transition duration-300 hover:-translate-y-1 focus:border-strong focus:outline-none";
 
-const labelStyles = "text-xs md:text-xs xl:text-xs font-semibold uppercase tracking-wider text-muted";
+const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 const socialStyles =
   "flex h-12 md:h-11 xl:h-12 flex-1 items-center justify-center gap-3 md:gap-2 xl:gap-3 rounded-xl border border-line bg-field text-base md:text-sm xl:text-base font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
@@ -90,28 +90,28 @@ export default function LoginPage() {
     return (
       <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
         {/* left side: logo, the clock and what the app does */}
-        <section className="flex flex-col justify-between md:flex-1 gap-6 md:gap-6 xl:gap-8 px-4 md:px-8 xl:px-20 py-8 md:py-8 xl:py-10">
-          <p className="text-xl md:text-2xl xl:text-2xl font-bold tracking-tight">Lights Off</p>
+        <section className="flex flex-col justify-between md:flex-1 gap-6 xl:gap-8 px-4 md:px-8 xl:px-20 py-8 xl:py-10">
+          <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
 
           <div className="relative mx-auto">
             {/* soft navy glow, the clock comes after it in the code so it sits on top */}
             <div className="absolute inset-12 rounded-full bg-navy blur-3xl" />
-            <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-72 md:size-72 xl:size-128" />
+            <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-72 xl:size-128" />
           </div>
 
           {/* centred when stacked on phones, left aligned once it's side by side */}
-          <div className="text-center md:text-left xl:text-left">
-            <h1 className="text-3xl md:text-3xl xl:text-4xl leading-tight font-semibold tracking-tight">
+          <div className="text-center md:text-left ">
+            <h1 className="text-3xl xl:text-4xl leading-tight font-semibold tracking-tight">
               Improve your sleeps instantly
             </h1>
-            <p className="mt-2 md:mt-2 xl:mt-3 text-base md:text-sm xl:text-base text-muted">
+            <p className="mt-2 xl:mt-3 text-base md:text-sm xl:text-base text-muted">
               Sleep tracker for your busy schedule.
             </p>
           </div>
         </section>
 
         {/* right side: the sign in form */}
-        <section className="flex flex-col md:w-96 xl:w-lg md:shrink-0 gap-12 md:gap-8 xl:gap-12 px-4 md:pr-8 md:pl-0 xl:pr-16 xl:pl-0 pb-10 md:py-8 xl:py-12">
+        <section className="flex flex-col md:w-96 xl:w-lg md:shrink-0 gap-12 md:gap-8 xl:gap-12 px-4 md:pr-8 md:pl-0 xl:pr-16 pb-10 md:py-8 xl:py-12">
           <div className="my-auto w-full max-w-sm self-center md:self-start">
             <h2 className="text-3xl md:text-2xl xl:text-3xl font-semibold tracking-tight">Welcome back</h2>
             <p className="mt-2 md:mt-1 xl:mt-2 text-base md:text-sm xl:text-base text-muted">
@@ -120,7 +120,7 @@ export default function LoginPage() {
 
             {/* sends the email and password to the backend when they press sign in */}
             <form className="mt-8 md:mt-6 xl:mt-8 flex flex-col gap-4 md:gap-3 xl:gap-4" onSubmit={handleSignIn}>
-              <label className="block">
+              <label>
                 <span className={labelStyles}>Email</span>
                 <input
                   type="email"
@@ -132,7 +132,7 @@ export default function LoginPage() {
                 />
               </label>
 
-              <label className="block">
+              <label>
                 <span className={labelStyles}>Password</span>
                 <input
                   type="password"
