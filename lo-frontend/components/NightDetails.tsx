@@ -12,7 +12,7 @@ const NightDetails = ({ log }: NightDetailsProps) => {
   const up = new Date(log.wakeUpTime).toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5 ">
+    <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5">
       <p className={labelStyles}>{date}</p>
       {/* hours and quality side by side with some space between */}
       <div className="mt-2 flex items-baseline gap-4 xl:gap-5 tabular-nums">
@@ -23,7 +23,7 @@ const NightDetails = ({ log }: NightDetailsProps) => {
         <span className="text-strong">{bed}</span> bed &rarr; <span className="text-strong">{up}</span> up
       </p>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 ">
+      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
         <Habit label="Caffeine after 3pm" value={log.caffeineAfter3pm == null ? "-" : log.caffeineAfter3pm ? "Yes" : "No"} />
         <Habit label="Exercise" value={log.exercised == null ? "-" : log.exercised ? "Yes" : "No"} />
         <Habit label="Stress" value={log.stressLevel == null ? "-" : `${log.stressLevel}/10`} />

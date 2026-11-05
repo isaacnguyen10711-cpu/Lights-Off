@@ -43,7 +43,7 @@ export default function DashboardPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 ">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
         <Link href="/home" className="text-sm xl:text-base font-semibold text-muted transition-colors hover:text-strong">
           Back to home
@@ -60,7 +60,7 @@ export default function DashboardPage() {
             <button type="button" aria-label="Next month" className={arrowStyles}>&rarr;</button>
           </div>
 
-          <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-3 gap-2 md:gap-3 ">
+          <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-3 gap-2 md:gap-3">
             <StatBox label="Nights" value="24 / 31" />
             <StatBox label="Avg sleep" value="7.0h" />
             <StatBox label="Avg quality" value="6.6" />
@@ -72,7 +72,7 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <div className="mt-2 grid grid-cols-7 gap-1 md:gap-2 ">
+          <div className="mt-2 grid grid-cols-7 gap-1 md:gap-2">
             {/* empty spots so the 1st lands on the right weekday */}
             {emptySpots.map((spot) => (
               <div key={`empty-${spot}`} />
@@ -83,8 +83,8 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="xl:col-span-1 flex flex-col gap-4 ">
-          <div className="rounded-2xl border border-line bg-field p-4 md:p-5 ">
+        <section className="xl:col-span-1 flex flex-col gap-4">
+          <div className="rounded-2xl border border-line bg-field p-4 md:p-5">
             <p className={labelStyles}>October review</p>
             <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">
               You averaged 7 hours this month, a bit up on September. Your worst nights all came after

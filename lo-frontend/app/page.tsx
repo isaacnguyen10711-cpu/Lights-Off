@@ -100,7 +100,7 @@ export default function LoginPage() {
           </div>
 
           {/* centred when stacked on phones, left aligned once it's side by side */}
-          <div className="text-center md:text-left ">
+          <div className="text-center md:text-left">
             <h1 className="text-3xl xl:text-4xl leading-tight font-semibold tracking-tight">
               Improve your sleeps instantly
             </h1>

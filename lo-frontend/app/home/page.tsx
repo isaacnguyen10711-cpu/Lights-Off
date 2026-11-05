@@ -143,7 +143,7 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col md:h-screen">
       {/* top bar */}
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 ">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
         <nav className="flex items-center gap-4 md:gap-6 xl:gap-8 text-sm xl:text-base">
           <Link href="/dashboard" className="font-semibold text-muted transition-colors hover:text-strong">

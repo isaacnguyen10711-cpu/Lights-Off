@@ -101,14 +101,14 @@ export default function LogPage() {
 
 return (
   <main className="flex min-h-screen flex-col">
-    <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5 ">
+    <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
       <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
       <Link href="/home" className="text-sm xl:text-base font-semibold text-muted transition-colors hover:text-strong">
         Back to home
       </Link>
     </header>
 
-    <form onSubmit={handleLogSleep} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8 ">
+    <form onSubmit={handleLogSleep} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
       <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
         How did last night go?
       </h1>

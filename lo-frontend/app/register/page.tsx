@@ -82,7 +82,7 @@ export default function RegisterPage() {
           <Image src="/sleep-dial.svg" alt="" width={548} height={548} priority className="relative size-72 xl:size-128" />
         </div>
 
-        <div className="text-center md:text-left ">
+        <div className="text-center md:text-left">
           <h1 className="text-3xl xl:text-4xl leading-tight font-semibold tracking-tight">
             Improve your sleeps instantly
           </h1>
