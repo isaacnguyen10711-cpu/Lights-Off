@@ -14,10 +14,11 @@ const NightDetails = ({ log }: NightDetailsProps) => {
   return (
     <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-5">
       <p className={labelStyles}>{date}</p>
-      <p className="mt-2 md:mt-2 xl:mt-2 text-3xl md:text-3xl xl:text-3xl font-semibold tabular-nums">
-        {log.hoursSlept}h
-        <span className="text-sm md:text-sm xl:text-base font-normal text-muted"> · quality {log.quality}/10</span>
-      </p>
+      {/* hours and quality side by side with some space between */}
+      <div className="mt-2 md:mt-2 xl:mt-2 flex items-baseline gap-4 md:gap-4 xl:gap-5 tabular-nums">
+        <p className="text-3xl md:text-3xl xl:text-3xl font-semibold">{log.hoursSlept}h</p>
+        <p className="text-sm md:text-sm xl:text-base text-muted">Quality {log.quality}/10</p>
+      </div>
       <p className="mt-1 md:mt-1 xl:mt-1 text-sm md:text-sm xl:text-sm text-muted tabular-nums">
         <span className="text-strong">{bed}</span> bed &rarr; <span className="text-strong">{up}</span> up
       </p>
