@@ -13,6 +13,11 @@ const sampleHours: Record<number, number> = {
   1: 7.4, 2: 7.9, 3: 5.1, 4: 6.6, 5: 7.2, 6: 8.0, 8: 6.8, 9: 7.7, 10: 5.3, 11: 6.4, 12: 7.3, 14: 7.9,
   15: 7.1, 16: 8.2, 17: 4.8, 18: 6.2, 19: 7.4, 21: 7.9, 22: 7.0, 23: 7.3, 24: 5.0, 25: 7.8, 27: 6.9, 28: 7.5,
 };
+// day of the month -> sleep quality out of 10
+const sampleQuality: Record<number, number> = {
+  1: 7, 2: 8, 3: 3, 4: 6, 5: 7, 6: 9, 8: 6, 9: 8, 10: 2, 11: 5, 12: 7, 14: 8,
+  15: 7, 16: 9, 17: 3, 18: 5, 19: 7, 21: 8, 22: 6, 23: 7, 24: 3, 25: 8, 27: 6, 28: 7,
+};
 const selectedDay = 25;
 const sampleLog: SleepLogProps = {
   sleepLogId: 1, date: "2026-10-25", bedtime: "2026-10-24T23:20:00", wakeUpTime: "2026-10-25T07:08:00",
@@ -73,7 +78,7 @@ export default function DashboardPage() {
               <div key={`empty-${spot}`} />
             ))}
             {days.map((day) => (
-              <CalendarDay key={day} day={day} hours={sampleHours[day] ?? null} selected={day === selectedDay} />
+              <CalendarDay key={day} day={day} hours={sampleHours[day] ?? null} quality={sampleQuality[day] ?? null} selected={day === selectedDay} />
             ))}
           </div>
         </section>

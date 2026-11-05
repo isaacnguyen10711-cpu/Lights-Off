@@ -21,6 +21,7 @@ export type ChoiceProps = {
 export type CalendarDayProps = {
   day: number;
   hours: number | null;
+  quality: number | null;
   selected?: boolean;
 };
 

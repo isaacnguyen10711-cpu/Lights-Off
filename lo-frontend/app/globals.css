@@ -8,6 +8,16 @@
   --color-line: #4d6bb3; /* borders around inputs and buttons, and text highlight */
   --color-strong: #f4f6fb; /* main text, headings and the sign in button */
   --color-muted: #a6b3d3; /* less important text, like labels, small descriptions and hints in empty inputs */
+  /* calendar days, each one has a dark background, a slightly lighter border and bright text */
+  --color-good: #203116; /* green, quality 8-10 */
+  --color-good-line: #3a5a2f;
+  --color-good-text: #86c849;
+  --color-okay: #342408; /* yellow, quality 4-7 */
+  --color-okay-line: #644815;
+  --color-okay-text: #eaac38;
+  --color-bad: #351316; /* red, quality 1-3 */
+  --color-bad-line: #67282e;
+  --color-bad-text: #ec9ea3;
 
   --font-sans: var(--font-manrope);
 }
