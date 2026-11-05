@@ -45,7 +45,7 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 
 ### Frontend
 
-- Next.js (App Router)
+- Next.js
 - TypeScript
 - Tailwind CSS
 
@@ -57,8 +57,6 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 - SQL Server
 - ASP.NET Core Identity (cookie authentication)
 - Google and Facebook OAuth
-- Rate limiting
-- Swagger UI
 
 ### Testing
 
