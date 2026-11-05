@@ -8,7 +8,7 @@ const levels = [
 // the colour key under the calendar
 const QualityLabel = () => {
   return (
-    <div className="mt-3 flex flex-wrap gap-4 text-xs md:text-sm text-muted">
+    <div className="mt-3 flex flex-wrap gap-5 md:gap-8 text-xs md:text-sm text-muted">
       {levels.map((level) => (
         <p key={level.label} className="flex items-center gap-2">
           <span className={`size-3 rounded border ${level.colour}`} />
