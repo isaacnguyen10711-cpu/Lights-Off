@@ -82,7 +82,10 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <NightDetails log={sampleLog} />
+          {/* stretches on xl so the bottom lines up with the calendar */}
+          <div className="xl:flex-1">
+            <NightDetails log={sampleLog} />
+          </div>
         </section>
       </div>
     </main>
