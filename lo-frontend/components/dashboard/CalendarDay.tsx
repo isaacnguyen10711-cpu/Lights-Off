@@ -1,4 +1,4 @@
-import { CalendarDayProps } from "../type";
+import { CalendarDayProps } from "../../type";
 
 // one day in the calendar, coloured by how well they slept
 const CalendarDay = ({ day, hours, quality, selected }: CalendarDayProps) => {

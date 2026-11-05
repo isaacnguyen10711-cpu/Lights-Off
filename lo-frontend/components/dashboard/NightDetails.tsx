@@ -1,6 +1,6 @@
-import { NightDetailsProps } from "../type";
-import Habit from "./Habit";
-import { labelStyles } from "./styles";
+import { NightDetailsProps } from "../../type";
+import Habit from "../Habit";
+import { labelStyles } from "../styles";
 
 // same labels as the home page, the enum number is the spot in this list
 const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];

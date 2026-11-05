@@ -1,8 +1,8 @@
 import Link from "next/link";
-import CalendarDay from "../../components/CalendarDay";
-import StatBox from "../../components/StatBox";
-import NightDetails from "../../components/NightDetails";
-import QualityLabel from "../../components/QualityLabel";
+import CalendarDay from "../../components/dashboard/CalendarDay";
+import StatBox from "../../components/dashboard/StatBox";
+import NightDetails from "../../components/dashboard/NightDetails";
+import QualityLabel from "../../components/dashboard/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
 

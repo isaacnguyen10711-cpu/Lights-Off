@@ -1,5 +1,5 @@
-import { ScoreBoxProps } from "../type";
-import { boxStyles, labelStyles } from "./styles";
+import { ScoreBoxProps } from "../../type";
+import { boxStyles, labelStyles } from "../styles";
 
 // a score out of 10, shown as the number plus 10 little bars
 const ScoreBox = ({ label, score }: ScoreBoxProps) => {

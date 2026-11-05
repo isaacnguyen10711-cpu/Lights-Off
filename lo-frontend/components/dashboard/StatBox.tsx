@@ -1,5 +1,5 @@
-import { StatBoxProps } from "../type";
-import { labelStyles } from "./styles";
+import { StatBoxProps } from "../../type";
+import { labelStyles } from "../styles";
 
 // one number for the month, like "Average sleep 7.2h"
 const StatBox = ({ label, value }: StatBoxProps) => {

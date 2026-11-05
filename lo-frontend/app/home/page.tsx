@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
-import ScoreBox from "../../components/ScoreBox";
+import ScoreBox from "../../components/home/ScoreBox";
 import Habit from "../../components/Habit";
 import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
