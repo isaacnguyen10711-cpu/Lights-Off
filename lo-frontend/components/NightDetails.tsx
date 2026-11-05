@@ -19,7 +19,7 @@ const NightDetails = ({ log }: NightDetailsProps) => {
         <p className="text-3xl md:text-3xl xl:text-3xl font-semibold">{log.hoursSlept}h</p>
         <p className="text-sm md:text-sm xl:text-base text-muted">Quality {log.quality}/10</p>
       </div>
-      <p className="mt-1 md:mt-1 xl:mt-1 text-sm md:text-sm xl:text-sm text-muted tabular-nums">
+      <p className="mt-3 md:mt-3 xl:mt-3 text-sm md:text-sm xl:text-sm text-muted tabular-nums">
         <span className="text-strong">{bed}</span> bed &rarr; <span className="text-strong">{up}</span> up
       </p>
 
