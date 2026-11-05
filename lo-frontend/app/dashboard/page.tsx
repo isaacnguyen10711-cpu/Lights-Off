@@ -27,6 +27,11 @@ const daysInMonth = new Date(year, month, 0).getDate();
 // getDay() starts on Sunday, our calendar starts on Monday, so shift it by one
 const blanks = (new Date(year, month - 1, 1).getDay() + 6) % 7;
 
+// [1, 2, 3 ... 31] so we can map over the days
+const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+// one empty spot per blank, e.g. [0, 1, 2] when the 1st is a thursday
+const emptySpots = Array.from({ length: blanks }, (_, i) => i);
+
 const arrowStyles = "size-10 md:size-10 xl:size-10 rounded-xl border border-line bg-field text-muted transition-colors hover:border-strong hover:text-strong";
 
 export default function DashboardPage() {
@@ -64,11 +69,11 @@ export default function DashboardPage() {
 
           <div className="mt-2 md:mt-2 xl:mt-2 grid grid-cols-7 gap-1 md:gap-2 xl:gap-2">
             {/* empty spots so the 1st lands on the right weekday */}
-            {Array.from({ length: blanks }, (_, i) => (
-              <div key={`blank-${i}`} />
+            {emptySpots.map((spot) => (
+              <div key={`empty-${spot}`} />
             ))}
-            {Array.from({ length: daysInMonth }, (_, i) => (
-              <CalendarDay key={i + 1} day={i + 1} hours={sampleHours[i + 1] ?? null} selected={i + 1 === selectedDay} />
+            {days.map((day) => (
+              <CalendarDay key={day} day={day} hours={sampleHours[day] ?? null} selected={day === selectedDay} />
             ))}
           </div>
         </section>
