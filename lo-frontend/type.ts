@@ -18,6 +18,21 @@ export type ChoiceProps = {
   defaultChecked?: boolean;
 };
 
+export type CalendarDayProps = {
+  day: number;
+  hours: number | null;
+  selected?: boolean;
+};
+
+export type StatBoxProps = {
+  label: string;
+  value: string;
+};
+
+export type NightDetailsProps = {
+  log: SleepLogProps;
+};
+
 export type SleepLogProps = {
   sleepLogId: number;
   date: string;
