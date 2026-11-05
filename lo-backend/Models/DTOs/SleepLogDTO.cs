@@ -27,7 +27,6 @@ namespace Lights_Off.Models.DTOs
         public DateOnly Date { get; set; }
         public double HoursSlept => Math.Round((WakeUpTime - Bedtime).TotalHours, 1);
 
-        // the coach's saved feedback, null if it hasn't been made yet
         public string? LastNightFeedback { get; set; }
 
         // turns a database row into what the API sends back, so the field list only lives here
