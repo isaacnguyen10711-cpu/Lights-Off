@@ -1,8 +1,8 @@
 // same colours and ranges as CalendarDay
 const levels = [
-  { label: "Quality 8-10", colour: "bg-good border-good-line" },
-  { label: "Quality 4-7", colour: "bg-okay border-okay-line" },
   { label: "Quality 1-3", colour: "bg-bad border-bad-line" },
+  { label: "Quality 4-7", colour: "bg-okay border-okay-line" },
+  { label: "Quality 8-10", colour: "bg-good border-good-line" },
 ];
 
 // the colour key under the calendar
