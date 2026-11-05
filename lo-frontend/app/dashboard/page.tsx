@@ -2,6 +2,7 @@ import Link from "next/link";
 import CalendarDay from "../../components/CalendarDay";
 import StatBox from "../../components/StatBox";
 import NightDetails from "../../components/NightDetails";
+import QualityLabel from "../../components/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
 
@@ -81,6 +82,9 @@ export default function DashboardPage() {
               <CalendarDay key={day} day={day} hours={sampleHours[day] ?? null} quality={sampleQuality[day] ?? null} selected={day === selectedDay} />
             ))}
           </div>
+
+          {/* the colour key under the calendar */}
+          <QualityLabel />
         </section>
 
         <section className="xl:col-span-1 flex flex-col gap-4">
