@@ -84,6 +84,10 @@ export default function DashboardPage() {
   // same thing for the empty boxes
   const emptySpots = Array.from({ length: blanks }, (_, i) => i);
 
+  // finds the log for a day, or undefined if they didn't log that night
+  const getLogForDay = (day: number) =>
+    allLogsInAMonth?.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
@@ -125,8 +129,8 @@ export default function DashboardPage() {
               <CalendarDay
                 key={day}
                 day={day}
-                hours={null}
-                quality={null}
+                hours={getLogForDay(day)?.hoursSlept ?? null}
+                quality={getLogForDay(day)?.quality ?? null}
               />
             ))}
           </div>
