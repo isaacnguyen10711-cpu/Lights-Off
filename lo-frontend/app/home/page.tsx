@@ -78,7 +78,7 @@ export default function HomePage() {
     queryFn: fetchUser,
   });
 
-  const { data: latestLog } = useQuery({
+  const { data: latestLog, isLoading } = useQuery({
     queryKey: ["latest-log"],
     queryFn: fetchLatestLogData,
   });
@@ -96,6 +96,15 @@ export default function HomePage() {
 
   // saved feedback if there is one, otherwise what the coach just said
   const feedback = latestLog?.lastNightFeedback ?? coachFeedback;
+
+  // what to say under the greeting
+  let message = feedback ?? "Here's how last night went.";
+  if (isLoading) {
+    message = "Loading last night...";
+  }
+  else if (latestLog === null) {
+    message = "Log your first night of sleep to get feedback.";
+  }
 
   const handleLogout = async () => {
     try {
@@ -162,16 +171,7 @@ export default function HomePage() {
             {firstName ? `Morning, ${firstName}.` : "Morning."}
           </h1>
 
-          {/* if there's a log for last night, show the coach's feedback, otherwise tell them to log a night */}
-          {latestLog !== null ? (
-            <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
-              {feedback ?? "Here's how last night went."}
-            </p>
-          ) : (
-            <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
-              Log your first night of sleep to get feedback.
-            </p>
-          )}
+          <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">{message}</p>
 
           {/* stacked on phones, side by side from tablets up */}
           <div className="mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 xl:gap-4">
