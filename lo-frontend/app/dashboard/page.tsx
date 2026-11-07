@@ -137,6 +137,10 @@ export default function DashboardPage() {
             ))}
           </div>
 
+          {/* let them know while the month loads, or if it couldn't */}
+          {isLoading && <p className="mt-3 text-sm text-muted">Loading your nights...</p>}
+          {isError && <p className="mt-3 text-sm text-muted">We can&rsquo;t load this month right now. Try again in a minute.</p>}
+
           {/* the colour key under the calendar */}
           <QualityLabel />
         </section>
