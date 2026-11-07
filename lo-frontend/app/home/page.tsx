@@ -2,106 +2,99 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
 import ScoreBox from "../../components/home/ScoreBox";
 import Habit from "../../components/Habit";
 import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
-import { useQuery } from "@tanstack/react-query"; 
+import { useQuery } from "@tanstack/react-query";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-
-
 export default function HomePage() {
-  const [latestLog, setLatestLog] = useState<SleepLogProps | null>(null);
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const router = useRouter();
 
-    const generateLatestNightFeedback = async () => {
-        const response = await fetch(`${API_URL}/api/sleepcoach/latest-night`, {
-          method: "GET",
-          credentials: "include",
-        });
+  // the logged in user, same as the login page so they can share the ["me"] cache
+  const fetchUser = async () => {
+    const response = await fetch(`${API_URL}/api/authentication/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-        // covers the rate limit too, the fallback line shows instead
-        if (!response.ok) {
-          console.log("Error generating latest night feedback:", response.statusText);
-          return;
-        }
+    if (response.status === 401) {
+      return null;
+    }
 
-        const data = await response.json();
-        setFeedback(data.review);
-    };
+    if (!response.ok) {
+      throw new Error("Couldn't get the user");
+    }
 
-    const fetchLatestLogData = async () => {
-        const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
-          method: "GET",
-          credentials: "include",
-        });
+    return response.json();
+  };
 
-        if (response.status === 401) {
-          // not logged in, send them back to the login page
-          router.replace("/");
-          return;
-        }
+  // what the coach says about the latest night, only called when there's nothing saved yet
+  const generateLatestNightFeedback = async (): Promise<string> => {
+    const response = await fetch(`${API_URL}/api/sleepcoach/latest-night`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-        // no logs yet, so there's nothing for the coach to look at
-        if (response.status === 404) {
-          setFeedback("Log your first night of sleep to get feedback.");
-          return;
-        }
+    // covers the rate limit too, the fallback line shows instead
+    if (!response.ok) {
+      throw new Error("The coach couldn't give feedback");
+    }
 
-        if (response.ok) {
-          const log = await response.json();
-          setLatestLog(log);
+    const data = await response.json();
+    return data.review;
+  };
 
-          // use the saved feedback if there is one, only ask the coach if it's empty
-          if (log.lastNightFeedback) {
-            setFeedback(log.lastNightFeedback);
-          }
-          else {
-            generateLatestNightFeedback();
-          }
-        }
-  }
+  // the latest sleep log, or null if they haven't logged one yet
+  const fetchLatestLogData = async (): Promise<SleepLogProps | null> => {
+    const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-    const fetchUser = async () => {
-        const response = await fetch(`${API_URL}/api/authentication/me`, {
-          method: "GET",
-          credentials: "include",
-        });
+    // not logged in, send them back to the login page
+    if (response.status === 401) {
+      router.replace("/");
+      return null;
+    }
 
-        if (response.ok) {
-          const user = await response.json();
-          // google gives the full name so we only want their first name
-          setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
-        }
-  }
+    // no logs yet, that's fine, there's just nothing to show
+    if (response.status === 404) {
+      return null;
+    }
 
-  const { data: latestLogData, isLoading: isLatestLogLoading, isPending: isLatestLogPending, error: latestLogError } = useQuery({
-    queryKey: ["latestLog"],
-    queryFn: fetchLatestLogData,
-  });
+    if (!response.ok) {
+      throw new Error("Couldn't get the latest sleep log");
+    }
 
-  const { data: userData, isLoading: isUserLoading, isPending: isUserPending, error: userError } = useQuery({
-    queryKey: ["user"],
+    return response.json();
+  };
+
+  const { data: user } = useQuery({
+    queryKey: ["me"],
     queryFn: fetchUser,
   });
 
-  const { data: coachFeedbackData, isLoading: isCoachFeedbackLoading, isPending: isCoachFeedbackPending, error: coachFeedbackError } = useQuery({
-    queryKey: ["coachFeedback"],
-    queryFn: generateLatestNightFeedback,
-    // only fetch feedback if latestLog is available and there is no saved feedback
-    enabled: !!latestLog && !latestLog.lastNightFeedback, 
+  const { data: latestLog } = useQuery({
+    queryKey: ["latest-log"],
+    queryFn: fetchLatestLogData,
   });
 
-  useEffect(() => {
-    if (latestLog) {
-      console.log("Latest sleep log data:", latestLog);
-    }
-  }, [latestLog]);
+  const { data: coachFeedback } = useQuery({
+    // one cache per night, so editing a log gives fresh feedback
+    queryKey: ["coach-feedback", latestLog?.sleepLogId],
+    queryFn: generateLatestNightFeedback,
+    // only ask the coach when there's a log and it has no saved feedback yet
+    enabled: !!latestLog && !latestLog.lastNightFeedback,
+  });
+
+  // google gives the full name like "Isaac Nguyen", we only want "Isaac"
+  const firstName = user?.displayName ? user.displayName.split(" ")[0] : null;
+
+  // saved feedback if there is one, otherwise what the coach just said
+  const feedback = latestLog?.lastNightFeedback ?? coachFeedback;
 
   const handleLogout = async () => {
     try {
@@ -130,7 +123,7 @@ export default function HomePage() {
   const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
   // the log's date is the day they woke up, so if it's today they've already logged last night
-  const loggedToday = latestLog !== null && latestLog.date === new Date().toLocaleDateString("en-CA");
+  const loggedToday = !!latestLog && latestLog.date === new Date().toLocaleDateString("en-CA");
 
   // the enum number is its spot in the array above, so durationLabels[number] gives the label
   const screenTimeBeforeBedString =
@@ -167,7 +160,7 @@ export default function HomePage() {
           </h1>
 
           {/* if there's a log for last night, show the coach's feedback, otherwise tell them to log a night */}
-          {latestLog ? (
+          {latestLog !== null ? (
             <p className="mt-3 md:mt-4 max-w-md text-base md:text-sm xl:text-lg leading-relaxed text-muted">
               {feedback ?? "Here's how last night went."}
             </p>
