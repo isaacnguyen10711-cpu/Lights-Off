@@ -7,6 +7,7 @@ import { SleepLogProps } from "../../type";
 import ScoreBox from "../../components/home/ScoreBox";
 import Habit from "../../components/Habit";
 import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
+import { useQuery } from "@tanstack/react-query"; 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,9 +19,7 @@ export default function HomePage() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
     const generateLatestNightFeedback = async () => {
-      try {
         const response = await fetch(`${API_URL}/api/sleepcoach/latest-night`, {
           method: "GET",
           credentials: "include",
@@ -34,14 +33,9 @@ export default function HomePage() {
 
         const data = await response.json();
         setFeedback(data.review);
-      }
-      catch (error) {
-        console.error("Error generating latest night feedback:", error);
-      }
     };
 
     const fetchLatestLogData = async () => {
-      try {
         const response = await fetch(`${API_URL}/api/sleeplogs/latest-log`, {
           method: "GET",
           credentials: "include",
@@ -71,15 +65,9 @@ export default function HomePage() {
             generateLatestNightFeedback();
           }
         }
-      }
-      catch (error) {
-        console.error("Error fetching latest sleep log:", error);
-      }
-    };
-    fetchLatestLogData();
+  }
 
     const fetchUser = async () => {
-      try {
         const response = await fetch(`${API_URL}/api/authentication/me`, {
           method: "GET",
           credentials: "include",
@@ -90,14 +78,24 @@ export default function HomePage() {
           // google gives the full name so we only want their first name
           setFirstName(user.displayName ? user.displayName.split(" ")[0] : null);
         }
-      }
-      catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
+  }
 
-  }, [router]);
+  const { data: latestLogData, isLoading: isLatestLogLoading, isPending: isLatestLogPending, error: latestLogError } = useQuery({
+    queryKey: ["latestLog"],
+    queryFn: fetchLatestLogData,
+  });
+
+  const { data: userData, isLoading: isUserLoading, isPending: isUserPending, error: userError } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
+
+  const { data: coachFeedbackData, isLoading: isCoachFeedbackLoading, isPending: isCoachFeedbackPending, error: coachFeedbackError } = useQuery({
+    queryKey: ["coachFeedback"],
+    queryFn: generateLatestNightFeedback,
+    // only fetch feedback if latestLog is available and there is no saved feedback
+    enabled: !!latestLog && !latestLog.lastNightFeedback, 
+  });
 
   useEffect(() => {
     if (latestLog) {
