@@ -6,12 +6,13 @@ import { SleepLogProps } from "../../type";
 import ScoreBox from "../../components/home/ScoreBox";
 import Habit from "../../components/Habit";
 import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function HomePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // the logged in user, same as the login page so they can share the ["me"] cache
   const fetchUser = async () => {
@@ -108,6 +109,8 @@ export default function HomePage() {
     catch (error) {
       console.error("Error logging out:", error);
     }
+    // forget everything saved for this user, or the login page would still think they are logged in
+    queryClient.clear();
     router.replace("/");
   }
 
