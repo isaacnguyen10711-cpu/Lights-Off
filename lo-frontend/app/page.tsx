@@ -6,6 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { SignInDetails } from "../type";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -79,13 +80,20 @@ export default function LoginPage() {
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // what the backend needs to log them in
+    const details: SignInDetails = {
+      email: emailRef.current?.value ?? "",
+      password: passwordRef.current?.value ?? "",
+    };
+
     try {
       const response = await fetch(`${API_URL}/api/identity/login?useCookies=true`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: emailRef.current?.value, password: passwordRef.current?.value }),
+          body: JSON.stringify(details),
           credentials: "include"
         });
 

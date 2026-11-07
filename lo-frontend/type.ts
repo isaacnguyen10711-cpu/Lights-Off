@@ -4,6 +4,11 @@ export type QueryProviderProps = {
   children: ReactNode;
 };
 
+export type SignInDetails = {
+  email: string;
+  password: string;
+};
+
 export type ScoreBoxProps = {
   label: string;
   score: number | null;
