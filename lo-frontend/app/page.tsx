@@ -33,23 +33,26 @@ export default function LoginPage() {
   const router = useRouter();
 
   const fetchUser = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/authentication/me`, {
-        method: "GET",
-        credentials: "include", // send the login cookie too
-      });
-      if (!response.ok) {
-        return null;
-      }
-      return response.json();
-    } catch (error) {
-      console.error("Error fetching user:", error);
+    const response = await fetch(`${API_URL}/api/authentication/me`, {
+      method: "GET",
+      credentials: "include", // send the login cookie too
+    });
+
+    // not logged in is normal on this page
+    if (response.status === 401) {
       return null;
     }
+
+    // anything else means something actually broke
+    if (!response.ok) {
+      throw new Error("Couldn't check if the user is logged in");
+    }
+
+    return response.json();
   };
 
   // check if they're already logged in
-  const { data: user } = useQuery({
+  const { data: user, error } = useQuery({
     queryKey: ["me"],
     queryFn: fetchUser,
     // we want to check every time they visit the login page, so no caching and if they log out, we don't want to keep the old user data
@@ -130,6 +133,10 @@ export default function LoginPage() {
             <p className="mt-2 md:mt-1 xl:mt-2 text-base md:text-sm xl:text-base text-muted">
               Sign in to log last night&rsquo;s sleep.
             </p>
+
+            {/* the login check failed, so tell them instead of failing quietly. our own words,
+                because if the server is off the browser's message is just "Failed to fetch" */}
+            {error && <p className="mt-4 text-sm text-muted">We can&rsquo;t reach the server right now. Try again in a minute.</p>}
 
             {/* sends the email and password to the backend when they press sign in */}
             <form className="mt-8 md:mt-6 xl:mt-8 flex flex-col gap-4 md:gap-3 xl:gap-4" onSubmit={handleSignIn}>
