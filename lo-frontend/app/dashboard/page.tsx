@@ -76,12 +76,14 @@ export default function DashboardPage() {
 
   // days in this month, 0 until the month is set
   const daysInMonth = year && month ? new Date(year, month, 0).getDate() : 0;
-  // empty boxes before the 1st so it lines up with the right weekday
-  const blanks = year && month ? new Date(year, month - 1, 1).getDay() : 0;
 
   // 1 to 31 so we can map over them
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  // same thing for the empty boxes
+
+  //  this returns the index of the weekday of the 1st of the month, 0-6, so we can map over it and make empty boxes
+  const blanks = year && month ? new Date(year, month - 1, 1).getDay() : 0;
+
+  // empty boxes so the 1st lands on the right weekday
   const emptySpots = Array.from({ length: blanks }, (_, i) => i);
 
   // finds the log for a day, or undefined if they didn't log that night
