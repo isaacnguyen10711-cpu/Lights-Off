@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRef } from "react";
+import { SignInDetails } from "../../type";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -24,11 +25,14 @@ export default function RegisterPage() {
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const email = emailRef.current?.value;
-    const password = passwordRef.current?.value;
+    // same shape the login page sends, used for both requests below
+    const details: SignInDetails = {
+      email: emailRef.current?.value ?? "",
+      password: passwordRef.current?.value ?? "",
+    };
 
     // check this here so we don't bother the backend
-    if (password !== confirmPasswordRef.current?.value) {
+    if (details.password !== confirmPasswordRef.current?.value) {
       alert("Passwords don't match.");
       return;
     }
@@ -39,7 +43,7 @@ export default function RegisterPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(details),
       });
 
       if (!response.ok) {
@@ -54,7 +58,7 @@ export default function RegisterPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(details),
         credentials: "include",
       });
 
