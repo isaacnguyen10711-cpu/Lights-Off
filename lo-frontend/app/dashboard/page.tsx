@@ -1,3 +1,5 @@
+"use client"; 
+
 import Link from "next/link";
 import CalendarDay from "../../components/dashboard/CalendarDay";
 import StatBox from "../../components/dashboard/StatBox";
@@ -5,42 +7,83 @@ import NightDetails from "../../components/dashboard/NightDetails";
 import QualityLabel from "../../components/dashboard/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-// sample data so the page has something to show, swap these for the real fetch later
-const year = 2026;
-const month = 10;
-// day of the month -> hours slept
-const sampleHours: Record<number, number> = {
-  1: 7.4, 2: 7.9, 3: 5.1, 4: 6.6, 5: 7.2, 6: 8.0, 8: 6.8, 9: 7.7, 10: 5.3, 11: 6.4, 12: 7.3, 14: 7.9,
-  15: 7.1, 16: 8.2, 17: 4.8, 18: 6.2, 19: 7.4, 21: 7.9, 22: 7.0, 23: 7.3, 24: 5.0, 25: 7.8, 27: 6.9, 28: 7.5,
-};
-// day of the month -> sleep quality out of 10
-const sampleQuality: Record<number, number> = {
-  1: 7, 2: 8, 3: 3, 4: 6, 5: 7, 6: 9, 8: 6, 9: 8, 10: 2, 11: 5, 12: 7, 14: 8,
-  15: 7, 16: 9, 17: 3, 18: 5, 19: 7, 21: 8, 22: 6, 23: 7, 24: 3, 25: 8, 27: 6, 28: 7,
-};
-const selectedDay = 25;
-const sampleLog: SleepLogProps = {
-  sleepLogId: 1, date: "2026-10-25", bedtime: "2026-10-24T23:20:00", wakeUpTime: "2026-10-25T07:08:00",
-  hoursSlept: 7.8, quality: 8, caffeineAfter3pm: false, exercised: true, stressLevel: 3,
-  screenTimeBeforeBed: 1, afternoonNapDuration: null, lastNightFeedback: null,
-};
-
-const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-// how many days in the month (day 0 of next month is the last day of this one)
-const daysInMonth = new Date(year, month, 0).getDate();
-// getDay() starts on Sunday, our calendar starts on Monday, so shift it by one
-const blanks = (new Date(year, month - 1, 1).getDay() + 6) % 7;
-
-// [1, 2, 3 ... 31] so we can map over the days
-const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-// one empty spot per blank, e.g. [0, 1, 2] when the 1st is a thursday
-const emptySpots = Array.from({ length: blanks }, (_, i) => i);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const arrowStyles = "size-10 rounded-xl border border-line bg-field text-muted transition-colors hover:border-strong hover:text-strong";
 
+const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
+
+const sampleLog: SleepLogProps = {
+  sleepLogId: 1,
+  date: "2026-10-15",
+  bedtime: "22:30",
+  wakeUpTime: "06:30",
+  hoursSlept: 8,
+  quality: 7,
+  caffeineAfter3pm: null,
+  exercised: null,
+  stressLevel: null,
+  screenTimeBeforeBed: null,
+  afternoonNapDuration: null,
+  lastNightFeedback: null,
+};
+
+
 export default function DashboardPage() {
+  const [year, setYear] = useState<number | null>(null);
+  const [month, setMonth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1; // Months are zero-based, so add 1
+    setYear(currentYear);
+    setMonth(currentMonth);
+  }, []);
+  
+  const router = useRouter();
+
+  const fetchAllLogsInAMonth = async () => {
+    const response = await fetch(`${API_URL}/api/sleeplogs?year=${year}&month=${month}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (response.status === 401) {
+      router.replace("/");
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error("Couldn't get the sleep logs");
+    }
+
+    return response.json();
+  }
+
+  const { data: allLogsInAMonth, isLoading, isError } = useQuery({
+    queryKey: ["sleepLogs", year, month],
+    queryFn: fetchAllLogsInAMonth,
+    // Only run the query if year and month are set
+    enabled: year !== null && month !== null, 
+  });
+
+  // days in this month, 0 until the month is set
+  const daysInMonth = year && month ? new Date(year, month, 0).getDate() : 0;
+  // empty boxes before the 1st so it lines up with the right weekday
+  const blanks = year && month ? new Date(year, month - 1, 1).getDay() : 0;
+
+  // 1 to 31 so we can map over them
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  // same thing for the empty boxes
+  const emptySpots = Array.from({ length: blanks }, (_, i) => i);
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
@@ -57,7 +100,7 @@ export default function DashboardPage() {
           {/* month name with arrows either side */}
           <div className="flex items-center justify-between">
             <button type="button" aria-label="Previous month" className={arrowStyles}>&larr;</button>
-            <h1 className="text-2xl md:text-3xl font-semibold">October 2026</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold">{`${monthNames[month ? month - 1 : 0]} ${year}`}</h1>
             <button type="button" aria-label="Next month" className={arrowStyles}>&rarr;</button>
           </div>
 
@@ -79,7 +122,12 @@ export default function DashboardPage() {
               <div key={`empty-${spot}`} />
             ))}
             {days.map((day) => (
-              <CalendarDay key={day} day={day} hours={sampleHours[day] ?? null} quality={sampleQuality[day] ?? null} selected={day === selectedDay} />
+              <CalendarDay
+                key={day}
+                day={day}
+                hours={null}
+                quality={null}
+              />
             ))}
           </div>
 
