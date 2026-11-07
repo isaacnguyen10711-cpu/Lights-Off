@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRef, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -31,6 +32,37 @@ export default function LoginPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/authentication/me`, {
+        method: "GET",
+        credentials: "include", // send the login cookie too
+      });
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return null;
+    }
+  };
+
+  // check if they're already logged in
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: fetchUser,
+    // we want to check every time they visit the login page, so no caching and if they log out, we don't want to keep the old user data
+    staleTime: 0,
+    gcTime: 0,
+  });
+
+  // already logged in, so go straight to home
+  useEffect(() => {
+    if (user) {
+      router.replace("/home");
+    }
+  }, [user, router]);
 
   useEffect(() => {
     // show a message if Google/Facebook login sent us back with an error
@@ -40,31 +72,12 @@ export default function LoginPage() {
       // clear ?error from the url so the message doesn't pop up again on reload
       router.replace("/");
     }
-
-    // check if they're already logged in
-    const checkAuthentication = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/authentication/me`, {
-          method: "GET",
-          credentials: "include", // send the login cookie too
-        });
-        if (response.ok) {
-          // already logged in, so go straight to home
-          router.replace("/home");
-        }
-      }
-      catch (error) {
-        console.error("Error checking authentication:", error);
-      }
-    };
-
-    checkAuthentication();
   }, [router]);
 
-    const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      try {
-        const response = await fetch(`${API_URL}/api/identity/login?useCookies=true`, {
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/api/identity/login?useCookies=true`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
