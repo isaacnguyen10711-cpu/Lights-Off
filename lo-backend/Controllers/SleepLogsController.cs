@@ -20,7 +20,7 @@ public class SleepLogsController : ControllerBase
     // GET: api/SleepLogs?year=2026&month=10
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SleepLogResponse>>> GetAllSleepLogInAMonth([FromQuery] int year, [FromQuery] int month)
+    public async Task<ActionResult<SleepLogMonthlyResponse>> GetAllSleepLogInAMonth([FromQuery] int year, [FromQuery] int month)
     {
         var userId = GetUserId();
 
@@ -38,14 +38,31 @@ public class SleepLogsController : ControllerBase
         var monthStart = new DateOnly(year, month, 1);
         var nextMonthStart = monthStart.AddMonths(1);
 
-        var sleepLogInTheMonth = _context.SleepLogs
+        var sleepLogInTheMonth = await _context.SleepLogs
             .AsNoTracking()
             .Where(s => s.UserId == userId && s.Date >= monthStart && s.Date < nextMonthStart)
             .OrderBy(s => s.Date)
             // use the DTO helper method to convert to the response model
-            .Select(s => SleepLogResponse.Create(s));
+            .Select(s => SleepLogResponse.Create(s))
+            .ToListAsync();
 
-        return await sleepLogInTheMonth.ToListAsync();
+        // Average() crashes on an empty list, so a month with no logs just gets 0
+        double qualityAverage = sleepLogInTheMonth.Count > 0
+            ? Math.Round(sleepLogInTheMonth.Average(s => s.Quality), 1)
+            : 0;
+        int numberOfLogs = sleepLogInTheMonth.Count;
+        double hoursSleptAverage = sleepLogInTheMonth.Count > 0
+            ? Math.Round(sleepLogInTheMonth.Average(s => s.HoursSlept), 1)
+            : 0;
+
+        // the month's numbers go once at the top, with the logs underneath
+        return new SleepLogMonthlyResponse
+        {
+            QualityAverage = qualityAverage,
+            HoursSleptAverage = hoursSleptAverage,
+            NumberOfLogs = numberOfLogs,
+            Logs = sleepLogInTheMonth,
+        };
     }
 
     // GET: api/SleepLog/5

@@ -48,4 +48,13 @@ namespace Lights_Off.Models.DTOs
             };
         }
     }
+
+    // one month for the dashboard: the month's numbers, plus every log in it
+    public class SleepLogMonthlyResponse
+    {
+        public double QualityAverage { get; set; }
+        public double HoursSleptAverage { get; set; }
+        public int NumberOfLogs { get; set; }
+        public List<SleepLogResponse> Logs { get; set; } = [];
+    }
 }
