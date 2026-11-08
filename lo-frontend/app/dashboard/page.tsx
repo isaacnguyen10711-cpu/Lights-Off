@@ -88,7 +88,19 @@ export default function DashboardPage() {
 
   // finds the log for a day, or undefined if they didn't log that night
   const getLogForDay = (day: number) =>
-    allLogsInAMonth?.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
+    allLogsInAMonth?.logs.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error loading sleep logs.</p>;
+  }
+
+  const qualityAverage = allLogsInAMonth?.qualityAverage ?? 0;
+  const numberOfLogs = allLogsInAMonth?.numberOfLogs ?? 0;
+  const hoursSleptAverage = allLogsInAMonth?.hoursSleptAverage ?? 0;
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -111,9 +123,9 @@ export default function DashboardPage() {
           </div>
 
           <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-3 gap-2 md:gap-3">
-            <StatBox label="Nights" value="24 / 31" />
-            <StatBox label="Avg sleep" value="7.0h" />
-            <StatBox label="Avg quality" value="6.6" />
+            <StatBox label="Nights" value={`${numberOfLogs} / ${daysInMonth}`} />
+            <StatBox label="Avg sleep" value={`${hoursSleptAverage.toFixed(1)}h`} />
+            <StatBox label="Avg quality" value={qualityAverage.toFixed(1)} />
           </div>
 
           <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-7 gap-1 md:gap-2 text-center text-xs md:text-sm xl:text-xs text-muted">
@@ -136,10 +148,6 @@ export default function DashboardPage() {
               />
             ))}
           </div>
-
-          {/* let them know while the month loads, or if it couldn't */}
-          {isLoading && <p className="mt-3 text-sm text-muted">Loading your nights...</p>}
-          {isError && <p className="mt-3 text-sm text-muted">We can&rsquo;t load this month right now. Try again in a minute.</p>}
 
           {/* the colour key under the calendar */}
           <QualityLabel />
