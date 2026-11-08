@@ -19,25 +19,11 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
 
-const sampleLog: SleepLogProps = {
-  sleepLogId: 1,
-  date: "2026-10-15",
-  bedtime: "22:30",
-  wakeUpTime: "06:30",
-  hoursSlept: 8,
-  quality: 7,
-  caffeineAfter3pm: null,
-  exercised: null,
-  stressLevel: null,
-  screenTimeBeforeBed: null,
-  afternoonNapDuration: null,
-  lastNightFeedback: null,
-};
-
 
 export default function DashboardPage() {
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   useEffect(() => {
     const today = new Date();
@@ -87,8 +73,10 @@ export default function DashboardPage() {
   const emptySpots = Array.from({ length: blanks }, (_, i) => i);
 
   // finds the log for a day, or undefined if they didn't log that night
-  const getLogForDay = (day: number) =>
+  const getLogForSelectedDay = (day: number) =>
     allLogsInAMonth?.logs.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
+
+  const selectedLog = selectedDay ? getLogForSelectedDay(selectedDay) : undefined;
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -143,8 +131,10 @@ export default function DashboardPage() {
               <CalendarDay
                 key={day}
                 day={day}
-                hours={getLogForDay(day)?.hoursSlept ?? null}
-                quality={getLogForDay(day)?.quality ?? null}
+                hours={getLogForSelectedDay(day)?.hoursSlept ?? null}
+                quality={getLogForSelectedDay(day)?.quality ?? null}
+                selected={day === selectedDay}
+                onClick={() => setSelectedDay(day)}
               />
             ))}
           </div>
@@ -164,7 +154,7 @@ export default function DashboardPage() {
 
           {/* stretches on xl so the bottom lines up with the calendar */}
           <div className="xl:flex-1">
-            <NightDetails log={sampleLog} />
+            {selectedLog && <NightDetails log={selectedLog} />}
           </div>
         </section>
       </div>

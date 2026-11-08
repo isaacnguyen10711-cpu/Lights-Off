@@ -33,6 +33,7 @@ export type CalendarDayProps = {
   hours: number | null;
   quality: number | null;
   selected?: boolean;
+  onClick?: () => void;
 };
 
 export type StatBoxProps = {
