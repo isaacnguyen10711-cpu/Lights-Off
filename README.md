@@ -6,7 +6,7 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built. On the frontend, the login, register, home, log a night and update pages all work with the API. The dashboard is next.
+The backend API is built, and every page on the frontend now talks to it, including the dashboard. The main thing left on the dashboard is switching between months.
 
 ## Features
 
@@ -14,6 +14,7 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 - Log a night of sleep, with optional factors like caffeine, exercise and stress
 - See your latest night on the home page
 - Update last night's log
+- See the month on a calendar, coloured by how well you slept, and tap a night for the details
 - Get AI feedback on last night's sleep and a review of each month
 - AI feedback is saved and rate limited to keep costs down
 
@@ -52,6 +53,7 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 - Next.js
 - TypeScript
 - Tailwind CSS
+- TanStack Query
 
 ### Backend
 
@@ -94,9 +96,7 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 ## Future Implementations
 
 ### Frontend
-- Build the dashboard with a sleep calendar and monthly stats
-- Show the full details of a night when a day is selected
-- Show the monthly AI review on the dashboard
+- Switch between months on the dashboard
 - Add a password reset page once the backend can send emails
 
 ### Backend
@@ -120,8 +120,8 @@ Lights-Off/
 │   └── Program.cs         # App setup
 ├── lo-backend.Tests/      # Backend tests
 ├── lo-frontend/           # Next.js frontend
-│   ├── app/               # Pages (login, register, home, log, update-log)
-│   ├── components/        # Shared UI pieces and styles
+│   ├── app/               # Pages (login, register, home, log, update-log, dashboard)
+│   ├── components/        # Shared UI pieces and styles, plus a folder for each page's own pieces
 │   ├── public/images/     # Screenshots for this README
 │   └── type.ts            # TypeScript types for props and API data
 └── README.md
