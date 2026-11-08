@@ -4,9 +4,9 @@ import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { SleepLogProps } from "../../type";
-import { useQueryClient } from "@tanstack/react-query"; 
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,34 +30,33 @@ function UpdateLogForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const [logData, setLogData] = useState<SleepLogProps | null>(null);
-
+  // no id in the url means there's nothing to edit, so go home
   useEffect(() => {
     if (!id) {
       alert("No log ID provided.");
       router.push("/home");
-      return;
     }
-    const fetchLogData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/sleeplogs/${id}`, {
-          method: "GET",
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch log data");
-        }
-        const data = await response.json();
-        setLogData(data);
-      }
-      catch (error) {
-        console.error(error);
-        alert("Failed to fetch log data.");
-      }
-    };
-
-    fetchLogData();
   }, [id, router]);
+
+  const fetchLogData = async (): Promise<SleepLogProps> => {
+    const response = await fetch(`${API_URL}/api/sleeplogs/${id}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch log data");
+    }
+
+    return response.json();
+  };
+
+  const { data: logData, isLoading, isError } = useQuery({
+    queryKey: ["sleep-log-update", id],
+    queryFn: fetchLogData,
+    // only fetch once we actually have an id
+    enabled: !!id,
+  });
 
   // same as the log page, just PUT to this log's id instead of POST
   const handleUpdateSleepLog = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -122,6 +121,9 @@ function UpdateLogForm() {
       alert("Log updated!");
       queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
       queryClient.invalidateQueries({ queryKey: ["latest-log"] });
+      // this log changed too, and the backend wiped its coach feedback, so both need fetching again
+      queryClient.invalidateQueries({ queryKey: ["sleep-log-update", id] });
+      queryClient.invalidateQueries({ queryKey: ["coach-feedback"] });
       router.push("/home");
     }
     catch (error) {
@@ -129,7 +131,11 @@ function UpdateLogForm() {
     }
   };
 
-  if (!logData) {
+  if (isError) {
+    return <p>Couldn&rsquo;t load this night. Try again in a minute.</p>;
+  }
+
+  if (isLoading || !logData) { 
     return <p>Loading...</p>;
   }
 
