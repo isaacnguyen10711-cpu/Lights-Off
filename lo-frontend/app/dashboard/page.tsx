@@ -53,11 +53,45 @@ export default function DashboardPage() {
     return response.json();
   }
 
+  const fetchMonthlyCoachReview = async () => {
+    const response = await fetch(`${API_URL}/api/sleepcoach/monthly?year=${year}&month=${month}`, {
+      method: "GET",
+      credentials: "include"
+    })
+
+    // the month isn't over yet, the backend says when the review will be ready
+    if (response.status === 400) {
+      return await response.text();
+    }
+
+    if (response.status === 401) {
+      router.replace("/");
+      return null;
+    }
+
+    // covers the rate limit too
+    if (!response.ok) {
+      throw new Error("Couldn't get the monthly review");
+    }
+
+    const data = await response.json();
+    return data.review;
+  };
+
   const { data: allLogsInAMonth, isLoading, isError } = useQuery({
     queryKey: ["sleepLogs", year, month],
     queryFn: fetchAllLogsInAMonth,
     // Only run the query if year and month are set
-    enabled: year !== null && month !== null, 
+    enabled: year !== null && month !== null,
+  });
+
+  // renamed so they don't clash with the logs query above
+  const { data: monthlyReview, isLoading: isReviewLoading, isError: isReviewError } = useQuery({
+    queryKey: ["monthly-review", year, month],
+    queryFn: fetchMonthlyCoachReview,
+    enabled: year !== null && month !== null,
+    // a finished month's review never changes, and the coach is rate limited, so never refetch it
+    staleTime: Infinity,
   });
 
   // days in this month, 0 until the month is set
@@ -89,6 +123,15 @@ export default function DashboardPage() {
   const qualityAverage = allLogsInAMonth?.qualityAverage ?? 0;
   const numberOfLogs = allLogsInAMonth?.numberOfLogs ?? 0;
   const hoursSleptAverage = allLogsInAMonth?.hoursSleptAverage ?? 0;
+
+  // what to show in the review box
+  let reviewText = monthlyReview ?? "";
+  if (isReviewLoading) {
+    reviewText = "Your coach is looking over this month...";
+  }
+  else if (isReviewError) {
+    reviewText = "We can't get this month's review right now. Try again in a minute.";
+  }
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -145,11 +188,8 @@ export default function DashboardPage() {
 
         <section className="xl:col-span-1 flex flex-col gap-4">
           <div className="rounded-2xl border border-line bg-field p-4 md:p-5">
-            <p className={labelStyles}>October review</p>
-            <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">
-              You averaged 7 hours this month, a bit up on September. Your worst nights all came after
-              late caffeine, so cutting it off by 3pm looks like the easiest win for November.
-            </p>
+            <p className={labelStyles}>{`${monthNames[month ? month - 1 : 0]} review`}</p>
+            <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
           </div>
 
           {/* stretches on xl so the bottom lines up with the calendar */}
