@@ -41,6 +41,10 @@ The backend API is built. On the frontend, the login, register, home, log a nigh
 
 ![Update last night page](lo-frontend/public/images/update-log.webp)
 
+### Dashboard
+
+![Dashboard page with a month of sleep logs](lo-frontend/public/images/dashboard.png)
+
 ## Technology Stack
 
 ### Frontend
