@@ -5,6 +5,7 @@ import Link from "next/link";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query"; 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -25,6 +26,7 @@ const durations = ["None", "< 30 min", "30–60 min", "60+ min"];
 export default function LogPage() {
   const dateRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // set the date input to today's date on page load, use en-CA format so it works in all browsers (YYYY-MM-DD)
@@ -91,6 +93,8 @@ export default function LogPage() {
       }
       else {
         alert("Form submitted successfully!");
+        queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
+        queryClient.invalidateQueries({ queryKey: ["latest-log"]});
         router.push("/home");
       }
     }

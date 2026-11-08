@@ -6,6 +6,7 @@ import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../c
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
+import { useQueryClient } from "@tanstack/react-query"; 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,6 +28,7 @@ function UpdateLogForm() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [logData, setLogData] = useState<SleepLogProps | null>(null);
 
@@ -118,6 +120,8 @@ function UpdateLogForm() {
       }
 
       alert("Log updated!");
+      queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
+      queryClient.invalidateQueries({ queryKey: ["latest-log"] });
       router.push("/home");
     }
     catch (error) {
