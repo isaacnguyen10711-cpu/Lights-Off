@@ -7,7 +7,7 @@ import NightDetails from "../../components/dashboard/NightDetails";
 import QualityLabel from "../../components/dashboard/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
