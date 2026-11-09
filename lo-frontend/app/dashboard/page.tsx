@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import Link from "next/link";
 import CalendarDay from "../../components/dashboard/CalendarDay";
@@ -17,7 +17,7 @@ const arrowStyles = "size-10 rounded-xl border border-line bg-field text-muted t
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 
 export default function DashboardPage() {
@@ -32,7 +32,7 @@ export default function DashboardPage() {
     setYear(currentYear);
     setMonth(currentMonth);
   }, []);
-  
+
   const router = useRouter();
 
   const fetchAllLogsInAMonth = async () => {
@@ -94,6 +94,37 @@ export default function DashboardPage() {
     staleTime: Infinity,
   });
 
+  // the arrows to change the month
+  const handlePreviousMonth = () => {
+    const currentYear = new Date().getFullYear();
+    if (month === 1) {
+      if (currentYear === year) {
+        setYear((previousYear) => (previousYear !== null ? previousYear - 1 : null));
+        setMonth(12);
+      }
+    }
+    else {
+      setMonth((previousMonth) => (previousMonth !== null ? previousMonth - 1 : null));
+    }
+  };
+
+  const handleNextMonth = () => {
+    const currentYear = new Date().getFullYear();
+    if (month === 12) {
+      if (currentYear - 1 === year) {
+        setYear((previousYear) => (previousYear !== null ? previousYear + 1 : null));
+        setMonth(1);
+      }
+        // don't allow going into the future
+      else {
+        return; 
+      }
+    }
+    else {
+      setMonth((previousMonth) => (previousMonth !== null ? previousMonth + 1 : null));
+    }
+  };
+
   // days in this month, 0 until the month is set
   const daysInMonth = year && month ? new Date(year, month, 0).getDate() : 0;
 
@@ -148,9 +179,9 @@ export default function DashboardPage() {
         <section className="xl:col-span-2">
           {/* month name with arrows either side */}
           <div className="flex items-center justify-between">
-            <button type="button" aria-label="Previous month" className={arrowStyles}>&larr;</button>
+            <button type="button" aria-label="Previous month" className={arrowStyles} onClick={handlePreviousMonth}>&larr;</button>
             <h1 className="text-2xl md:text-3xl font-semibold">{`${monthNames[month ? month - 1 : 0]} ${year}`}</h1>
-            <button type="button" aria-label="Next month" className={arrowStyles}>&rarr;</button>
+            <button type="button" aria-label="Next month" className={arrowStyles} onClick={handleNextMonth}>&rarr;</button>
           </div>
 
           <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-3 gap-2 md:gap-3">
