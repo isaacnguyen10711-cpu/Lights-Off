@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Lights_Off.Models;
+using Lights_Off.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
 namespace Lights_Off.Controllers
@@ -116,6 +117,32 @@ namespace Lights_Off.Controllers
                 user.DisplayName,
                 user.SleepGoal
             });
+        }
+
+        // lets the user change their name and sleep goal
+        [Authorize]
+        [HttpPut("me")]
+        public async Task<IActionResult> UpdateCurrentUser(ProfileUpdateRequest request)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.DisplayName = request.DisplayName;
+            user.SleepGoal = request.SleepGoal;
+
+            // identity has its own save for users, so use that instead of SaveChangesAsync
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Couldn't save your profile.");
+            }
+
+            return NoContent();
         }
 
         [Authorize]
