@@ -4,9 +4,6 @@
     {
         ImproveQuality,
         SleepLonger,
-        ConsistentSchedule,
-        EarlierBedtime,
-        ReduceScreenTime,
-        ReduceStress
+        ConsistentSchedule
     }
 }
