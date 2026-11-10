@@ -152,6 +152,9 @@ export default function HomePage() {
           <Link href="/dashboard" className="font-semibold text-muted transition-colors hover:text-strong">
             Dashboard
           </Link>
+          <Link href="/profile" className="font-semibold text-muted transition-colors hover:text-strong">
+            Profile
+          </Link>
           <button
             onClick={handleLogout}
             type="button"
