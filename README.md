@@ -6,7 +6,7 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend now talks to it, including the dashboard. The main thing left on the dashboard is switching between months.
+The backend API is built, and every page on the frontend talks to it. The dashboard is finished, and I'm now working on the profile page. It shows your details and lets you change your password, but saving a new name or sleep goal isn't hooked up yet.
 
 ## Features
 
@@ -15,6 +15,8 @@ The backend API is built, and every page on the frontend now talks to it, includ
 - See your latest night on the home page
 - Update last night's log
 - See the month on a calendar, coloured by how well you slept, and tap a night for the details
+- Go back through past months on the dashboard
+- See your profile and change your password (for email accounts)
 - Get AI feedback on last night's sleep and a review of each month
 - AI feedback is saved and rate limited to keep costs down
 
@@ -96,13 +98,13 @@ The backend API is built, and every page on the frontend now talks to it, includ
 ## Future Implementations
 
 ### Frontend
-- Switch between months on the dashboard
+- Save a new name and sleep goal from the profile page
 - Add a password reset page once the backend can send emails
 
 ### Backend
 - Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 - Add password reset and email verification
-- Let users set a sleep goal and update their profile
+- Have the sleep coach use the user's sleep goal in its feedback
 - Let users delete their account
 - Deploy to AWS
 
@@ -120,7 +122,7 @@ Lights-Off/
 │   └── Program.cs         # App setup
 ├── lo-backend.Tests/      # Backend tests
 ├── lo-frontend/           # Next.js frontend
-│   ├── app/               # Pages (login, register, home, log, update-log, dashboard)
+│   ├── app/               # Pages (login, register, home, log, update-log, dashboard, profile)
 │   ├── components/        # Shared UI pieces and styles, plus a folder for each page's own pieces
 │   ├── public/images/     # Screenshots for this README
 │   └── type.ts            # TypeScript types for props and API data
