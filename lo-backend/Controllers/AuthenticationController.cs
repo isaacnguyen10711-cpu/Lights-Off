@@ -115,7 +115,9 @@ namespace Lights_Off.Controllers
                 user.Email,
                 user.UserName,
                 user.DisplayName,
-                user.SleepGoal
+                user.SleepGoal,
+                // google and facebook users have no password, so the profile page hides "change password" for them
+                HasPassword = await _userManager.HasPasswordAsync(user)
             });
         }
 
