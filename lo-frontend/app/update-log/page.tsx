@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LoadingScreen from "../../components/LoadingScreen";
 import Choice from "../../components/Choice";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -136,7 +137,7 @@ function UpdateLogForm() {
   }
 
   if (isLoading || !logData) { 
-    return <p>Loading...</p>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -263,7 +264,7 @@ function UpdateLogForm() {
 // useSearchParams needs a Suspense around it, so Next knows what to show before it reads the url
 export default function UpdateLogPage() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<LoadingScreen />}>
       <UpdateLogForm />
     </Suspense>
   );

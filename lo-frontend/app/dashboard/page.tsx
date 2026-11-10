@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LoadingScreen from "../../components/LoadingScreen";
 import CalendarDay from "../../components/dashboard/CalendarDay";
 import StatBox from "../../components/dashboard/StatBox";
 import NightDetails from "../../components/dashboard/NightDetails";
@@ -144,7 +145,7 @@ export default function DashboardPage() {
   const selectedLog = selectedDay ? getLogForSelectedDay(selectedDay) : undefined;
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingScreen />;
   }
 
   if (isError) {
