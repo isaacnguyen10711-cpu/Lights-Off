@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Choice from "../../components/Choice";
 import Habit from "../../components/Habit";
+import LoadingScreen from "../../components/LoadingScreen";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -18,9 +21,36 @@ const inputStyles =
 const goals = ["Improve quality", "Sleep longer", "Consistent schedule"];
 
 export default function ProfilePage() {
+  const router = useRouter();
+
   // which boxes are open for typing
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // the logged in user, same key as home so they share the cache
+  const fetchUser = async () => {
+    const response = await fetch(`${API_URL}/api/authentication/me`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    // not logged in, send them back to the login page
+    if (response.status === 401) {
+      router.replace("/");
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error("Couldn't get the user");
+    }
+
+    return response.json();
+  };
+
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: fetchUser,
+  });
 
   const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,6 +90,11 @@ export default function ProfilePage() {
     }
   };
 
+  // wait for the user before showing anything
+  if (!user) {
+    return <LoadingScreen />;
+  }
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
@@ -73,7 +108,7 @@ export default function ProfilePage() {
       <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 md:px-0 pt-4 pb-10">
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Your profile</h1>
 
-        {/* the details, or the form once they press edit. "-" for now until it's hooked up */}
+        {/* the details, or the form once they press edit */}
         <section className={sectionStyles}>
           {isEditingProfile ? (
             <form className="flex flex-col gap-5">
@@ -103,9 +138,10 @@ export default function ProfilePage() {
           ) : (
             <div className="flex flex-col gap-5">
               <dl className="flex flex-col gap-4">
-                <Habit label="Name" value="-" />
-                <Habit label="Email" value="-" />
-                <Habit label="Sleep goal" value="-" />
+                <Habit label="Name" value={user.displayName ?? "-"} />
+                <Habit label="Email" value={user.email ?? "-"} />
+                {/* the goal comes back as a number, so goals[number] gives the actual goal in text */}
+                <Habit label="Sleep goal" value={user.sleepGoal != null ? goals[user.sleepGoal] : "-"} />
               </dl>
 
               <button type="button" className={secondaryButtonStyles} onClick={() => setIsEditingProfile(true)}>
@@ -116,39 +152,41 @@ export default function ProfilePage() {
         </section>
 
         {/* only for people who signed up with a password */}
-        <section className={sectionStyles}>
-          {isChangingPassword ? (
-            <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
-              <label>
-                <span className={labelStyles}>Current password</span>
-                <input type="password" name="oldPassword" autoComplete="current-password" className={inputStyles} />
-              </label>
+        {user.hasPassword && (
+          <section className={sectionStyles}>
+            {isChangingPassword ? (
+              <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
+                <label>
+                  <span className={labelStyles}>Current password</span>
+                  <input type="password" name="oldPassword" autoComplete="current-password" className={inputStyles} />
+                </label>
 
-              <label>
-                <span className={labelStyles}>New password</span>
-                <input type="password" name="newPassword" autoComplete="new-password" className={inputStyles} />
-              </label>
+                <label>
+                  <span className={labelStyles}>New password</span>
+                  <input type="password" name="newPassword" autoComplete="new-password" className={inputStyles} />
+                </label>
 
-              <label>
-                <span className={labelStyles}>Confirm new password</span>
-                <input type="password" name="confirmPassword" autoComplete="new-password" className={inputStyles} />
-              </label>
+                <label>
+                  <span className={labelStyles}>Confirm new password</span>
+                  <input type="password" name="confirmPassword" autoComplete="new-password" className={inputStyles} />
+                </label>
 
-              <div className="flex gap-3">
-                <button type="button" className={secondaryButtonStyles} onClick={() => setIsChangingPassword(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className={primaryButtonStyles}>
-                  Save password
-                </button>
-              </div>
-            </form>
-          ) : (
-            <button type="button" className={`${secondaryButtonStyles} w-full`} onClick={() => setIsChangingPassword(true)}>
-              Change password
-            </button>
-          )}
-        </section>
+                <div className="flex gap-3">
+                  <button type="button" className={secondaryButtonStyles} onClick={() => setIsChangingPassword(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className={primaryButtonStyles}>
+                    Save password
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <button type="button" className={`${secondaryButtonStyles} w-full`} onClick={() => setIsChangingPassword(true)}>
+                Change password
+              </button>
+            )}
+          </section>
+        )}
       </div>
     </main>
   );
