@@ -155,8 +155,9 @@ namespace Lights_Off.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SleepGoal")
-                        .HasColumnType("int");
+                    b.PrimitiveCollection<string>("SleepGoals")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");

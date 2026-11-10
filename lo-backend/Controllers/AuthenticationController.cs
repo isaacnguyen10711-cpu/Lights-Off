@@ -115,7 +115,7 @@ namespace Lights_Off.Controllers
                 user.Email,
                 user.UserName,
                 user.DisplayName,
-                user.SleepGoal,
+                user.SleepGoals,
                 // google and facebook users have no password, so the profile page hides "change password" for them
                 HasPassword = await _userManager.HasPasswordAsync(user)
             });
@@ -133,8 +133,15 @@ namespace Lights_Off.Controllers
                 return NotFound("User not found.");
             }
 
+            // any number binds to an enum, so make sure each goal is a real one
+            if (request.SleepGoals.Any(goal => !Enum.IsDefined(goal)))
+            {
+                return BadRequest("That sleep goal doesn't exist.");
+            }
+
             user.DisplayName = request.DisplayName;
-            user.SleepGoal = request.SleepGoal;
+            // Distinct so picking the same goal twice only saves it once
+            user.SleepGoals = request.SleepGoals.Distinct().ToList();
 
             // identity has its own save for users, so use that instead of SaveChangesAsync
             var result = await _userManager.UpdateAsync(user);

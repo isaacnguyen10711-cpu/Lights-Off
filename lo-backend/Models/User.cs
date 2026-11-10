@@ -13,6 +13,7 @@ namespace Lights_Off.Models
         [StringLength(100)]
         public string? DisplayName { get; set; }
 
-        public SleepGoal? SleepGoal { get; set; }
+        // they can pick more than one, EF saves the list as JSON in one column like [0,2]
+        public List<SleepGoal> SleepGoals { get; set; } = [];
     }
 }
