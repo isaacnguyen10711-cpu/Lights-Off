@@ -6,7 +6,7 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished. Next up is getting the sleep coach to use your sleep goal.
+The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished. Next up is getting the sleep coach to use your sleep goals.
 
 ## Features
 
@@ -16,7 +16,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 - Update last night's log
 - See the month on a calendar, coloured by how well you slept, and tap a night for the details
 - Go back through past months on the dashboard
-- Set your name and sleep goal, and change your password (for email accounts)
+- Set your name and sleep goals, and change your password (for email accounts)
 - Get AI feedback on last night's sleep and a review of each month
 - AI feedback is saved and rate limited to keep costs down
 
@@ -107,7 +107,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 ### Backend
 - Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 - Add password reset and email verification
-- Have the sleep coach use the user's sleep goal in its feedback
+- Have the sleep coach use the user's sleep goals in its feedback
 - Let users delete their account
 - Deploy to AWS
 
