@@ -6,7 +6,7 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend talks to it. The dashboard is finished, and I'm now working on the profile page. It shows your details and lets you change your password, but saving a new name or sleep goal isn't hooked up yet.
+The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished. Next up is getting the sleep coach to use your sleep goal.
 
 ## Features
 
@@ -16,7 +16,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 - Update last night's log
 - See the month on a calendar, coloured by how well you slept, and tap a night for the details
 - Go back through past months on the dashboard
-- See your profile and change your password (for email accounts)
+- Set your name and sleep goal, and change your password (for email accounts)
 - Get AI feedback on last night's sleep and a review of each month
 - AI feedback is saved and rate limited to keep costs down
 
@@ -47,6 +47,10 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 ### Dashboard
 
 ![Dashboard page with a month of sleep logs](lo-frontend/public/images/dashboard.png)
+
+### Profile
+
+![Profile page](lo-frontend/public/images/profile.png)
 
 ## Technology Stack
 
@@ -98,7 +102,6 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 ## Future Implementations
 
 ### Frontend
-- Save a new name and sleep goal from the profile page
 - Add a password reset page once the backend can send emails
 
 ### Backend
