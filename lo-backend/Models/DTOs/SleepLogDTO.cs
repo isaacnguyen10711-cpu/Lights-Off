@@ -14,7 +14,10 @@ namespace Lights_Off.Models.DTOs
         public bool? CaffeineAfter3pm { get; set; }
         public bool? Exercised { get; set; }
         [Range(1, 10)] public int? StressLevel { get; set; }
+        // without these, any number like 99 would get saved
+        [EnumDataType(typeof(ScreenTimeBeforeBed))]
         public ScreenTimeBeforeBed? ScreenTimeBeforeBed { get; set; }
+        [EnumDataType(typeof(AfternoonNapDuration))]
         public AfternoonNapDuration? AfternoonNapDuration { get; set; }
     }
 
