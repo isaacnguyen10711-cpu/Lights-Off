@@ -5,7 +5,7 @@ namespace lo_backend.Tests
     // a pretend coach so tests never call the real Claude API
     public class FakeSleepCoach : ISleepCoach
     {
-        public Task<string> GetLastNightFeedbackAsync(int userId)
+        public Task<string> GetLatestNightFeedbackAsync(int userId)
         {
             return Task.FromResult("Great job!");
         }
