@@ -26,6 +26,8 @@ export type ChoiceProps = {
   value: string;
   label: string;
   defaultChecked?: boolean;
+  // "checkbox" lets them pick more than one, radio is the default
+  type?: "radio" | "checkbox";
 };
 
 export type CalendarDayProps = {

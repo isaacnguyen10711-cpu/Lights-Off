@@ -59,7 +59,8 @@ export default function ProfilePage() {
 
     const formData = new FormData(event.currentTarget);
     const displayName = formData.get("displayName");
-    const sleepGoal = formData.get("sleepGoal");
+    // getAll gives every ticked box, like ["0", "2"], then Number turns them into [0, 2]
+    const sleepGoals = formData.getAll("sleepGoals").map(Number);
 
     try {
       const response = await fetch(`${API_URL}/api/authentication/me`, {
@@ -69,8 +70,7 @@ export default function ProfilePage() {
         body: JSON.stringify({
           // an empty name box becomes null so the profile shows "-"
           displayName: displayName || null,
-          // formData gives "1", but the backend wants the number 1
-          sleepGoal: sleepGoal ? Number(sleepGoal) : null,
+          sleepGoals,
         }),
       });
 
@@ -133,6 +133,10 @@ export default function ProfilePage() {
     return <LoadingScreen />;
   }
 
+  // the goals come back as numbers like [0, 2], so goals[number] turns each one into words
+  const sleepGoalsString =
+    user.sleepGoals.length > 0 ? user.sleepGoals.map((goal: number) => goals[goal]).join(", ") : "-";
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
@@ -163,10 +167,10 @@ export default function ProfilePage() {
               </label>
 
               <div>
-                <p className={labelStyles}>Sleep goal</p>
+                <p className={labelStyles}>Sleep goals (pick as many as you like)</p>
                 <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2">
                   {goals.map((label, i) => (
-                    <Choice key={label} name="sleepGoal" value={String(i)} label={label} defaultChecked={user.sleepGoal === i} />
+                    <Choice key={label} type="checkbox" name="sleepGoals" value={String(i)} label={label} defaultChecked={user.sleepGoals.includes(i)} />
                   ))}
                 </div>
               </div>
@@ -185,8 +189,7 @@ export default function ProfilePage() {
               <dl className="flex flex-col gap-4">
                 <Habit label="Name" value={user.displayName ?? "-"} />
                 <Habit label="Email" value={user.email ?? "-"} />
-                {/* the goal comes back as a number, so goals[number] gives the actual goal in text */}
-                <Habit label="Sleep goal" value={user.sleepGoal != null ? goals[user.sleepGoal] : "-"} />
+                <Habit label="Sleep goals" value={sleepGoalsString} />
               </dl>
 
               <button type="button" className={secondaryButtonStyles} onClick={() => setIsEditingProfile(true)}>
