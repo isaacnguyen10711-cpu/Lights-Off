@@ -175,8 +175,10 @@ export default function DashboardPage() {
       </header>
 
       {/* calendar on the left, review and the picked night on the right. stacked until xl */}
-      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-center gap-6 md:gap-8 xl:gap-10 px-4 md:px-8 xl:px-20 pt-6 xl:pt-0 pb-10 md:pb-8 xl:pb-6">
-        <section className="xl:col-span-2">
+      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-start gap-6 md:gap-8 xl:gap-10 px-4 md:px-8 xl:px-20 pt-6 xl:pt-8 pb-10 md:pb-8 xl:pb-6">
+        <div className="xl:col-span-2">
+        {/* month name and the month's stats */}
+        <section>
           {/* month name with arrows either side */}
           <div className="flex items-center justify-between">
             <button type="button" aria-label="Previous month" className={arrowStyles} onClick={handlePreviousMonth}>&larr;</button>
@@ -189,7 +191,10 @@ export default function DashboardPage() {
             <StatBox label="Avg sleep" value={`${hoursSleptAverage.toFixed(1)}h`} />
             <StatBox label="Avg quality" value={qualityAverage.toFixed(1)} />
           </div>
+        </section>
 
+        {/* the calendar */}
+        <section>
           <div className="mt-4 md:mt-5 xl:mt-4 grid grid-cols-7 gap-1 md:gap-2 text-center text-xs md:text-sm xl:text-xs text-muted">
             {weekdays.map((name) => (
               <p key={name}>{name}</p>
@@ -202,7 +207,7 @@ export default function DashboardPage() {
               <div key={`empty-${spot}`} />
             ))}
             {days.map((day) => (
-              <CalendarDay
+              <CalendarDay 
                 key={day}
                 day={day}
                 hours={getLogForSelectedDay(day)?.hoursSlept ?? null}
@@ -216,6 +221,7 @@ export default function DashboardPage() {
           {/* the colour key under the calendar */}
           <QualityLabel />
         </section>
+        </div>
 
         <section className="xl:col-span-1 flex flex-col gap-4">
           <div className="rounded-2xl border border-line bg-field p-4 md:p-5">
