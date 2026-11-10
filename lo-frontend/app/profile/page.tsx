@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Choice from "../../components/Choice";
 import Habit from "../../components/Habit";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -22,6 +22,7 @@ const goals = ["Improve quality", "Sleep longer", "Consistent schedule"];
 
 export default function ProfilePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // which boxes are open for typing
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -51,6 +52,43 @@ export default function ProfilePage() {
     queryKey: ["me"],
     queryFn: fetchUser,
   });
+
+  // handle the form submission for user details
+  const handleEditProfile = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const displayName = formData.get("displayName");
+    const sleepGoal = formData.get("sleepGoal");
+
+    try {
+      const response = await fetch(`${API_URL}/api/authentication/me`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          // an empty name box becomes null so the profile shows "-"
+          displayName: displayName || null,
+          // formData gives "1", but the backend wants the number 1
+          sleepGoal: sleepGoal ? Number(sleepGoal) : null,
+        }),
+      });
+
+      if (!response.ok) {
+        alert("Failed to update profile.");
+        return;
+      }
+
+      // get the new details so the page doesn't show the old ones
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      alert("Profile updated.");
+      setIsEditingProfile(false);
+    }
+    catch (error) {
+      console.error("Error updating profile:", error);
+      alert("We can't reach the server right now. Try again in a minute.");
+    }
+  };
 
   const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -111,17 +149,24 @@ export default function ProfilePage() {
         {/* the details, or the form once they press edit */}
         <section className={sectionStyles}>
           {isEditingProfile ? (
-            <form className="flex flex-col gap-5">
+            <form onSubmit={handleEditProfile} className="flex flex-col gap-5">
+              {/* start with what they already have, or saving would wipe whatever they didn't change */}
               <label>
                 <span className={labelStyles}>Name</span>
-                <input type="text" name="displayName" placeholder="What should we call you?" className={inputStyles} />
+                <input
+                  type="text"
+                  name="displayName"
+                  defaultValue={user.displayName ?? ""}
+                  placeholder="What should we call you?"
+                  className={inputStyles}
+                />
               </label>
 
               <div>
                 <p className={labelStyles}>Sleep goal</p>
                 <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2">
                   {goals.map((label, i) => (
-                    <Choice key={label} name="sleepGoal" value={String(i)} label={label} />
+                    <Choice key={label} name="sleepGoal" value={String(i)} label={label} defaultChecked={user.sleepGoal === i} />
                   ))}
                 </div>
               </div>
