@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRef, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SignInDetails } from "../type";
 
 // the backend address, set in .env.local
@@ -32,6 +32,7 @@ export default function LoginPage() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const fetchUser = async () => {
     const response = await fetch(`${API_URL}/api/authentication/me`, {
@@ -101,7 +102,8 @@ export default function LoginPage() {
           alert("Sign in failed. Please check your credentials.");
         }
         else {
-          // logged in, go to home
+          // the cache still says "not logged in" from this page, so forget it or home won't get the user
+          queryClient.removeQueries({ queryKey: ["me"] });
           router.push("/home");
         }
 
