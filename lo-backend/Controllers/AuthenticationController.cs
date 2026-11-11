@@ -66,6 +66,8 @@ namespace Lights_Off.Controllers
                     UserName = email ?? $"{userInfo.LoginProvider}_{userInfo.ProviderKey}",
                     Email = email,
                     DisplayName = displayName,
+                    // google/facebook already checked this email is theirs, so no need to confirm it again
+                    EmailConfirmed = email != null,
                 };
 
                 var response = await _userManager.CreateAsync(newUser);
