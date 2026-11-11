@@ -29,6 +29,8 @@ namespace Lights_Off.Services
               or "Need more sleep!".
             - Then say how many hours they slept and how that compares to their usual.
             - If something clearly stood out (like caffeine or stress), you can add a few words on it.
+            - If they have sleep goals, you can link your comment to one of them,
+              like "nice, that helps your goal of sleeping longer".
             - One emoji is fine, no lists or headings.
             - Only use the data you were given, don't make anything up.
 
@@ -49,6 +51,7 @@ namespace Lights_Off.Services
             - Point out up to three patterns that seem linked to better or worse sleep, like certain days
               of the week, caffeine, exercise, stress, screen time or naps.
             - Mention their best stretch of sleep, so there's something to feel good about.
+            - If they have sleep goals, say how the month went for each goal and aim your tips at them.
             - Finish with two or three realistic tips for next month.
             - Keep it friendly, under 200 words and in plain English. Short paragraphs are fine, no headings.
             - If a pattern only shows up on a couple of nights, say it's early days rather than overclaiming.
@@ -84,10 +87,13 @@ namespace Lights_Off.Services
                 average = $"{averageHours:0.0} hours and quality {averageQuality:0.0}/10 over {logsInWeekBefore.Count} nights.";
             }
 
+            var sleepGoals = await GetUserSleepGoals(userId);
+
             // the message we send to Claude, with the last night log taken from DescribeNight() and the average of the week before above
             var message = $"""
                 Last night: {DescribeNight(lastNight)}
                 My average the week before: {average}
+                My sleep goals: {sleepGoals}
                 """;
 
             var feedback = await AskClaudeAsync(LastNightPrompt, message);
@@ -134,7 +140,8 @@ namespace Lights_Off.Services
             var averageQuality = logsInMonth.Average(s => s.Quality);
 
             var message = $"My sleep in {monthStart:MMMM yyyy} ({logsInMonth.Count} nights logged):\n";
-            message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n\n";
+            message += $"Average: {averageHours:0.0} hours and quality {averageQuality:0.0}/10\n";
+            message += $"My sleep goals: {await GetUserSleepGoals(userId)}\n\n";
 
             foreach (var log in logsInMonth)
             {
