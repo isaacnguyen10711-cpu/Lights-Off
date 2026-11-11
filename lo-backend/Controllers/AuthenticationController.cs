@@ -154,6 +154,31 @@ namespace Lights_Off.Controllers
             return NoContent();
         }
 
+        // deletes the account for good. their sleep logs, monthly reviews and
+        // google/facebook links are set to cascade, so the database removes those too
+        [Authorize]
+        [HttpDelete("me")]
+        public async Task<IActionResult> DeleteCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Couldn't delete your account.");
+            }
+
+            // the cookie still says they're logged in, so clear it
+            await _signInManager.SignOutAsync();
+            return NoContent();
+        }
+
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
