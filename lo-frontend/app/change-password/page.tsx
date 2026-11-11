@@ -67,8 +67,8 @@ export default function ChangePasswordPage() {
         </Link>
       </header>
 
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 md:px-0 pt-4 pb-10">
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Change password</h1>
+      <div className="mx-auto flex w-full max-w-xl xl:max-w-2xl flex-col gap-4 xl:gap-5 px-4 md:px-0 pt-4 xl:pt-8 pb-10">
+        <h1 className="mb-2 md:mb-4 text-3xl md:text-4xl leading-tight font-semibold tracking-tight">Change password</h1>
 
         <section className="rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6">
           <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
@@ -87,7 +87,8 @@ export default function ChangePasswordPage() {
               <input type="password" name="confirmPassword" autoComplete="new-password" className={inputStyles} />
             </label>
 
-            <div className="flex gap-3">
+            {/* buttons sit on the right */}
+            <div className="flex justify-end gap-3">
               <Link href="/profile" className={secondaryButtonStyles}>
                 Cancel
               </Link>
