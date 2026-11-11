@@ -1,4 +1,4 @@
-using Lights_Off.Services;
+using Lights_Off.Services.SleepCoachService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

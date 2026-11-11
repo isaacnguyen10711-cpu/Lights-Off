@@ -1,4 +1,4 @@
-﻿namespace Lights_Off.Services
+﻿namespace Lights_Off.Services.SleepCoachService
 {
     public interface ISleepCoach
     {

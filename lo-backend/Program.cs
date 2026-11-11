@@ -1,7 +1,7 @@
 using Anthropic;
 using Lights_Off.Data;
 using Lights_Off.Models;
-using Lights_Off.Services;
+using Lights_Off.Services.SleepCoachService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;

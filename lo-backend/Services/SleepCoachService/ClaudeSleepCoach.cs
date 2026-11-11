@@ -4,7 +4,7 @@ using Lights_Off.Data;
 using Lights_Off.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lights_Off.Services
+namespace Lights_Off.Services.SleepCoachService
 {
     public class ClaudeSleepCoach : ISleepCoach
     {
