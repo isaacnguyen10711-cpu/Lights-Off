@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 using System.Security.Claims;
+using Lights_Off.Services.EmailService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,6 +87,19 @@ builder.Services.AddSingleton(new AnthropicClient
 });
 
 builder.Services.AddScoped<ISleepCoach, ClaudeSleepCoach>();
+
+builder.Services.AddSingleton(new SmtpSettings
+{
+    Server = builder.Configuration["Smtp:Server"]!,
+    Port = int.Parse(builder.Configuration["Smtp:Port"]!),
+    SenderName = builder.Configuration["Smtp:SenderName"]!,
+    SenderEmail = builder.Configuration["Smtp:SenderEmail"]!,
+    Username = builder.Configuration["Smtp:Username"]!,
+    Password = builder.Configuration["Smtp:Password"]!
+});
+
+builder.Services.AddTransient<IEmailSender<User>, Mailer>();
+
 
 // let the Next.js frontend call this API from the browser (with the login cookie)
 builder.Services.AddCors(options =>
