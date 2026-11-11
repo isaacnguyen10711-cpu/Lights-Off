@@ -136,8 +136,8 @@ export default function ProfilePage() {
         </Link>
       </header>
 
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 md:px-0 pt-4 pb-10">
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Your profile</h1>
+      <div className="mx-auto flex w-full max-w-xl xl:max-w-2xl flex-col gap-4 xl:gap-5 px-4 md:px-0 pt-4 xl:pt-8 pb-10">
+        <h1 className="mb-2 md:mb-4 text-3xl md:text-4xl leading-tight font-semibold tracking-tight">Your profile</h1>
 
         {/* the details, or the form once they press edit */}
         <section className={sectionStyles}>
@@ -164,7 +164,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              {/* buttons sit on the right, same as the change password page */}
+              <div className="flex justify-end gap-3">
                 <button type="button" className={secondaryButtonStyles} onClick={() => setIsEditingProfile(false)}>
                   Cancel
                 </button>
@@ -188,17 +189,17 @@ export default function ProfilePage() {
           )}
         </section>
 
-        {/* account buttons side by side. flex-1 makes them share the width evenly */}
-        <section className={`${sectionStyles} flex gap-3`}>
+        {/* account buttons. stacked on phones so the text fits on one line, side by side from tablets up (md:flex-1 shares the row evenly) */}
+        <section className={`${sectionStyles} flex flex-col md:flex-row gap-3`}>
           {/* only for people who signed up with a password. it's a link since it just goes to another page */}
           {user.hasPassword && (
-            <Link href="/change-password" className={`${secondaryButtonStyles} flex-1`}>
+            <Link href="/change-password" className={`${secondaryButtonStyles} md:flex-1 text-center`}>
               Change password
             </Link>
           )}
 
           {/* everyone can delete their account, google and facebook users too */}
-          <button type="button" className={`${secondaryButtonStyles} bg-red-900 flex-1`} onClick={handleDeleteAccount}>
+          <button type="button" className={`${secondaryButtonStyles} bg-red-900 md:flex-1`} onClick={handleDeleteAccount}>
             Delete account
           </button>
         </section>
