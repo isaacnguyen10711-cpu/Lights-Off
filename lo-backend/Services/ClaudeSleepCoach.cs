@@ -229,5 +229,21 @@ namespace Lights_Off.Services
                 .OrderBy(s => s.Date)
                 .ToListAsync();
         }
+
+        private async Task<string> GetUserSleepGoals(int userId) 
+        {
+            var goals = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.SleepGoals)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (goals == null || goals.Count == 0)
+            {
+                return "None picked";
+            }
+
+            return string.Join(", ", goals);
+        }
     }
 }
