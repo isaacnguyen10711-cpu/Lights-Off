@@ -128,6 +128,34 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    // there's no undo, so make them say yes first
+    if (!confirm("Delete your account and all your sleep logs? This can't be undone.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/authentication/me`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        alert("Couldn't delete your account. Try again in a minute.");
+        return;
+      }
+
+      alert("Your account has been deleted.");
+      // same as logging out, forget everything saved for this user
+      queryClient.clear();
+      router.replace("/");
+    }
+    catch (error) {
+      console.error("Error deleting account:", error);
+      alert("We can't reach the server right now. Try again in a minute.");
+    }
+  };
+
   // wait for the user before showing anything
   if (!user) {
     return <LoadingScreen />;
@@ -235,6 +263,13 @@ export default function ProfilePage() {
             )}
           </section>
         )}
+
+        {/* everyone can delete their account, google and facebook users too */}
+        <section className={sectionStyles}>
+          <button type="button" className={`${secondaryButtonStyles} w-full`} onClick={handleDeleteAccount}>
+            Delete account
+          </button>
+        </section>
       </div>
     </main>
   );
