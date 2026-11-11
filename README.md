@@ -6,7 +6,7 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished, and the sleep coach now takes your sleep goals into account. Next up is password reset, which needs the backend to send emails.
+The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished, and the sleep coach now takes your sleep goals into account. I've started on email: the backend can now send confirm email and reset password emails, and the forgot password and reset password pages are next.
 
 ## Features
 
@@ -52,6 +52,10 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 
 ![Profile page](lo-frontend/public/images/profile.png)
 
+### Change password
+
+![Change password page](lo-frontend/public/images/change-password.png)
+
 ## Technology Stack
 
 ### Frontend
@@ -69,6 +73,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 - SQL Server
 - ASP.NET Core Identity (cookie authentication)
 - Google and Facebook OAuth
+- MailKit (sending emails over SMTP)
 
 ### Testing
 
@@ -89,6 +94,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
    - `Authentication:Facebook:AppId`
    - `Authentication:Facebook:AppSecret`
    - `Anthropic:Api:Key`
+   - `Smtp:Server`, `Smtp:Port`, `Smtp:Username`, `Smtp:Password`, `Smtp:SenderName`, `Smtp:SenderEmail`
 3. Run `dotnet ef database update`, then `dotnet run`.
 
 ### Frontend
@@ -119,11 +125,11 @@ Lights-Off/
 │   ├── Filters/           # Request validation filters
 │   ├── Migrations/        # Database migrations
 │   ├── Models/            # Database models, DTOs and enums
-│   ├── Services/          # Sleep coach that calls the Claude API
+│   ├── Services/          # Sleep coach that calls the Claude API, and the email sender
 │   └── Program.cs         # App setup
 ├── lo-backend.Tests/      # Backend tests
 ├── lo-frontend/           # Next.js frontend
-│   ├── app/               # Pages (login, register, home, log, update-log, dashboard, profile)
+│   ├── app/               # Pages (login, register, home, log, update-log, dashboard, profile, change-password)
 │   ├── components/        # Shared UI pieces and styles, plus a folder for each page's own pieces
 │   ├── public/images/     # Screenshots for this README
 │   └── type.ts            # TypeScript types for props and API data
