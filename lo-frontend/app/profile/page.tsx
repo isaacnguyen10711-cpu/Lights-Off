@@ -24,9 +24,8 @@ export default function ProfilePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // which boxes are open for typing
+  // whether the profile box is open for typing
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   // the logged in user, same key as home so they share the cache
   const fetchUser = async () => {
@@ -86,44 +85,6 @@ export default function ProfilePage() {
     }
     catch (error) {
       console.error("Error updating profile:", error);
-      alert("We can't reach the server right now. Try again in a minute.");
-    }
-  };
-
-  const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // read what they typed, using each input's name
-    const formData = new FormData(event.currentTarget);
-    const oldPassword = formData.get("oldPassword");
-    const newPassword = formData.get("newPassword");
-    const confirmPassword = formData.get("confirmPassword");
-
-    // check this here so we don't bother the backend
-    if (newPassword !== confirmPassword) {
-      alert("New passwords don't match.");
-      return;
-    }
-
-    try {
-      // identity's own endpoint, it checks the old password and hashes the new one for us
-      const response = await fetch(`${API_URL}/api/identity/manage/info`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ oldPassword, newPassword }),
-      });
-
-      if (!response.ok) {
-        alert("Wrong current password, or the new one is too weak.");
-        return;
-      }
-
-      alert("Password changed.");
-      setIsChangingPassword(false);
-    }
-    catch (error) {
-      console.error("Error changing password:", error);
       alert("We can't reach the server right now. Try again in a minute.");
     }
   };
@@ -227,46 +188,17 @@ export default function ProfilePage() {
           )}
         </section>
 
-        {/* only for people who signed up with a password */}
-        {user.hasPassword && (
-          <section className={sectionStyles}>
-            {isChangingPassword ? (
-              <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
-                <label>
-                  <span className={labelStyles}>Current password</span>
-                  <input type="password" name="oldPassword" autoComplete="current-password" className={inputStyles} />
-                </label>
+        {/* account buttons side by side. flex-1 makes them share the width evenly */}
+        <section className={`${sectionStyles} flex gap-3`}>
+          {/* only for people who signed up with a password. it's a link since it just goes to another page */}
+          {user.hasPassword && (
+            <Link href="/change-password" className={`${secondaryButtonStyles} flex-1`}>
+              Change password
+            </Link>
+          )}
 
-                <label>
-                  <span className={labelStyles}>New password</span>
-                  <input type="password" name="newPassword" autoComplete="new-password" className={inputStyles} />
-                </label>
-
-                <label>
-                  <span className={labelStyles}>Confirm new password</span>
-                  <input type="password" name="confirmPassword" autoComplete="new-password" className={inputStyles} />
-                </label>
-
-                <div className="flex gap-3">
-                  <button type="button" className={secondaryButtonStyles} onClick={() => setIsChangingPassword(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className={primaryButtonStyles}>
-                    Save password
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <button type="button" className={`${secondaryButtonStyles} w-full`} onClick={() => setIsChangingPassword(true)}>
-                Change password
-              </button>
-            )}
-          </section>
-        )}
-
-        {/* everyone can delete their account, google and facebook users too */}
-        <section className={sectionStyles}>
-          <button type="button" className={`${secondaryButtonStyles} w-full`} onClick={handleDeleteAccount}>
+          {/* everyone can delete their account, google and facebook users too */}
+          <button type="button" className={`${secondaryButtonStyles} bg-red-900 flex-1`} onClick={handleDeleteAccount}>
             Delete account
           </button>
         </section>
