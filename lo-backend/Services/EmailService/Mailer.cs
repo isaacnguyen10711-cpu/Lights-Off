@@ -20,13 +20,24 @@ namespace Lights_Off.Services.EmailService
 
         }
 
+        // sends a confirmation link to the user's email address
         public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
         {
+            // identity's link opens a plain text page on the backend, so redirect it to our confirm-email 
             var subject = "Confirm your email";
-            var body = $"<p>Hi {System.Net.WebUtility.HtmlEncode(user.DisplayName ?? "there")},</p><p>Please confirm your email by clicking the link below:</p><p><a href='{confirmationLink}'>Confirm Email</a></p>";
+
+            // Decode the confirmation link to ensure it is properly formatted for the frontend
+            var decodedLink = System.Net.WebUtility.HtmlDecode(confirmationLink);
+            // Extract the query string from the decoded link to get the userId and code
+            var queryString = decodedLink.Substring(decodedLink.IndexOf('?'));   
+
+            var link = $"{_configuration["Frontend:Url"]}/confirm-email{queryString}";
+
+            var body = $"<p>Hi {System.Net.WebUtility.HtmlEncode(user.DisplayName ?? "there")},</p><p>Please confirm your email by clicking the link below:</p><p><a href='{link}'>Confirm Email</a></p>";
             await SendEmailAsync(email, subject, body);
         }
 
+        // sends a password reset code to the user's email address and redirects them to the frontend reset password page with the code and email as query parameters
         public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
         {
             var subject = "Password Reset";
