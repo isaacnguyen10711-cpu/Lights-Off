@@ -60,7 +60,7 @@ export default function ProfilePage() {
   });
 
   // handle the form submission for user details
-  const handleEditProfile = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // clear the last error so an old one doesn't hang around
     setErrorMessage(null);
@@ -190,7 +190,7 @@ export default function ProfilePage() {
         {/* the details, or the form once they press edit */}
         <section className={sectionStyles}>
           {isEditingProfile ? (
-            <form onSubmit={handleEditProfile} className="flex flex-col gap-5">
+            <form onSubmit={handleSaveProfile} className="flex flex-col gap-5">
               {/* start with what they already have, or saving would wipe whatever they didn't change */}
               <label>
                 <span className={labelStyles}>Name</span>
