@@ -119,9 +119,9 @@ In Development
 
 ## Future Implementations
 
+- Implement RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 - Deploy to AWS
 - Send emails from my own domain through AWS SES, so they stop going to spam
-- Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 
 ## Project Structure
 
