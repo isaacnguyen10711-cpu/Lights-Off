@@ -27,6 +27,8 @@ export default function RegisterPage() {
 
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // clear the last error so an old one doesn't appear again
+    setErrorMessage(null);
 
     // same shape the login page sends, used for both requests below
     const details: SignInDetails = {
