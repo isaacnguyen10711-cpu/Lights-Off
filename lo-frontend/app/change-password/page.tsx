@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -12,9 +13,13 @@ const inputStyles =
 
 export default function ChangePasswordPage() {
   const router = useRouter();
+  // what went wrong, null means there's nothing to show
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // clear the last error so an old one doesn't appear again
+    setErrorMessage(null);
 
     // read what they typed, using each input's name
     const formData = new FormData(event.currentTarget);
@@ -24,7 +29,7 @@ export default function ChangePasswordPage() {
 
     // check this here so we don't bother the backend
     if (newPassword !== confirmPassword) {
-      alert("New passwords don't match.");
+      setErrorMessage("New passwords don't match.");
       return;
     }
 
@@ -44,7 +49,10 @@ export default function ChangePasswordPage() {
       }
 
       if (!response.ok) {
-        alert("Wrong current password, or the new one is too weak.");
+        const errorData = await response.json();
+        // the keys are identity's error codes, e.g. "PasswordMismatch" when the current password is wrong
+        const errors = errorData.errors ?? {};
+        setErrorMessage(Object.values(errors).flat().join("\n"));
         return;
       }
 
@@ -69,6 +77,13 @@ export default function ChangePasswordPage() {
 
       <div className="mx-auto flex w-full max-w-xl xl:max-w-2xl flex-col gap-4 xl:gap-5 px-4 md:px-0 pt-4 xl:pt-8 pb-10">
         <h1 className="mb-2 md:mb-4 text-3xl md:text-4xl leading-tight font-semibold tracking-tight">Change password</h1>
+
+        {/* each problem on its own line, same as the register page */}
+        {errorMessage && (
+          <p className="whitespace-pre-line text-sm text-bad-text">
+            {errorMessage}
+          </p>
+        )}
 
         <section className="rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6">
           <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
