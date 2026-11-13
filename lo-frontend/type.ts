@@ -62,3 +62,12 @@ export type SleepLogProps = {
   lastNightFeedback: string | null;
 };
 
+
+export type PopUpDialogProps = {
+  title: string;
+  message: string;
+  firstButtonText: string;
+  secondButtonText?: string;
+  onFirstButtonClick: () => void;
+  onSecondButtonClick?: () => void;
+};
