@@ -120,8 +120,9 @@ In Development
 ## Future Implementations
 
 - Implement RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
-- Deploy to AWS
+- Deploy to Azure
 - Send emails from my own domain through AWS SES, so they stop going to spam
+- Backend Tests
 
 ## Project Structure
 
