@@ -6,8 +6,6 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are done, and the sleep coach now takes your sleep goals into account. Email is working too: new accounts have to confirm their email before they can log in, and you can reset a forgotten password. The emails still tend to land in spam for now, because they're sent from a personal Gmail account. That gets fixed when I deploy to AWS and send them from my own domain.
-
 ## Features
 
 - Sign up and log in with email and password, Google or Facebook
