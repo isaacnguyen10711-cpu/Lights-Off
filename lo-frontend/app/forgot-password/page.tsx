@@ -34,8 +34,9 @@ export default function ForgotPasswordPage() {
         setShowResetLinkSentDialog(true);
       }
     }
-    catch (error) {
-      setError("Failed to send reset link");
+    catch (err) {
+      console.error("Error sending reset email:", err);
+      setError("We can't reach the server right now. Try again in a minute.");
     }
   };
 
