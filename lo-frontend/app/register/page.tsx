@@ -18,6 +18,8 @@ const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 export default function RegisterPage() {
   const [showEmailNotConfirmedDialog, setShowEmailNotConfirmedDialog] = useState(false);
+  // what went wrong with sign up, null means there's no error popup to show
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ export default function RegisterPage() {
 
     // check this here so we don't bother the backend
     if (details.password !== confirmPasswordRef.current?.value) {
-      alert("Passwords don't match.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
@@ -48,8 +50,12 @@ export default function RegisterPage() {
       });
 
       if (!response.ok) {
-        // usually the email's already used or the password is too weak
-        alert("Sign up failed. The email might already be used, or the password is too weak.");
+        const errorData = await response.json();
+        // the keys are identity's error codes, e.g. "DuplicateUserName"
+        const errors = errorData.errors ?? {};
+        if (errors) {
+          setErrorMessage(Object.values(errors).flat().join("\n"));
+        }
         return;
       }
       else {
@@ -71,6 +77,7 @@ export default function RegisterPage() {
         onFirstButtonClick={() => { setShowEmailNotConfirmedDialog(false); router.push("/"); }}
       />
     )}
+
     <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
       {/* left side: logo, the clock and what the app does */}
       <section className="flex flex-col justify-between md:flex-1 gap-6 xl:gap-8 px-4 md:px-8 xl:px-20 py-8 xl:py-10">
@@ -98,6 +105,11 @@ export default function RegisterPage() {
           <p className="mt-2 md:mt-1 xl:mt-2 text-base md:text-sm xl:text-base text-muted">
             Start tracking your sleep tonight.
           </p>
+          {errorMessage && (
+            <p className="mt-2 whitespace-pre-line text-sm text-red-500">
+              {errorMessage}
+            </p>
+          )}
 
           <form className="mt-8 md:mt-6 xl:mt-8 flex flex-col gap-4 md:gap-3 xl:gap-4" onSubmit={handleRegister}>
             <label>

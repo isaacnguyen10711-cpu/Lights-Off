@@ -17,7 +17,8 @@ const PopUpDialog = ({ title, message, firstButtonText, secondButtonText, onFirs
         <h2 id="popup-title" className="text-xl md:text-2xl font-semibold tracking-tight">
           {title}
         </h2>
-        <p className="mt-3 text-base md:text-sm xl:text-base text-muted">{message}</p>
+        {/* whitespace-pre-line makes each \n in the message start a new line */}
+        <p className="mt-3 whitespace-pre-line text-base md:text-sm xl:text-base text-muted">{message}</p>
 
         <div className="mt-6 flex justify-center gap-3">
           <button type="button" className={primaryButtonStyles} onClick={onFirstButtonClick}>
