@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SignInDetails } from "../type";
+import PopUpDialog from "@/components/PopUpDialog";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -33,6 +34,7 @@ export default function LoginPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [showEmailNotConfirmedDialog, setShowEmailNotConfirmedDialog] = useState(false);
 
   const fetchUser = async () => {
     const response = await fetch(`${API_URL}/api/authentication/me`, {
@@ -99,14 +101,19 @@ export default function LoginPage() {
         });
 
         if (!response.ok) {
-          alert("Sign in failed. Please check your credentials.");
+          const errorData = await response.json();
+          if (errorData.detail === "NotAllowed") {
+            setShowEmailNotConfirmedDialog(true);
+          } 
+          else {
+            alert("Sign in failed. Please check your credentials.");
+          }
         }
         else {
           // the cache still says "not logged in" from this page, so forget it or home won't get the user
           queryClient.removeQueries({ queryKey: ["me"] });
-          router.push("/home");
+          router.replace("/home");
         }
-
       }
       catch (error) {
         console.error("Error during sign in:", error);
@@ -114,6 +121,15 @@ export default function LoginPage() {
     };
 
     return (
+      <>
+        {showEmailNotConfirmedDialog && (
+          <PopUpDialog
+            title="Email not confirmed"
+            message="Please confirm your email before logging in."
+            firstButtonText="OK"
+            onFirstButtonClick={() => setShowEmailNotConfirmedDialog(false)}
+          />
+        )}
       <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
         {/* left side: logo, the clock and what the app does */}
         <section className="flex flex-col justify-between md:flex-1 gap-6 xl:gap-8 px-4 md:px-8 xl:px-20 py-8 xl:py-10">
@@ -217,5 +233,6 @@ export default function LoginPage() {
           </div>
         </section>
       </main>
+      </>
     );
   }

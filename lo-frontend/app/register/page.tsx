@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { SignInDetails } from "../../type";
+import PopUpDialog from "@/components/PopUpDialog";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -17,6 +17,7 @@ const inputStyles =
 const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 export default function RegisterPage() {
+  const [showEmailNotConfirmedDialog, setShowEmailNotConfirmedDialog] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -51,23 +52,8 @@ export default function RegisterPage() {
         alert("Sign up failed. The email might already be used, or the password is too weak.");
         return;
       }
-
-      // register doesn't log you in, so sign in straight after
-      const loginResponse = await fetch(`${API_URL}/api/identity/login?useCookies=true`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(details),
-        credentials: "include",
-      });
-
-      if (loginResponse.ok) {
-        router.push("/home");
-      }
       else {
-        // account was made but login failed, so let them sign in themselves
-        router.push("/");
+        setShowEmailNotConfirmedDialog(true);
       }
     }
     catch (error) {
@@ -76,6 +62,15 @@ export default function RegisterPage() {
   };
 
   return (
+    <>
+    {showEmailNotConfirmedDialog && (
+      <PopUpDialog
+        title="Email Confirmation required"
+        message="Please confirm your email before logging in."
+        firstButtonText="OK"
+        onFirstButtonClick={() => { setShowEmailNotConfirmedDialog(false); router.push("/"); }}
+      />
+    )}
     <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
       {/* left side: logo, the clock and what the app does */}
       <section className="flex flex-col justify-between md:flex-1 gap-6 xl:gap-8 px-4 md:px-8 xl:px-20 py-8 xl:py-10">
@@ -163,5 +158,6 @@ export default function RegisterPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }
