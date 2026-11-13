@@ -112,8 +112,7 @@ export default function HomePage() {
         method: "POST",
         credentials: "include",
       });
-
-      alert("You have been logged out.");
+      // no message needed, landing back on the login page shows they're logged out
     }
     catch (error) {
       console.error("Error logging out:", error);
