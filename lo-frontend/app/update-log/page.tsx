@@ -121,7 +121,7 @@ function UpdateLogForm() {
 
       if (!response.ok) {
         setErrorMessage("Failed to update. Please try again.");
-        console.log("Error response:", await response.text());
+        console.error("Error response:", await response.text());
         return;
       }
 

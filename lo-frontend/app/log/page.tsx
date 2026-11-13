@@ -95,7 +95,7 @@ export default function LogPage() {
 
       if (!response.ok) {
         setErrorMessage("Failed to submit form. Please try again.");
-        console.log("Error response:", await response.text());
+        console.error("Error response:", await response.text());
       }
       else {
         queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
