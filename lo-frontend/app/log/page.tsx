@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Choice from "../../components/Choice";
+import PopUpDialog from "../../components/PopUpDialog";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query"; 
@@ -27,6 +28,9 @@ export default function LogPage() {
   const dateRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+  // what went wrong, null means there's nothing to show
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showLoggedDialog, setShowLoggedDialog] = useState(false);
 
   useEffect(() => {
     // set the date input to today's date on page load, use en-CA format so it works in all browsers (YYYY-MM-DD)
@@ -37,6 +41,8 @@ export default function LogPage() {
 
   const handleLogSleep = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // clear the last error so an old one doesn't hang around
+    setErrorMessage(null);
     // get the date value and put it in the form data, so it can be sent to the backend
     const formData = new FormData(event.currentTarget);
     const date = formData.get("date");
@@ -57,7 +63,7 @@ export default function LogPage() {
     }
 
     if (!quality) {
-      alert("Pick how well you slept.");
+      setErrorMessage("Pick how well you slept.");
       return;
     }
 
@@ -83,28 +89,38 @@ export default function LogPage() {
 
       // backend only allows one log per day
       if (response.status === 409) {
-        alert("You already logged this night.");
+        setErrorMessage("You already logged this night.");
         return;
       }
 
       if (!response.ok) {
-        alert("Failed to submit form. Please try again.");
+        setErrorMessage("Failed to submit form. Please try again.");
         console.log("Error response:", await response.text());
       }
       else {
-        alert("Form submitted successfully!");
         queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
         queryClient.invalidateQueries({ queryKey: ["latest-log"]});
-        router.push("/home");
+        // the popup's OK button takes them home
+        setShowLoggedDialog(true);
       }
     }
     catch (error) {
       console.error("Error submitting form:", error);
+      setErrorMessage("We can't reach the server right now. Try again in a minute.");
     }
   };
 
 return (
   <main className="flex min-h-screen flex-col">
+    {showLoggedDialog && (
+      <PopUpDialog
+        title="Night logged"
+        message="Your sleep is saved. Head home to see how it went."
+        firstButtonText="Go home"
+        onFirstButtonClick={() => router.push("/home")}
+      />
+    )}
+
     <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
       <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
       <Link href="/home" className="text-sm xl:text-base font-semibold text-muted transition-colors hover:text-strong">
@@ -116,6 +132,12 @@ return (
       <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
         How did last night go?
       </h1>
+
+      {errorMessage && (
+        <p className="mt-3 whitespace-pre-line text-sm text-red-500">
+          {errorMessage}
+        </p>
+      )}
 
       {/* the night, the only bit they have to fill in */}
       <section className={`${sectionStyles} mt-6 xl:mt-8`}>
