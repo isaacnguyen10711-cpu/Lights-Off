@@ -2,12 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
-// same styles as the login page
-const inputStyles =
-  "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-field px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong placeholder:text-muted transition duration-300 hover:-translate-y-1 focus:border-strong focus:outline-none";
-
-const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
+import { labelStyles, signInInputStyles } from "../../components/styles";
 
 export default function ForgotPasswordPage() {
   return (
@@ -48,7 +43,7 @@ export default function ForgotPasswordPage() {
                 autoComplete="email"
                 placeholder="Enter your email"
                 required
-                className={inputStyles}
+                className={signInInputStyles}
               />
             </label>
 

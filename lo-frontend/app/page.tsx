@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { labelStyles, signInInputStyles } from "../components/styles";
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,12 +12,6 @@ import PopUpDialog from "@/components/PopUpDialog";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-// shared styles for the email and password boxes
-const inputStyles =
-  "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-field px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong placeholder:text-muted transition duration-300 hover:-translate-y-1 focus:border-strong focus:outline-none";
-
-const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 const socialStyles =
   "flex h-12 md:h-11 xl:h-12 flex-1 items-center justify-center gap-3 md:gap-2 xl:gap-3 rounded-xl border border-line bg-field text-base md:text-sm xl:text-base font-semibold transition duration-300 hover:-translate-y-1 hover:border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-strong";
@@ -228,7 +223,7 @@ export default function SignInPage() {
                   name="email"
                   autoComplete="email"
                   placeholder="Enter your email"
-                  className={inputStyles}
+                  className={signInInputStyles}
                   ref={emailRef}
                 />
               </label>
@@ -240,7 +235,7 @@ export default function SignInPage() {
                   name="password"
                   autoComplete="current-password"
                   placeholder="Enter your password"
-                  className={inputStyles}
+                  className={signInInputStyles}
                   ref={passwordRef}
                 />
               </label>

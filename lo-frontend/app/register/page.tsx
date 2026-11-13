@@ -3,18 +3,13 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { labelStyles, signInInputStyles } from "../../components/styles";
 import React, { useState, useRef } from "react";
 import { SignInDetails } from "../../type";
 import PopUpDialog from "@/components/PopUpDialog";
 
 // the backend address, set in .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-// same styles as the login page
-const inputStyles =
-  "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-field px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong placeholder:text-muted transition duration-300 hover:-translate-y-1 focus:border-strong focus:outline-none";
-
-const labelStyles = "text-xs font-semibold uppercase tracking-wider text-muted";
 
 export default function RegisterPage() {
   const [showEmailNotConfirmedDialog, setShowEmailNotConfirmedDialog] = useState(false);
@@ -122,7 +117,7 @@ export default function RegisterPage() {
                 autoComplete="email"
                 placeholder="Enter your email"
                 required
-                className={inputStyles}
+                className={signInInputStyles}
                 ref={emailRef}
               />
             </label>
@@ -135,7 +130,7 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 placeholder="Create a password"
                 required
-                className={inputStyles}
+                className={signInInputStyles}
                 ref={passwordRef}
               />
             </label>
@@ -148,7 +143,7 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 placeholder="Enter your password again"
                 required
-                className={inputStyles}
+                className={signInInputStyles}
                 ref={confirmPasswordRef}
               />
             </label>
