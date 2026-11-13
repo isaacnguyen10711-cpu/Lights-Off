@@ -6,11 +6,13 @@ Lights Off is a sleep tracking web application that helps users find out what af
 
 In Development
 
-The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are both finished, and the sleep coach now takes your sleep goals into account. I've started on email: the backend can now send confirm email and reset password emails, and the forgot password and reset password pages are next.
+The backend API is built, and every page on the frontend talks to it. The dashboard and profile page are done, and the sleep coach now takes your sleep goals into account. Email is working too: new accounts have to confirm their email before they can log in, and you can reset a forgotten password. The emails still tend to land in spam for now, because they're sent from a personal Gmail account. That gets fixed when I deploy to AWS and send them from my own domain.
 
 ## Features
 
 - Sign up and log in with email and password, Google or Facebook
+- Confirm your email before your first login (Google and Facebook accounts skip this), and get a new link if the first one went missing
+- Reset your password by email if you forget it
 - Log a night of sleep, with optional factors like caffeine, exercise and stress
 - See your latest night on the home page
 - Update last night's log
@@ -29,6 +31,18 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 ### Register
 
 ![Register page](lo-frontend/public/images/register.png)
+
+### Confirm email
+
+![Confirm email page after clicking the link in the email](lo-frontend/public/images/confirm-email.png)
+
+### Forgot password
+
+![Forgot password page](lo-frontend/public/images/forgot-password.png)
+
+### Reset password
+
+![Reset password page](lo-frontend/public/images/reset-password.png)
 
 ### Home
 
@@ -94,7 +108,7 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
    - `Authentication:Facebook:AppId`
    - `Authentication:Facebook:AppSecret`
    - `Anthropic:Api:Key`
-   - `Smtp:Server`, `Smtp:Port`, `Smtp:Username`, `Smtp:Password`, `Smtp:SenderName`, `Smtp:SenderEmail`
+   - `Smtp:Server`, `Smtp:Port`, `Smtp:Username`, `Smtp:Password`, `Smtp:SenderName`, `Smtp:SenderEmail` (with Gmail, the password has to be an app password, not your normal one)
 3. Run `dotnet ef database update`, then `dotnet run`.
 
 ### Frontend
@@ -107,13 +121,9 @@ The backend API is built, and every page on the frontend talks to it. The dashbo
 
 ## Future Implementations
 
-### Frontend
-- Add a password reset page once the backend can send emails
-
-### Backend
-- Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
-- Add password reset and email verification
 - Deploy to AWS
+- Send emails from my own domain through AWS SES, so they stop going to spam
+- Use RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 
 ## Project Structure
 
@@ -129,7 +139,7 @@ Lights-Off/
 │   └── Program.cs         # App setup
 ├── lo-backend.Tests/      # Backend tests
 ├── lo-frontend/           # Next.js frontend
-│   ├── app/               # Pages (login, register, home, log, update-log, dashboard, profile, change-password)
+│   ├── app/               # Pages (login, register, confirm-email, forgot-password, reset-password, home, log, update-log, dashboard, profile, change-password)
 │   ├── components/        # Shared UI pieces and styles, plus a folder for each page's own pieces
 │   ├── public/images/     # Screenshots for this README
 │   └── type.ts            # TypeScript types for props and API data
