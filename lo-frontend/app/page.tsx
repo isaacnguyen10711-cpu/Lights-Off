@@ -34,7 +34,10 @@ export default function LoginPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+  
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showEmailNotConfirmedDialog, setShowEmailNotConfirmedDialog] = useState(false);
+  const [showResendEmailDialog, setShowResendEmailDialog] = useState(false);
 
   const fetchUser = async () => {
     const response = await fetch(`${API_URL}/api/authentication/me`, {
@@ -75,7 +78,9 @@ export default function LoginPage() {
     // show a message if Google/Facebook login sent us back with an error
     const error = new URLSearchParams(window.location.search).get("error");
     if (error && errorMessages[error]) {
-      alert(errorMessages[error]);
+      // only runs once when google/facebook sends us back with ?error=, so the extra render is fine
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setErrorMessage(errorMessages[error]);
       // clear ?error from the url so the message doesn't pop up again on reload
       router.replace("/");
     }
@@ -83,6 +88,8 @@ export default function LoginPage() {
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // clear the last error so an old one doesn't hang around
+    setErrorMessage(null);
 
     // what the backend needs to log them in
     const details: SignInDetails = {
@@ -106,7 +113,7 @@ export default function LoginPage() {
             setShowEmailNotConfirmedDialog(true);
           } 
           else {
-            alert("Sign in failed. Please check your credentials.");
+            setErrorMessage("Sign in failed. Please check your credentials.");
           }
         }
         else {
@@ -117,6 +124,7 @@ export default function LoginPage() {
       }
       catch (error) {
         console.error("Error during sign in:", error);
+        setErrorMessage("We can't reach the server right now. Try again in a minute.");
       }
     };
 
@@ -132,17 +140,21 @@ export default function LoginPage() {
           body: JSON.stringify({ email }),
         });
 
+        // either way this popup's done its job, so close it
+        setShowEmailNotConfirmedDialog(false);
+
         if (!response.ok) {
-          alert("Couldn't send the email. Try again in a minute.");
+          setErrorMessage("Couldn't send the email. Try again in a minute.");
           return;
         }
 
-        alert("We sent you a new link. Check your inbox (and spam).");
-        setShowEmailNotConfirmedDialog(false);
+        // swap to the "email sent" popup
+        setShowResendEmailDialog(true);
       }
       catch (error) {
         console.error("Error resending confirmation email:", error);
-        alert("We can't reach the server right now. Try again in a minute.");
+        setShowEmailNotConfirmedDialog(false);
+        setErrorMessage("We can't reach the server right now. Try again in a minute.");
       }
     };
 
@@ -156,6 +168,14 @@ export default function LoginPage() {
             onFirstButtonClick={() => setShowEmailNotConfirmedDialog(false)}
             secondButtonText="Resend email"
             onSecondButtonClick={handleResendConfirmationEmail}
+          />
+        )}
+        {showResendEmailDialog && (
+          <PopUpDialog
+            title="Email sent"
+            message="We sent you a new link. Check your inbox (and spam)."
+            firstButtonText="OK"
+            onFirstButtonClick={() => setShowResendEmailDialog(false)}
           />
         )}
       <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
@@ -187,6 +207,13 @@ export default function LoginPage() {
             <p className="mt-2 md:mt-1 xl:mt-2 text-base md:text-sm xl:text-base text-muted">
               Sign in to log last night&rsquo;s sleep.
             </p>
+
+            {/* wrong password, google/facebook problems, resend failing. each on its own line */}
+            {errorMessage && (
+              <p className="mt-2 whitespace-pre-line text-sm text-red-500">
+                {errorMessage}
+              </p>
+            )}
 
             {/* the login check failed, so tell them instead of failing quietly. our own words,
                 because if the server is off the browser's message is just "Failed to fetch" */}
