@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PopUpDialog from "../../components/PopUpDialog";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -15,6 +16,7 @@ export default function ChangePasswordPage() {
   const router = useRouter();
   // what went wrong, null means there's nothing to show
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showPasswordChangedDialog, setShowPasswordChangedDialog] = useState(false);
 
   const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,17 +58,26 @@ export default function ChangePasswordPage() {
         return;
       }
 
-      alert("Password changed.");
-      router.push("/profile");
+      setShowPasswordChangedDialog(true);
     }
     catch (error) {
       console.error("Error changing password:", error);
-      alert("We can't reach the server right now. Try again in a minute.");
+      setErrorMessage("We can't reach the server right now. Try again in a minute.");
     }
   };
 
   return (
     <main className="flex min-h-screen flex-col">
+      {/* it worked, so tell them and go back to the profile when they press OK */}
+      {showPasswordChangedDialog && (
+        <PopUpDialog
+          title="Password changed"
+          message="Your new password is saved. Use it next time you log in."
+          firstButtonText="OK"
+          onFirstButtonClick={() => router.push("/profile")}
+        />
+      )}
+
       {/* top bar, same as the other pages */}
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
@@ -80,7 +91,7 @@ export default function ChangePasswordPage() {
 
         {/* each problem on its own line, same as the register page */}
         {errorMessage && (
-          <p className="whitespace-pre-line text-sm text-bad-text">
+          <p className="whitespace-pre-line text-sm text-red-500">
             {errorMessage}
           </p>
         )}
