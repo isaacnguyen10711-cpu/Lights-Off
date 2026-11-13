@@ -29,7 +29,7 @@ const errorMessages: Record<string, string> = {
   "email-taken": "This email already has an account. Sign in the way you did before.",
 };
 
-export default function LoginPage() {
+export default function SignInPage() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -281,7 +281,8 @@ export default function LoginPage() {
             </p>
             <p>
               Forgot password?{" "}
-              <Link href="/reset-password" className="font-bold text-strong hover:underline underline-offset-4">
+              {/* forgot-password sends the email. reset-password is only opened from the link inside it */}
+              <Link href="/forgot-password" className="font-bold text-strong hover:underline underline-offset-4">
                 Reset password
               </Link>
             </p>
