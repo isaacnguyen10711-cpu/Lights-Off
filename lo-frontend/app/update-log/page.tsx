@@ -3,9 +3,10 @@
 import Link from "next/link";
 import LoadingScreen from "../../components/LoadingScreen";
 import Choice from "../../components/Choice";
+import PopUpDialog from "../../components/PopUpDialog";
 import { labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { SleepLogProps } from "../../type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -30,11 +31,14 @@ function UpdateLogForm() {
   const id = searchParams.get('id');
   const router = useRouter();
   const queryClient = useQueryClient();
+  // what went wrong, null means there's nothing to show
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showUpdatedDialog, setShowUpdatedDialog] = useState(false);
 
-  // no id in the url means there's nothing to edit, so go home
+  // no id in the url means there's nothing to edit, so go home.
+  // no message, the page is still loading so there's nowhere to show one
   useEffect(() => {
     if (!id) {
-      alert("No log ID provided.");
       router.push("/home");
     }
   }, [id, router]);
@@ -62,6 +66,8 @@ function UpdateLogForm() {
   // same as the log page, just PUT to this log's id instead of POST
   const handleUpdateSleepLog = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // clear the last error so an old one doesn't hang around
+    setErrorMessage(null);
     // read every input in the form by its name
     const formData = new FormData(event.currentTarget);
     const date = formData.get("date");
@@ -83,7 +89,7 @@ function UpdateLogForm() {
     }
 
     if (!quality) {
-      alert("Pick how well you slept.");
+      setErrorMessage("Pick how well you slept.");
       return;
     }
 
@@ -109,26 +115,27 @@ function UpdateLogForm() {
 
       // they changed the date to one that's already logged
       if (response.status === 409) {
-        alert("You already logged this night.");
+        setErrorMessage("You already logged this night.");
         return;
       }
 
       if (!response.ok) {
-        alert("Failed to update. Please try again.");
+        setErrorMessage("Failed to update. Please try again.");
         console.log("Error response:", await response.text());
         return;
       }
 
-      alert("Log updated!");
       queryClient.invalidateQueries({ queryKey: ["sleepLogs"] });
       queryClient.invalidateQueries({ queryKey: ["latest-log"] });
       // this log changed too, and the backend wiped its coach feedback, so both need fetching again
       queryClient.invalidateQueries({ queryKey: ["sleep-log-update", id] });
       queryClient.invalidateQueries({ queryKey: ["coach-feedback"] });
-      router.push("/home");
+      // the popup's OK button takes them home
+      setShowUpdatedDialog(true);
     }
     catch (error) {
       console.error("Error updating log:", error);
+      setErrorMessage("We can't reach the server right now. Try again in a minute.");
     }
   };
 
@@ -142,6 +149,15 @@ function UpdateLogForm() {
 
   return (
     <main className="flex min-h-screen flex-col">
+      {showUpdatedDialog && (
+        <PopUpDialog
+          title="Night updated"
+          message="Your changes are saved. Head home to see the new feedback."
+          firstButtonText="Go home"
+          onFirstButtonClick={() => router.push("/home")}
+        />
+      )}
+
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
         <Link href="/home" className="text-sm xl:text-base font-semibold text-muted transition-colors hover:text-strong">
@@ -153,6 +169,12 @@ function UpdateLogForm() {
         <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
           Update last night
         </h1>
+
+        {errorMessage && (
+          <p className="mt-3 whitespace-pre-line text-sm text-red-500">
+            {errorMessage}
+          </p>
+        )}
 
         {/* the night, the only bit they have to fill in */}
         <section className={`${sectionStyles} mt-6 xl:mt-8`}>
