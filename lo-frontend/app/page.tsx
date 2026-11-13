@@ -120,6 +120,32 @@ export default function LoginPage() {
       }
     };
 
+    // sends the confirm email again, for when the first one got lost or the link expired
+    const handleResendConfirmationEmail = async () => {
+      // the email they just tried to log in with is still in the box
+      const email = emailRef.current?.value ?? "";
+
+      try {
+        const response = await fetch(`${API_URL}/api/identity/resendConfirmationEmail`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          alert("Couldn't send the email. Try again in a minute.");
+          return;
+        }
+
+        alert("We sent you a new link. Check your inbox (and spam).");
+        setShowEmailNotConfirmedDialog(false);
+      }
+      catch (error) {
+        console.error("Error resending confirmation email:", error);
+        alert("We can't reach the server right now. Try again in a minute.");
+      }
+    };
+
     return (
       <>
         {showEmailNotConfirmedDialog && (
@@ -128,6 +154,8 @@ export default function LoginPage() {
             message="Please confirm your email before logging in."
             firstButtonText="OK"
             onFirstButtonClick={() => setShowEmailNotConfirmedDialog(false)}
+            secondButtonText="Resend email"
+            onSecondButtonClick={handleResendConfirmationEmail}
           />
         )}
       <main className="min-h-screen md:flex md:h-screen md:overflow-hidden">
