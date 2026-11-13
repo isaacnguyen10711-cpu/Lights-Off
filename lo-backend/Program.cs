@@ -20,8 +20,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Add authentication services with cookie authentication and Google OAuth
-builder.Services.AddIdentityApiEndpoints<User>()
+// ASP.NET Core Identity with email confirmation required
+builder.Services.AddIdentityApiEndpoints<User>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+})
     .AddEntityFrameworkStores<LightsOffDbContext>();
 
 // the frontend (http) and API (https) count as different sites, so the login cookie
@@ -43,7 +46,8 @@ builder.Services.AddAuthentication()
         {
             // they cancelled or it failed on the provider's side, so send them back to the login page
             context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
-            context.HandleResponse(); // stops ASP.NET showing its own error page
+            // stops ASP.NET showing its own error page
+            context.HandleResponse(); 
             return Task.CompletedTask;
         };
     })
@@ -56,7 +60,8 @@ builder.Services.AddAuthentication()
         {
             // they cancelled or it failed on the provider's side, so send them back to the login page
             context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
-            context.HandleResponse(); // stops ASP.NET showing its own error page
+            // stops ASP.NET showing its own error page
+            context.HandleResponse(); 
             return Task.CompletedTask;
         };
     });
