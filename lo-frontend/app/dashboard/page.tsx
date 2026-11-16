@@ -181,7 +181,7 @@ export default function DashboardPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* top bar, same as the other pages */}
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-8 xl:px-20 py-4 md:py-5">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-16 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
         <Link href="/home" className="text-sm xl:text-base font-semibold text-muted transition-colors hover:text-strong">
           Back to home
@@ -189,7 +189,7 @@ export default function DashboardPage() {
       </header>
 
       {/* calendar on the left, review and the picked night on the right. stacked until xl */}
-      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-start gap-6 md:gap-8 xl:gap-10 px-4 md:px-8 xl:px-20 pt-6 xl:pt-8 pb-10 md:pb-8 xl:pb-6">
+      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-start gap-6 md:gap-8 xl:gap-10 px-4 md:px-16 xl:px-20 pt-6 xl:pt-8 pb-10 md:pb-8 xl:pb-6">
         <div className="xl:col-span-2">
         {/* month name and the month's stats */}
         <section>
