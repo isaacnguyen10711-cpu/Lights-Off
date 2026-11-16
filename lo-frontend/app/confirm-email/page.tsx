@@ -73,7 +73,7 @@ function ConfirmEmail() {
           <p className="mt-3 text-base md:text-sm xl:text-base text-muted">{message}</p>
 
           <div className="mt-6 xl:mt-8 flex justify-center">
-            <Link href="/" className={primaryButtonStyles}>
+            <Link href="/" className={`${primaryButtonStyles} hover:-translate-y-1`}>
               Go to login
             </Link>
           </div>

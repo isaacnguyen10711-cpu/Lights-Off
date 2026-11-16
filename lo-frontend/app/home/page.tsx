@@ -178,15 +178,15 @@ export default function HomePage() {
           {/* stacked on phones, side by side from tablets up */}
           <div className="mt-8 xl:mt-10 flex flex-col md:flex-row gap-3 xl:gap-4">
             {loggedToday ? (
-              <Link href={`/update-log?id=${latestLog?.sleepLogId}`} className={primaryButtonStyles}>
+              <Link href={`/update-log?id=${latestLog?.sleepLogId}`} className={`${primaryButtonStyles} hover:-translate-y-1`}>
                 Update last night
               </Link>
             ) : (
-              <Link href="/log" className={primaryButtonStyles}>
+              <Link href="/log" className={`${primaryButtonStyles} hover:-translate-y-1`}>
                 Log a night
               </Link>
             )}
-            <Link href="/dashboard" className={secondaryButtonStyles}>
+            <Link href="/dashboard" className={`${secondaryButtonStyles} hover:-translate-y-1`}>
               Open dashboard
             </Link>
           </div>

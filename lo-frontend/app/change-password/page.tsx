@@ -115,10 +115,10 @@ export default function ChangePasswordPage() {
 
             {/* buttons sit on the right */}
             <div className="flex justify-end gap-3">
-              <Link href="/profile" className={secondaryButtonStyles}>
+              <Link href="/profile" className={`${secondaryButtonStyles} hover:-translate-y-1`}>
                 Cancel
               </Link>
-              <button type="submit" className={primaryButtonStyles}>
+              <button type="submit" className={`${primaryButtonStyles} hover:-translate-y-1`}>
                 Save password
               </button>
             </div>

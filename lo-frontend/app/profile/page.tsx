@@ -18,6 +18,7 @@ const sectionStyles = "rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6
 const inputStyles =
   "mt-2 h-12 md:h-11 xl:h-12 w-full rounded-xl border border-line bg-night px-4 md:px-3 xl:px-4 text-base md:text-sm xl:text-base text-strong scheme-dark focus:border-strong focus:outline-none";
 
+
 // same order as the SleepGoal enum in the backend (0 to 2)
 const goals = ["Improve quality", "Sleep longer", "Consistent schedule"];
 

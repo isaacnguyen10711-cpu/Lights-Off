@@ -21,11 +21,11 @@ const PopUpDialog = ({ title, message, firstButtonText, secondButtonText, onFirs
         <p className="mt-3 whitespace-pre-line text-base md:text-sm xl:text-base text-muted">{message}</p>
 
         <div className="mt-6 flex justify-center gap-3">
-          <button type="button" className={primaryButtonStyles} onClick={onFirstButtonClick}>
+          <button type="button" className={`${primaryButtonStyles} hover:-translate-y-1`} onClick={onFirstButtonClick}>
             {firstButtonText}
           </button>
           {secondButtonText && onSecondButtonClick && (
-            <button type="button" className={secondaryButtonStyles} onClick={onSecondButtonClick}>
+            <button type="button" className={`${secondaryButtonStyles} hover:-translate-y-1`} onClick={onSecondButtonClick}>
               {secondButtonText}
             </button>
           )}

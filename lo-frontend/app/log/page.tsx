@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// same as boxStyles, just without the hover lift
+// same as boxStyles, just without the brighter border on hover
 const sectionStyles = "rounded-2xl border border-line bg-field p-4 md:p-5 xl:p-6";
 
 const inputStyles =
@@ -234,10 +234,10 @@ return (
 
       {/* stacked on phones, next to each other from md up */}
       <div className="mt-6 xl:mt-8 flex flex-col-reverse md:flex-row md:justify-end gap-3 xl:gap-4">
-        <Link href="/home" className={secondaryButtonStyles}>
+        <Link href="/home" className={`${secondaryButtonStyles} hover:-translate-y-1`}>
           Cancel
         </Link>
-        <button type="submit" className={primaryButtonStyles}>
+        <button type="submit" className={`${primaryButtonStyles} hover:-translate-y-1`}>
           Save last night
         </button>
       </div>
