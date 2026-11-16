@@ -121,7 +121,7 @@ In Development
 
 - Implement RAG (OpenAI embeddings) so the monthly review can compare against similar past nights
 - Deploy to Azure
-- Send emails from my own domain through AWS SES, so they stop going to spam
+- Send emails from my own domain through Azure Communication Services
 - Backend Tests
 
 ## Project Structure
