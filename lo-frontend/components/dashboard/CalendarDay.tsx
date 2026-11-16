@@ -12,7 +12,7 @@ const CalendarDay = ({ day, hours, quality, selected, onClick }: CalendarDayProp
   return (
     <div
       onClick={onClick}
-      className={`h-12 md:h-16 rounded-lg border p-1 md:p-2 text-xs md:text-sm tabular-nums ${colour} transition-colors hover:border-strong hover:cursor-pointer ${selected ? "ring-2 ring-line" : ""}`}
+      className={`h-12 md:h-14 rounded-lg border p-1 md:p-2 text-xs md:text-sm tabular-nums ${colour} transition-colors hover:border-strong hover:cursor-pointer ${selected ? "ring-2 ring-line" : ""}`}
     >
       <p>{day}</p>
       {hours !== null && <p className="font-semibold">{hours.toFixed(1)}h</p>}
