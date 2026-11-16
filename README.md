@@ -13,9 +13,11 @@ In Development
 - Reset your password by email if you forget it
 - Log a night of sleep, with optional factors like caffeine, exercise and stress
 - See your latest night on the home page
-- Update last night's log
+- Update last night's log from the home page
 - See the month on a calendar, coloured by how well you slept, and tap a night for the details
+- Log a night you missed or edit an old one straight from the calendar
 - Go back through past months on the dashboard
+- Read the full monthly review in a popup when it's too long for the box
 - Set your name and sleep goals, change your password (for email accounts) and delete your account
 - Get AI feedback on last night's sleep and a review of each month
 - AI feedback is saved and rate limited to keep costs down
@@ -52,9 +54,9 @@ In Development
 
 ![Log a night page with the optional details open](lo-frontend/public/images/log-optional.webp)
 
-### Update last night
+### Update a night
 
-![Update last night page](lo-frontend/public/images/update-log.webp)
+![Update a night page](lo-frontend/public/images/update-log.webp)
 
 ### Dashboard
 
