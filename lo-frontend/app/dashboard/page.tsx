@@ -4,8 +4,8 @@ import Link from "next/link";
 import LoadingScreen from "../../components/LoadingScreen";
 import CalendarDay from "../../components/dashboard/CalendarDay";
 import StatBox from "../../components/dashboard/StatBox";
-import NightDetails from "../../components/dashboard/NightDetails";
-import EmptyNight from "../../components/dashboard/EmptyNight";
+import NightDetailsBox from "../../components/dashboard/NightDetailsBox";
+import EmptyNightBox from "../../components/dashboard/EmptyNightBox";
 import QualityLabel from "../../components/dashboard/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
@@ -143,9 +143,10 @@ export default function DashboardPage() {
   const emptySpots = Array.from({ length: blanks }, (_, i) => i);
 
   // finds the log for a day, or undefined if they didn't log that night
-  const getLogForSelectedDay = (day: number) =>
-    allLogsInAMonth?.logs.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
-
+  const getLogForSelectedDay = (day: number) => {
+    return allLogsInAMonth?.logs.find((log: SleepLogProps) => Number(log.date.slice(8)) === day);
+  }
+  // assign the log for the selected day to a variable
   const selectedLog = selectedDay ? getLogForSelectedDay(selectedDay) : undefined;
 
   // the picked day as "2026-11-15", padStart turns 5 into "05"
@@ -153,7 +154,7 @@ export default function DashboardPage() {
     ? `${year}-${String(month).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`
     : null;
 
-  // dates in this format sort like text, so "<=" works to check it's not in the future
+  // Use the selectedDate and todayString to determine if the selected day can be logged
   const canLogSelectedDay = !!selectedDate && !!todayString && selectedDate <= todayString;
 
   if (isLoading) {
@@ -245,8 +246,8 @@ export default function DashboardPage() {
           {/* on phones this goes first, right under the calendar, so tapping a day shows it straight away.
               on xl it goes back under the review and stretches so the bottom lines up with the calendar */}
           <div className="order-first xl:order-none xl:flex-1">
-            {selectedLog && <NightDetails log={selectedLog} />}
-            {selectedDate && !selectedLog && <EmptyNight date={selectedDate} canLog={canLogSelectedDay} />}
+            {selectedLog && <NightDetailsBox log={selectedLog} />}
+            {selectedDate && !selectedLog && <EmptyNightBox date={selectedDate} canLog={canLogSelectedDay} />}
           </div>
         </section>
       </div>
