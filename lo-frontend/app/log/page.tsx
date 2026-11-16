@@ -35,7 +35,12 @@ export default function LogPage() {
   useEffect(() => {
     // set the date input to today's date on page load, use en-CA format so it works in all browsers (YYYY-MM-DD)
     if (dateRef.current) {
-      dateRef.current.value = new Date().toLocaleDateString("en-CA");
+      const today = new Date().toLocaleDateString("en-CA");
+      // the dashboard sends ?date= when they tap an empty day, otherwise use today
+      const dateFromUrl = new URLSearchParams(window.location.search).get("date");
+      dateRef.current.value = dateFromUrl ?? today;
+      // can't log a night that hasn't happened yet
+      dateRef.current.max = today;
     }
   }, []);
 
