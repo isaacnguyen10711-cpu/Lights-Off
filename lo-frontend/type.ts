@@ -71,3 +71,10 @@ export type PopUpDialogProps = {
   onFirstButtonClick: () => void;
   onSecondButtonClick?: () => void;
 };
+
+export type EmptyNightProps = {
+  // the night they tapped, like "2026-11-15"
+  date: string;
+  // false for days that haven't happened yet
+  canLog: boolean;
+};

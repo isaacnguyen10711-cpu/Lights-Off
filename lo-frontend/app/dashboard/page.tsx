@@ -5,6 +5,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import CalendarDay from "../../components/dashboard/CalendarDay";
 import StatBox from "../../components/dashboard/StatBox";
 import NightDetails from "../../components/dashboard/NightDetails";
+import EmptyNight from "../../components/dashboard/EmptyNight";
 import QualityLabel from "../../components/dashboard/QualityLabel";
 import { labelStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
@@ -25,6 +26,8 @@ export default function DashboardPage() {
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  // today as "2026-11-15", so we know which days haven't happened yet
+  const [todayString, setTodayString] = useState<string | null>(null);
 
   useEffect(() => {
     const today = new Date();
@@ -32,6 +35,7 @@ export default function DashboardPage() {
     const currentMonth = today.getMonth() + 1; // Months are zero-based, so add 1
     setYear(currentYear);
     setMonth(currentMonth);
+    setTodayString(today.toLocaleDateString("en-CA"));
   }, []);
 
   const router = useRouter();
@@ -144,6 +148,14 @@ export default function DashboardPage() {
 
   const selectedLog = selectedDay ? getLogForSelectedDay(selectedDay) : undefined;
 
+  // the picked day as "2026-11-15", padStart turns 5 into "05"
+  const selectedDate = year && month && selectedDay
+    ? `${year}-${String(month).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`
+    : null;
+
+  // dates in this format sort like text, so "<=" works to check it's not in the future
+  const canLogSelectedDay = !!selectedDate && !!todayString && selectedDate <= todayString;
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -230,9 +242,11 @@ export default function DashboardPage() {
             <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
           </div>
 
-          {/* stretches on xl so the bottom lines up with the calendar */}
-          <div className="xl:flex-1">
+          {/* on phones this goes first, right under the calendar, so tapping a day shows it straight away.
+              on xl it goes back under the review and stretches so the bottom lines up with the calendar */}
+          <div className="order-first xl:order-none xl:flex-1">
             {selectedLog && <NightDetails log={selectedLog} />}
+            {selectedDate && !selectedLog && <EmptyNight date={selectedDate} canLog={canLogSelectedDay} />}
           </div>
         </section>
       </div>

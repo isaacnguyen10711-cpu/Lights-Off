@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { NightDetailsProps } from "../../type";
 import Habit from "../Habit";
-import { labelStyles } from "../styles";
+import { labelStyles, secondaryButtonStyles } from "../styles";
 
 // same labels as the home page, the enum number is the spot in this list
 const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
@@ -30,6 +31,11 @@ const NightDetails = ({ log }: NightDetailsProps) => {
         <Habit label="Screen time" value={log.screenTimeBeforeBed == null ? "-" : durationLabels[log.screenTimeBeforeBed]} />
         <Habit label="Nap" value={log.afternoonNapDuration == null ? "-" : durationLabels[log.afternoonNapDuration]} />
       </dl>
+
+      {/* opens this night in the update page, any past night, not just last night */}
+      <Link href={`/update-log?id=${log.sleepLogId}`} className={`${secondaryButtonStyles} hover:-translate-y-1 mt-5`}>
+        Edit this night
+      </Link>
     </div>
   );
 }
