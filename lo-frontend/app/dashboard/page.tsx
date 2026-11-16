@@ -7,7 +7,8 @@ import StatBox from "../../components/dashboard/StatBox";
 import NightDetailsBox from "../../components/dashboard/NightDetailsBox";
 import EmptyNightBox from "../../components/dashboard/EmptyNightBox";
 import QualityLabel from "../../components/dashboard/QualityLabel";
-import { labelStyles } from "../../components/styles";
+import PopUpDialog from "../../components/PopUpDialog";
+import { labelStyles, primaryButtonStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const arrowStyles = "size-10 rounded-xl border border-line bg-field text-muted transition-colors hover:border-strong hover:text-strong";
 
-const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekdays =["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -28,6 +29,8 @@ export default function DashboardPage() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   // today as "2026-11-15", so we know which days haven't happened yet
   const [todayString, setTodayString] = useState<string | null>(null);
+  // shows the full monthly review in a popup
+  const [showFullReview, setShowFullReview] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -180,6 +183,15 @@ export default function DashboardPage() {
 
   return (
     <main className="flex min-h-screen flex-col">
+      {showFullReview && (
+        <PopUpDialog
+          title={`${monthNames[month ? month - 1 : 0]} review`}
+          message={reviewText}
+          firstButtonText="Close"
+          onFirstButtonClick={() => setShowFullReview(false)}
+        />
+      )}
+
       {/* top bar, same as the other pages */}
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 md:px-16 xl:px-20 py-4 md:py-5">
         <p className="text-xl md:text-2xl font-bold tracking-tight">Lights Off</p>
@@ -242,7 +254,18 @@ export default function DashboardPage() {
           <div className="min-w-0 md:flex-1 xl:flex-none">
             <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5 transition-colors duration-300 hover:border-muted">
               <p className={labelStyles}>{`${monthNames[month ? month - 1 : 0]} review`}</p>
-              <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
+              <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted line-clamp-6 md:line-clamp-10 xl:line-clamp-4">{reviewText}</p>
+              {/* 6 lines fits roughly 240 characters, so only show the button when the review is longer */}
+              {reviewText.length > 240 && (
+                <button
+                  type="button"
+                  onClick={() => setShowFullReview(true)}
+                  // the ! makes these sizes beat the ones already in primaryButtonStyles
+                  className={`${primaryButtonStyles} h-10! md:h-11! px-4! md:px-5! text-sm! xl:text-base! hover:-translate-y-1 mt-4`}
+                >
+                  Read more
+                </button>
+              )}
             </div>
           </div>
 
