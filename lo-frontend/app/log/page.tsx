@@ -34,10 +34,7 @@ export default function LogPage() {
   const [showLoggedDialog, setShowLoggedDialog] = useState(false);
 
   useEffect(() => {
-    // reset the form and error state whenever the page is shown
-    setShowLoggedDialog(false);
-    setErrorMessage(null);
-    // clear what they picked last time, back to the empty form
+    // clear what they picked last time, back to the empty form. this also clears the error (see onReset)
     formRef.current?.reset();
     // set the date input to today's date on page load, use en-CA format so it works in all browsers (YYYY-MM-DD)
     if (dateRef.current) {
@@ -128,7 +125,11 @@ return (
         title="Night logged"
         message="Your sleep is saved. Head home to see how it went."
         firstButtonText="Go home"
-        onFirstButtonClick={() => router.push("/home")}
+        onFirstButtonClick={() => {
+          // close it before leaving, so it's not still open next time they come back
+          setShowLoggedDialog(false);
+          router.push("/home");
+        }}
       />
     )}
 
@@ -139,7 +140,8 @@ return (
       </Link>
     </header>
 
-    <form ref={formRef} onSubmit={handleLogSleep} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
+    {/* when the form gets reset, the old error goes too */}
+    <form ref={formRef} onSubmit={handleLogSleep} onReset={() => setErrorMessage(null)} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
       <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
         How did last night go?
       </h1>
