@@ -18,7 +18,8 @@ const PopUpDialog = ({ title, message, firstButtonText, secondButtonText, onFirs
           {title}
         </h2>
         {/* whitespace-pre-line makes each \n in the message start a new line */}
-        <p className="mt-3 whitespace-pre-line text-base md:text-sm xl:text-base text-muted">{message}</p>
+        {/* long messages scroll inside the box instead of going off the screen */}
+        <p className="mt-3 max-h-96 overflow-y-auto whitespace-pre-line text-base md:text-sm xl:text-base text-muted">{message}</p>
 
         <div className="mt-6 flex justify-center gap-3">
           <button type="button" className={`${primaryButtonStyles} hover:-translate-y-1`} onClick={onFirstButtonClick}>
