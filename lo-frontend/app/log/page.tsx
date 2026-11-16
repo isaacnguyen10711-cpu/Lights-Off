@@ -144,7 +144,7 @@ return (
     {/* when the form gets reset, the old error goes too */}
     <form ref={formRef} onSubmit={handleLogSleep} onReset={() => setErrorMessage(null)} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
       <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
-        How did last night go?
+        Let us hear about your sleep
       </h1>
 
       {errorMessage && (
@@ -252,7 +252,7 @@ return (
           Cancel
         </Link>
         <button type="submit" className={`${primaryButtonStyles} hover:-translate-y-1`}>
-          Save last night
+          Save log
         </button>
       </div>
     </form>
