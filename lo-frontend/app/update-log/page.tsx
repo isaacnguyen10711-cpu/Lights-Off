@@ -152,9 +152,14 @@ function UpdateLogForm() {
       {showUpdatedDialog && (
         <PopUpDialog
           title="Night updated"
-          message="Your changes are saved. Head home to see the new feedback."
-          firstButtonText="Go home"
-          onFirstButtonClick={() => router.push("/home")}
+          message="Your changes are saved."
+          firstButtonText="Done"
+          onFirstButtonClick={() => {
+            // close it before leaving, so it's not still open next time they come back
+            setShowUpdatedDialog(false);
+            // back to where they came from, home or the dashboard
+            router.back();
+          }}
         />
       )}
 

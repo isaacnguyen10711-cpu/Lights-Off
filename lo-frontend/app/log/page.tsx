@@ -123,12 +123,13 @@ return (
     {showLoggedDialog && (
       <PopUpDialog
         title="Night logged"
-        message="Your sleep is saved. Head home to see how it went."
-        firstButtonText="Go home"
+        message="Your sleep is saved."
+        firstButtonText="Done"
         onFirstButtonClick={() => {
           // close it before leaving, so it's not still open next time they come back
           setShowLoggedDialog(false);
-          router.push("/home");
+          // back to where they came from, home or the dashboard
+          router.back();
         }}
       />
     )}
