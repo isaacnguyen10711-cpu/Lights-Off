@@ -225,7 +225,7 @@ export default function DashboardPage() {
         </div>
 
         <section className="xl:col-span-1 flex flex-col gap-4">
-          <div className="rounded-2xl border border-line bg-field p-4 md:p-5">
+          <div className="rounded-2xl border border-line bg-field p-4 md:p-5 transition-colors duration-300 hover:border-muted">
             <p className={labelStyles}>{`${monthNames[month ? month - 1 : 0]} review`}</p>
             <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
           </div>

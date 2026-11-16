@@ -12,7 +12,7 @@ const NightDetails = ({ log }: NightDetailsProps) => {
   const up = new Date(log.wakeUpTime).toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5">
+    <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5 transition-colors duration-300 hover:border-muted">
       <p className={labelStyles}>{date}</p>
       {/* hours and quality side by side with some space between */}
       <div className="mt-2 flex items-baseline gap-4 xl:gap-5 tabular-nums">
