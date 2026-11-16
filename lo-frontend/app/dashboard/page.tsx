@@ -189,7 +189,7 @@ export default function DashboardPage() {
       </header>
 
       {/* calendar on the left, review and the picked night on the right. stacked until xl */}
-      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-start gap-6 md:gap-8 xl:gap-10 px-4 md:px-16 xl:px-20 pt-6 xl:pt-8 pb-10 md:pb-8 xl:pb-6">
+      <div className="mx-auto grid w-full max-w-6xl xl:max-w-7xl flex-1 grid-cols-1 xl:grid-cols-3 content-start gap-6 xl:gap-10 px-4 md:px-16 xl:px-20 pt-6 xl:pt-8 pb-10 md:pb-8 xl:pb-6">
         <div className="xl:col-span-2">
         {/* month name and the month's stats */}
         <section>
@@ -237,18 +237,24 @@ export default function DashboardPage() {
         </section>
         </div>
 
-        <section className="xl:col-span-1 flex flex-col gap-4">
-          <div className="rounded-2xl border border-line bg-field p-4 md:p-5 transition-colors duration-300 hover:border-muted">
-            <p className={labelStyles}>{`${monthNames[month ? month - 1 : 0]} review`}</p>
-            <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
+        {/* stacked on phones, side by side on tablets to save height, back to one column on xl */}
+        <section className="xl:col-span-1 flex flex-col md:flex-row xl:flex-col gap-4">
+          <div className="min-w-0 md:flex-1 xl:flex-none">
+            <div className="h-full rounded-2xl border border-line bg-field p-4 md:p-5 transition-colors duration-300 hover:border-muted">
+              <p className={labelStyles}>{`${monthNames[month ? month - 1 : 0]} review`}</p>
+              <p className="mt-2 text-base md:text-sm xl:text-base leading-relaxed text-muted">{reviewText}</p>
+            </div>
           </div>
 
-          {/* on phones this goes first, right under the calendar, so tapping a day shows it straight away.
-              on xl it goes back under the review and stretches so the bottom lines up with the calendar */}
-          <div className="order-first xl:order-none xl:flex-1">
-            {selectedLog && <NightDetailsBox log={selectedLog} />}
-            {selectedDate && !selectedLog && <EmptyNightBox date={selectedDate} canLog={canLogSelectedDay} />}
-          </div>
+          {/* the picked night goes first, right under the calendar. on xl it goes under the review
+              and stretches so the bottom lines up with the calendar */}
+          {selectedDate && (
+            <div className="min-w-0 order-first xl:order-none md:flex-1">
+              {selectedLog
+                ? <NightDetailsBox log={selectedLog} />
+                : <EmptyNightBox date={selectedDate} canLog={canLogSelectedDay} />}
+            </div>
+          )}
         </section>
       </div>
     </main>
