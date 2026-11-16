@@ -3,7 +3,7 @@ import { EmptyNightProps } from "../../type";
 import { labelStyles, primaryButtonStyles } from "../styles";
 
 // shows when they tap a day in the calendar that has no log yet
-const EmptyNight = ({ date, canLog }: EmptyNightProps) => {
+function EmptyNightBox({ date, canLog }: EmptyNightProps) {
   const day = new Date(`${date}T00:00:00`).toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "short" });
 
   return (
@@ -19,10 +19,10 @@ const EmptyNight = ({ date, canLog }: EmptyNightProps) => {
           </Link>
         </>
       ) : (
-        <p className="mt-2 text-sm xl:text-base text-muted">This night hasn&rsquo;t happened yet.</p>
+        <p className="mt-2 text-sm xl:text-base text-muted">You can not log this night yet.</p>
       )}
     </div>
   );
 }
 
-export default EmptyNight;
+export default EmptyNightBox;

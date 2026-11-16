@@ -7,7 +7,7 @@ import { labelStyles, secondaryButtonStyles } from "../styles";
 const durationLabels = ["None", "Under 30 min", "30 to 60 min", "Over 60 min"];
 
 // everything about the night they clicked on in the calendar
-const NightDetails = ({ log }: NightDetailsProps) => {
+function NightDetailsBox({ log }: NightDetailsProps) {
   const date = new Date(`${log.date}T00:00:00`).toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "short" });
   const bed = new Date(log.bedtime).toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
   const up = new Date(log.wakeUpTime).toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
@@ -40,4 +40,4 @@ const NightDetails = ({ log }: NightDetailsProps) => {
   );
 }
 
-export default NightDetails;
+export default NightDetailsBox;
