@@ -165,7 +165,8 @@ function UpdateLogForm() {
         </Link>
       </header>
 
-      <form onSubmit={handleUpdateSleepLog} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
+      {/* a fresh form for each night, so the last night's answers don't stay */}
+      <form key={logData.sleepLogId} onSubmit={handleUpdateSleepLog} className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 md:px-0 pt-4 xl:pt-2 pb-10 md:pb-8">
         <h1 className="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
           Update last night
         </h1>
