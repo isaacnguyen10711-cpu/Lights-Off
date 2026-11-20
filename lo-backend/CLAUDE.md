@@ -38,7 +38,7 @@ ASP.NET Core 10 API with EF Core on SQL Server, ASP.NET Identity with cookies, G
 
 Isaac's plan: a knowledge base of trusted sleep articles, searched using the month's results, so Claude's advice is based on real sources.
 
-1. Articles are saved by hand as `.md` files in `KnowledgeBase/`: line 1 `# Title`, line 2 `Source: <url>`, then the text. Only use sources whose terms allow it.
+1. Done: 11 articles saved as `.md` files in `SleepArticles/`: line 1 `# Title`, line 2 `Source: <url>`, then the text with blank lines between paragraphs. Copyrighted sources (Sleep Foundation, Woolcock, Sleep Health Foundation) are summaries in our own words, marked under the `Source:` line. NHLBI ones are public domain and copied in full. Never paste copyrighted article text in word for word.
 2. Add a `KnowledgeChunk` model (`SourceTitle`, `SourceUrl`, `Text`, `float[] Embedding` stored as JSON) and a migration.
 3. Ingestion runs at startup: split each new file into paragraph-based chunks of about 1500 characters, embed each chunk with OpenAI `text-embedding-3-small` (the `OpenAI` NuGet package, key in User Secrets as `OpenAI:ApiKey`), and save it. Skip files whose `SourceUrl` is already stored.
 4. During the monthly review, turn the month's patterns into a plain sentence, embed it, rank the chunks with cosine similarity in C#, and add the top 4 (with their titles) to the prompt. Tell Claude to base its advice on them and name the source.
