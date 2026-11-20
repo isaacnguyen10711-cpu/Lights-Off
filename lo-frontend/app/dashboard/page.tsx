@@ -11,7 +11,12 @@ import PopUpDialog from "../../components/PopUpDialog";
 import { labelStyles, primaryButtonStyles } from "../../components/styles";
 import { SleepLogProps } from "../../type";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { prefersReducedMotion } from "../../components/motion";
+
+gsap.registerPlugin(useGSAP);
 import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -160,6 +165,21 @@ export default function DashboardPage() {
   // Use the selectedDate and todayString to determine if the selected day can be logged
   const canLogSelectedDay = !!selectedDate && !!todayString && selectedDate <= todayString;
 
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const nightRef = useRef<HTMLDivElement>(null);
+
+  // the days pop in one by one when the calendar shows up or the month changes
+  useGSAP(() => {
+    if (prefersReducedMotion() || !calendarRef.current) return;
+    gsap.from(calendarRef.current.children, { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: "power2.out", stagger: 0.02 });
+  }, { dependencies: [month, isLoading], revertOnUpdate: true });
+
+  // the night box fades in each time they tap a day
+  useGSAP(() => {
+    if (prefersReducedMotion() || !nightRef.current) return;
+    gsap.from(nightRef.current, { autoAlpha: 0, y: 10, duration: 0.5, ease: "power2.out" });
+  }, { dependencies: [selectedDate], revertOnUpdate: true });
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -227,7 +247,7 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <div className="mt-2 grid grid-cols-7 gap-1 md:gap-2">
+          <div ref={calendarRef} className="mt-2 grid grid-cols-7 gap-1 md:gap-2">
             {/* empty spots so the 1st lands on the right weekday */}
             {emptySpots.map((spot) => (
               <div key={`empty-${spot}`} />
@@ -272,7 +292,7 @@ export default function DashboardPage() {
           {/* the picked night goes first, right under the calendar. on xl it goes under the review
               and stretches so the bottom lines up with the calendar */}
           {selectedDate && (
-            <div className="min-w-0 order-first xl:order-none md:flex-1">
+            <div ref={nightRef} className="min-w-0 order-first xl:order-none md:flex-1">
               {selectedLog
                 ? <NightDetailsBox log={selectedLog} />
                 : <EmptyNightBox date={selectedDate} canLog={canLogSelectedDay} />}
