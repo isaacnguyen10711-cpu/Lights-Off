@@ -7,6 +7,12 @@ import ScoreBox from "../../components/home/ScoreBox";
 import Habit from "../../components/Habit";
 import { boxStyles, labelStyles, primaryButtonStyles, secondaryButtonStyles } from "../../components/styles";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { prefersReducedMotion } from "../../components/motion";
+
+gsap.registerPlugin(useGSAP);
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -89,6 +95,14 @@ export default function HomePage() {
     queryFn: generateLatestNightFeedback,
     // only ask the coach when there's a log and it has no saved feedback yet
     enabled: !!latestLog && !latestLog.lastNightFeedback,
+  });
+
+  const boxesRef = useRef<HTMLDivElement>(null);
+
+  // when the page opens, last night's boxes slide up one after another
+  useGSAP(() => {
+    if (prefersReducedMotion() || !boxesRef.current) return;
+    gsap.from(boxesRef.current.children, { autoAlpha: 0, y: 20, duration: 0.6, ease: "power2.out", stagger: 0.12 });
   });
 
   // google gives the full name like "Isaac Nguyen", we only want "Isaac"
@@ -194,7 +208,7 @@ export default function HomePage() {
 
         {/* right side: last night split into boxes */}
         <section className="mx-auto w-full max-w-lg xl:max-w-xl">
-          <div className="grid grid-cols-2 gap-3 xl:gap-4">
+          <div ref={boxesRef} className="grid grid-cols-2 gap-3 xl:gap-4">
             {/* the big one: how long they slept */}
             <div className={`${boxStyles} col-span-2`}>
               {/* label on the left, the date on the right */}
