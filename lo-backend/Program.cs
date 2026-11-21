@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 using System.Security.Claims;
 using Lights_Off.Services.EmailService;
+using OpenAI;
+using OpenAI.Embeddings;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,7 +51,7 @@ builder.Services.AddAuthentication()
             // they cancelled or it failed on the provider's side, so send them back to the login page
             context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
             // stops ASP.NET showing its own error page
-            context.HandleResponse(); 
+            context.HandleResponse();
             return Task.CompletedTask;
         };
     })
@@ -63,7 +65,7 @@ builder.Services.AddAuthentication()
             // they cancelled or it failed on the provider's side, so send them back to the login page
             context.Response.Redirect(builder.Configuration["Frontend:Url"] + "/?error=login-cancelled");
             // stops ASP.NET showing its own error page
-            context.HandleResponse(); 
+            context.HandleResponse();
             return Task.CompletedTask;
         };
     });
@@ -94,6 +96,12 @@ builder.Services.AddSingleton(new AnthropicClient
 });
 
 builder.Services.AddScoped<ISleepCoach, ClaudeSleepCoach>();
+
+builder.Services.AddSingleton(new EmbeddingClient(
+    "text-embedding-3-small",
+    builder.Configuration["OpenAI:Api:Key"]
+));
+
 
 builder.Services.AddSingleton(new SmtpSettings
 {
