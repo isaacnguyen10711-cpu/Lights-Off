@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 using System.Security.Claims;
 using Lights_Off.Services.EmailService;
+using Lights_Off.Services.OpenAIEmbeddingService;
 using OpenAI;
 using OpenAI.Embeddings;
 
@@ -102,6 +103,8 @@ builder.Services.AddSingleton(new EmbeddingClient(
     builder.Configuration["OpenAI:Api:Key"]
 ));
 
+// turns text into embeddings for the sleep articles
+builder.Services.AddSingleton<IKnowledgeEmbedding, KnowledgeEmbedding>();
 
 builder.Services.AddSingleton(new SmtpSettings
 {
