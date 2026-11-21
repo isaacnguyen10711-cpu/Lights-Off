@@ -106,6 +106,9 @@ builder.Services.AddSingleton(new EmbeddingClient(
 // turns text into embeddings for the sleep articles
 builder.Services.AddScoped<IKnowledgeEmbedding, KnowledgeEmbedding>();
 
+// reads the sleep articles and saves them as chunks
+builder.Services.AddScoped<IDocumentLoader, DocumentLoader>();
+
 builder.Services.AddSingleton(new SmtpSettings
 {
     Server = builder.Configuration["Smtp:Server"]!,
