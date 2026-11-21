@@ -47,4 +47,5 @@ Isaac's plan: a knowledge base of trusted sleep articles, searched using the mon
 ## Before deploying
 
 - CORS only allows `http://localhost:3000` (`Program.cs`).
-- `appsettings.json` has a localhost `Frontend:Url` and a local SQLEXPRESS connection string.
+- `appsettings.json` has a localhost `Frontend:Url`.
+- The database is Azure SQL (`chef-minhh` server, `LightsOffDb`, free offer, auto-pauses). The connection string uses `Authentication=Active Directory Default`, so there's no password: locally it logs in as Isaac's `az login` account. The deployed app will need a managed identity added as a database user. New IPs need a firewall rule on the server.

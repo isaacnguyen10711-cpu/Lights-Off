@@ -23,6 +23,6 @@ Done: email/Google/Facebook login, email confirmation, forgot/reset password, lo
 Next, in order:
 
 1. RAG for the monthly review (plan in `lo-backend/CLAUDE.md`).
-2. Deploy to Azure (Docker). Needs production values for the localhost URLs and the connection string, and the secrets moved out of User Secrets.
+2. Deploy to Azure (Docker). The database is already on Azure SQL. Still needs production values for the localhost URLs, a managed identity so the app can log into the database, and the secrets moved out of User Secrets.
 3. Send emails from Isaac's own domain through Azure Communication Services.
 4. Backend tests. `GetSleepLogs_ReturnsOk` fails with 401, most likely because the test user never confirms their email.
