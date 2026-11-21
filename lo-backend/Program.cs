@@ -134,6 +134,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var documentLoader = services.GetRequiredService<IDocumentLoader>();
+    await documentLoader.LoadDocumentsAsync(Path.Combine(AppContext.BaseDirectory, "SleepDocuments"));
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
