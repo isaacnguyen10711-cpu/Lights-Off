@@ -11,6 +11,7 @@ namespace Lights_Off.Data
         }
         public DbSet<SleepLog> SleepLogs { get; set; } = null!;
         public DbSet<MonthlyReview> MonthlyReviews { get; set; } = null!;
+        public DbSet<KnowledgeChunk> KnowledgeChunks { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

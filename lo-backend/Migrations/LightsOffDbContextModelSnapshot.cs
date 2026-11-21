@@ -22,6 +22,31 @@ namespace Lights_Off.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Lights_Off.Models.KnowledgeChunk", b =>
+                {
+                    b.Property<int>("KnowledgeChunkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KnowledgeChunkId"));
+
+                    b.PrimitiveCollection<string>("Embeddings")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RetrievedInformation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KnowledgeChunkId");
+
+                    b.ToTable("KnowledgeChunks");
+                });
+
             modelBuilder.Entity("Lights_Off.Models.MonthlyReview", b =>
                 {
                     b.Property<int>("MonthlyReviewId")
