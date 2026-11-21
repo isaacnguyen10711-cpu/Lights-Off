@@ -1,4 +1,5 @@
 # Healthy Sleep Habits
+
 Source: https://www.nhlbi.nih.gov/health/sleep-deprivation/healthy-sleep-habits
 
 You can take steps to improve your sleep habits. First, make sure that you give yourself enough time to sleep. With enough sleep each night, you may find that you're happier and more productive during the day.
@@ -6,7 +7,6 @@ You can take steps to improve your sleep habits. First, make sure that you give 
 Sleep is often the first thing that busy people squeeze out of their schedules. Making time to sleep will help you protect your health and well-being now and in the future.
 
 To improve your sleep habits, it also may help to:
-
 - Go to bed and wake up at the same time every day. For children, have a set bedtime and a bedtime routine. Don't use the child's bedroom for timeouts or punishment.
 - Try to keep the same sleep schedule on weeknights and weekends. Limit the difference to no more than about an hour. Staying up late and sleeping in late on weekends can disrupt your body clock's sleep-wake rhythm.
 - Use the hour before bed for quiet time. Avoid intense exercise and bright artificial light, such as from a TV or computer screen. The light may signal the brain that it's time to be awake.
@@ -25,7 +25,6 @@ Strategies for shift workers
 Some people have schedules that conflict with their internal body clocks. For example, shift workers may have trouble getting enough sleep. This can affect how they feel mentally and physically.
 
 If you're a shift worker, you may find it helpful to:
-
 - Take naps and raise the amount of time available for sleep
 - Keep the lights bright at work
 - Limit shift changes so your body clock can adjust

@@ -1,7 +1,6 @@
 # How Shift Work Affects Your Sleep
-Source: https://www.woolcock.org.au/news/please-explain-how-shift-work-affects-your-sleep
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.woolcock.org.au/news/please-explain-how-shift-work-affects-your-sleep
 
 Humans are built to be awake in daylight and asleep in the dark. Your body clock runs your circadian rhythms, which make you alert in the day and drowsy as it gets dark. Working at night goes directly against this, so night shift feels a lot like jet lag.
 
@@ -12,7 +11,6 @@ After about three or four night shifts in a row, the body clock shifts enough to
 Shift work sleep disorder involves poor sleep, trouble concentrating, headaches, low energy and tiredness. Some people handle shift work much better than others, and the same coping tricks don't work for everyone.
 
 Tips for coping with night shift:
-
 - Treat your post-shift sleep like a normal night's sleep with a regular routine: dim the lights, avoid screens, skip heavy meals and do something calming like reading or meditating.
 - Get bright light while working to stay alert, but block morning light on the way home, for example with dark sunglasses. Make the bedroom as dark as possible, and use an eye mask if your curtains let light through.
 - Keep the bedroom cool and quiet. Earplugs, noise-cancelling devices or calming sounds can help.

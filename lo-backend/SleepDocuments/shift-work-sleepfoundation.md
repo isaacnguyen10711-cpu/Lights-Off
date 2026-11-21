@@ -1,7 +1,6 @@
 # Tips for Shift Workers
-Source: https://www.sleepfoundation.org/shift-work-disorder/tips
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/shift-work-disorder/tips
 
 Any job with hours outside roughly 7am to 6pm counts as shift work. This includes fixed night hours, rotating shifts, split shifts and irregular rosters. Night, early morning and rotating shifts make good sleep hard, and some workers end up with shift work disorder: trouble sleeping when they try to rest and heavy tiredness on the job. This can hurt thinking, health and work performance, and makes mistakes and accidents more likely.
 
@@ -14,7 +13,6 @@ Some shift workers stay up for a few hours after getting home so they wake close
 Wind down before bed with a warm shower, meditation or something relaxing. Alcohol might make you fall asleep faster, but it breaks up your sleep later as your body processes it. Talk to a doctor before trying melatonin, because it can shift your body clock.
 
 Staying alert at work:
-
 - Have caffeine early in the shift, in small amounts spread out, rather than a lot at once. It kicks in after about 15 to 20 minutes. Stop caffeine 3 to 4 hours before you plan to sleep.
 - A short burst of exercise on a break, like a quick walk, can give you an energy boost.
 - A nap of 10 to 20 minutes on a break helps without leaving you groggy. A "coffee nap" means drinking coffee right before a 15 to 20 minute nap, so the caffeine kicks in as you wake up.

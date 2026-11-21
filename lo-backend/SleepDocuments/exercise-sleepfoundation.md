@@ -1,7 +1,6 @@
 # Exercise and Sleep
-Source: https://www.sleepfoundation.org/physical-activity/exercise-and-sleep
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/physical-activity/exercise-and-sleep
 
 Exercise and sleep affect each other in both directions. Regular exercise helps many people fall asleep faster, spend less time awake during the night and sleep better overall. Poor sleep, in turn, tends to make people less active the next day.
 
@@ -16,7 +15,6 @@ The best time to exercise depends on your schedule, how hard you work out and ho
 Sleep problems make people less likely to exercise. Adults with insomnia or sleep apnoea are usually less active. In one study, every extra 30 minutes it took to fall asleep meant about a minute less exercise the next day. Morning people also tend to be more active than night owls. Good sleep makes you feel more rested and motivated to exercise, but it won't change your activity levels on its own.
 
 Common questions:
-
 - Stretching before bed is generally fine. Moderate activity near bedtime has little evidence of harming sleep.
 - Sleeping after exercise doesn't cause weight gain. Not getting enough sleep is the bigger problem, because it raises hunger hormones and lowers the hormone that makes you feel full.
 - Exercise can help with insomnia, but very hard exercise finishing within an hour of bed may disrupt sleep. Cognitive behavioural therapy for insomnia (CBT-I) is still the main recommended treatment.

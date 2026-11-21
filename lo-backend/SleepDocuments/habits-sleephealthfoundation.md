@@ -1,14 +1,12 @@
 # Sleep Hygiene: Good Sleep Habits
-Source: https://www.sleephealthfoundation.org.au/sleep-topics/sleep-hygiene-good-sleep-habits
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleephealthfoundation.org.au/sleep-topics/sleep-hygiene-good-sleep-habits
 
 Good sleep habits, often called sleep hygiene, are simple everyday things that make good sleep more likely. Most adults need 7 to 9 hours.
 
 In the evening, go to bed at around the same time each night. Your body clock works best with a regular routine and will start making you sleepy at bedtime. Don't push past that sleepy window by staying up, but don't go to bed too early either. Spend the last hour before bed doing something relaxing, like a warm bath, quiet reading or a warm milky drink, and go to the toilet before bed. Switch off screens 1 to 2 hours before bed and keep them out of the bedroom if you can.
 
 Things to avoid in the evening:
-
 - Caffeine close to bed, including coffee, tea, cola and soft drinks. Advice differs on the cut-off: some say 3 to 7 hours before bed, others say none after lunch if you sleep badly. Many people sleep better with less caffeine or only having it early in the day.
 - Smoking before bed or during the night.
 - Alcohol, which can help you fall asleep but makes it harder to stay asleep and makes snoring and sleep apnoea worse.

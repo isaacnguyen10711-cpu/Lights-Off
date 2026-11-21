@@ -1,7 +1,6 @@
 # Stress and Insomnia
-Source: https://www.sleepfoundation.org/insomnia/stress-and-insomnia
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/insomnia/stress-and-insomnia
 
 Stress and sleep feed into each other. Stress makes it harder to fall asleep and stay asleep, and poor sleep makes stress harder to handle the next day. Sleep often improves once a stressful period ends, but some people get stuck in a loop where bad nights cause daytime anxiety, which causes more bad nights. Working on either the stress or the sleep usually helps the other.
 
@@ -14,7 +13,6 @@ Chronic insomnia means trouble sleeping at least three nights a week for three m
 When you're stressed, your body releases stress hormones like cortisol and adrenaline. Cortisol is normally highest just after waking and drops through the day. Stress hormones make you feel wired and alert, and you often crash afterwards. Short bursts of stress are mostly harmless, but long-term stress keeps heart rate and blood pressure up and affects digestion, muscles (tension, headaches, back pain), breathing, the nervous system and reproductive health.
 
 Ways to manage stress for better sleep:
-
 - Eat a balanced diet, exercise during the week, and use slow breathing or other relaxation techniques.
 - Keep a healthy balance between work and life, and try not to bottle stress up.
 - Cognitive behavioural stress management, a short type of talk therapy, helps people spot negative thoughts and replace them with more helpful ones.
@@ -22,7 +20,6 @@ Ways to manage stress for better sleep:
 - See a doctor straight away if you have thoughts of suicide, are misusing drugs or alcohol, or feel you can't cope with daily life.
 
 Sleep habits that help when you're stressed:
-
 - Go to bed and get up at the same times every day, including weekends and when travelling.
 - Keep the bedroom dim, quiet and cool, around 18 degrees Celsius.
 - Keep TVs, computers and phones out of the bedroom, because their light can get in the way of sleep.

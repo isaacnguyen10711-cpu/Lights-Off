@@ -1,7 +1,6 @@
 # Caffeine and Sleep
-Source: https://www.sleepfoundation.org/nutrition/caffeine-and-sleep
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/nutrition/caffeine-and-sleep
 
 Most adults have caffeine every day, from coffee, tea, chocolate, soft drinks, energy drinks and some medicines. It helps with alertness and mood, but it can cause jitters, headaches and nervousness, and it can hurt sleep, especially when you have it later in the day. Sleep Foundation data from about 160,000 people found that roughly 88% of those who regularly have caffeine in the afternoon report at least one sleep problem.
 
@@ -20,7 +19,6 @@ The usual advice is to stop caffeine at least 8 hours before bed. For a 10pm bed
 Trouble falling or staying asleep, nausea, headaches or nervousness can be signs of too much caffeine. If you're very sleepy during the day and caffeine isn't helping, talk to a doctor, because it could be a sleep disorder. If you cut back, do it gradually to avoid withdrawal headaches, anxiety and low mood.
 
 Other ways to stay alert without caffeine:
-
 - Get bright light in the morning, ideally natural light outside.
 - Keep a regular sleep schedule and a relaxing bedroom.
 - Exercise, which boosts alertness and can improve sleep.

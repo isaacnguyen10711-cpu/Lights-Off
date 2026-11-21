@@ -1,7 +1,6 @@
 # How Electronics Affect Sleep
-Source: https://www.sleepfoundation.org/how-sleep-works/how-electronics-affect-sleep
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/how-sleep-works/how-electronics-affect-sleep
 
 Using phones, computers and tablets before bed can make it harder to fall asleep and lower sleep quality. There are two reasons. The blue light from screens holds back melatonin, the hormone that makes you sleepy in the evening. And content like social media, games or work emails keeps your brain switched on when it should be winding down. Together they push your body clock later.
 
@@ -12,7 +11,6 @@ Bright room lighting has a similar effect. One study found that bright bedroom l
 Young people are especially affected. Screen use before bed is linked to taking longer to fall asleep, getting less good-quality sleep and feeling tired the next day. Heavy screen use during the day is also linked to shorter sleep in teenagers.
 
 Tips if you need screens at night, for example for work or study:
-
 - Cut down on screen time overall, not just at night.
 - Keep a regular bedtime and spend the last hour before bed on relaxing things that don't involve screens.
 - Make the bedroom a screen-free zone, including the TV.

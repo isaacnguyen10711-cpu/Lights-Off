@@ -1,7 +1,6 @@
 # Does Napping Impact Sleep at Night?
-Source: https://www.sleepfoundation.org/how-sleep-works/does-napping-impact-sleep-at-night
 
-(Summary written in our own words, not the original article text.)
+Source: https://www.sleepfoundation.org/how-sleep-works/does-napping-impact-sleep-at-night
 
 Naps don't always hurt night-time sleep. It mostly comes down to when you nap and for how long. Short naps earlier in the day rarely cause problems, but long naps or naps late in the afternoon can make it harder to fall asleep and stay asleep at night. People who already struggle with insomnia are more sensitive to this.
 
@@ -12,7 +11,6 @@ The best time for most people with a normal schedule is early afternoon, roughly
 For most people, 30 minutes or less is ideal. Short naps keep you in light sleep. Waking from deep sleep can leave you groggier than before the nap. A 90-minute nap can also work, because it lets you go through a full sleep cycle without being woken mid-deep sleep.
 
 Tips for a good nap:
-
 - Set an alarm so a short nap doesn't turn into a long one.
 - Nap in the early afternoon rather than late in the day.
 - Block out light and noise with blackout curtains, an eye mask, earplugs or white noise.

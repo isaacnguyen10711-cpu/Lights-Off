@@ -1,8 +1,8 @@
 # How Much Sleep Is Enough
+
 Source: https://www.nhlbi.nih.gov/health/sleep-deprivation/how-much-sleep
 
 The amount of sleep you need each day will change over the course of your life. Although sleep needs vary from person to person, the chart below shows general recommendations for different age groups. This table reflects American Academy of Sleep Medicine (AASM) recommendations that the American Academy of Pediatrics (AAP) has endorsed.
-
 - Newborns 4 to 12 months: 12 to 16 hours a day (including naps)
 - Children 1 to 2 years old: 11 to 14 hours a day (including naps)
 - Children 3 to 5 years old: 10 to 13 hours a day (including naps)
@@ -21,7 +21,6 @@ Sleeping more on days off might be a sign that you aren't getting enough sleep. 
 Who is at risk of sleep deprivation and deficiency?
 
 Sleep deficiency, which includes sleep deprivation, affects people of all ages, races, and ethnicities. Certain groups of people may be more likely to be sleep deficient, including people who:
-
 - Have limited time for sleep, such as caregivers or people working long hours or more than one job
 - Have schedules that conflict with their internal body clocks, such as shift workers, first responders, teens who have early school schedules, or people who must travel for work
 - Make lifestyle choices that prevent them from getting enough sleep, such as taking medicine to stay awake, misusing alcohol or drugs, or not leaving enough time for sleep
