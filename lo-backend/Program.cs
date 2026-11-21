@@ -104,7 +104,7 @@ builder.Services.AddSingleton(new EmbeddingClient(
 ));
 
 // turns text into embeddings for the sleep articles
-builder.Services.AddSingleton<IKnowledgeEmbedding, KnowledgeEmbedding>();
+builder.Services.AddScoped<IKnowledgeEmbedding, KnowledgeEmbedding>();
 
 builder.Services.AddSingleton(new SmtpSettings
 {
